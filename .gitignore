@@ -21,3 +21,14 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+.env.backup
+.env.dusk.local
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+phpunit.dusk.xml
+/public/dist
+/public/build
+/public/mix-manifest.json
