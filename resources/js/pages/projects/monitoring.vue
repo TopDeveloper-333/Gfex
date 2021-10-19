@@ -1,19 +1,19 @@
 <template>
   <div class="row">
-    <div class="col-lg-10 m-auto">
+    <div class="m-auto">
     <form>
-      <div class="card mb-3" style="max-width:800px">
+      <div class="card mb-3">
         <div class="card-header gf-header">
-          XXX Model
+          FastPlan
         </div>
         <div class="row g-0">
-          <div class="col-md-8">
+          <div class="">
             <div class="card-body">
-              <h3 class="card-title">Monitoring Calculation</h3>
+              <h3 class="card-title gf-title">Field X Project</h3>
 
               <div>
-                <label class="btn btn-primary btn-simple active" v-on:click="onPrevPage">Previous</label>
-                <label class="btn btn-primary btn-simple active" v-on:click="onNextPage">Next</label>
+                <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPrevPage">Previous</label>
+                <label class="btn btn-primary btn-simple active gf-button" style="float:right" v-on:click="onNextPage">Next</label>
               </div>
 
             </div>

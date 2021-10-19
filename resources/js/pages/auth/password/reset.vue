@@ -1,33 +1,41 @@
 <template>
   <div class="row">
     <div class="col-lg-7 m-auto">
-      <card :title="$t('reset_password')">
+      <div class="card">
         <form @submit.prevent="reset" @keydown="form.onKeydown($event)">
           <alert-success :form="form" :message="status" />
 
+          <div class="card-header gf-header">
+            Reset Password
+          </div>
+
+
           <!-- Email -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('email') }}</label>
+          <div class="mb-3 row" style="margin-top:32px">
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('email') }}</label>
             <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email" readonly>
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" 
+                class="form-control gf-control" type="email" name="email" readonly>
               <has-error :form="form" field="email" />
             </div>
           </div>
 
           <!-- Password -->
           <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('password') }}</label>
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" 
+                class="form-control gf-control" type="password" name="password">
               <has-error :form="form" field="password" />
             </div>
           </div>
 
           <!-- Password Confirmation -->
           <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('confirm_password') }}</label>
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('confirm_password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
+              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" 
+                class="form-control gf-control" type="password" name="password_confirmation">
               <has-error :form="form" field="password_confirmation" />
             </div>
           </div>
@@ -35,13 +43,13 @@
           <!-- Submit Button -->
           <div class="mb-3 row">
             <div class="col-md-9 ms-md-auto">
-              <v-button :loading="form.busy">
+              <v-button class="gf-button" :loading="form.busy">
                 {{ $t('reset_password') }}
               </v-button>
             </div>
           </div>
         </form>
-      </card>
+      </div>
     </div>
   </div>
 </template>

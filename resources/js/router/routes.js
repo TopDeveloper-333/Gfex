@@ -12,7 +12,8 @@ export default [
   { path: '/email/verify/:id', name: 'verification.verify', component: page('auth/verification/verify.vue') },
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
-  { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/home', name: 'home', component: page('projects/home.vue') },
+  { path: '/create', name: 'create', component: page('projects/create.vue') },
   { path: '/fdp', name: 'fdp', component: page('projects/fdp.vue') },
   { path: '/monitoring', name: 'monitoring', component: page('projects/monitoring.vue') },
   {

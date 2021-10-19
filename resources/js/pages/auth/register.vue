@@ -1,45 +1,55 @@
 <template>
   <div class="row">
     <div class="col-lg-7 m-auto">
-      <card v-if="mustVerifyEmail" :title="$t('register')">
+      <div class="card" v-if="mustVerifyEmail">
+        <div class="card-header gf-header">
+          Register
+        </div>
         <div class="alert alert-success" role="alert">
           {{ $t('verify_email_address') }}
         </div>
-      </card>
-      <card v-else :title="$t('register')">
+      </div>
+      <div class="card" v-else >
+        <div class="card-header gf-header">
+          Register
+        </div>
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('name') }}</label>
+          <div class="mb-3 row" style="margin-top:32px">
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('name') }}</label>
             <div class="col-md-7">
-              <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" type="text" name="name">
+              <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" 
+                class="form-control gf-control" type="text" name="name">
               <has-error :form="form" field="name" />
             </div>
           </div>
 
           <!-- Email -->
           <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('email') }}</label>
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('email') }}</label>
             <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email">
+              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }"
+                class="form-control gf-control" type="email" name="email">
               <has-error :form="form" field="email" />
             </div>
           </div>
 
           <!-- Password -->
           <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('password') }}</label>
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="form-control" type="password" name="password">
+              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" 
+                class="form-control gf-control" type="password" name="password">
               <has-error :form="form" field="password" />
             </div>
           </div>
 
           <!-- Password Confirmation -->
           <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{ $t('confirm_password') }}</label>
+            <label class="col-md-3 col-form-label text-md-end gf-control">{{ $t('confirm_password') }}</label>
             <div class="col-md-7">
-              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" class="form-control" type="password" name="password_confirmation">
+              <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" 
+                class="form-control gf-control" type="password" name="password_confirmation">
               <has-error :form="form" field="password_confirmation" />
             </div>
           </div>
@@ -47,7 +57,7 @@
           <div class="mb-3 row">
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
-              <v-button :loading="form.busy">
+              <v-button class="gf-button" :loading="form.busy">
                 {{ $t('register') }}
               </v-button>
 
@@ -56,7 +66,7 @@
             </div>
           </div>
         </form>
-      </card>
+      </div>
     </div>
   </div>
 </template>
