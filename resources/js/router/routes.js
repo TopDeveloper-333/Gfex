@@ -13,6 +13,8 @@ export default [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/fdp', name: 'fdp', component: page('projects/fdp.vue') },
+  { path: '/monitoring', name: 'monitoring', component: page('projects/monitoring.vue') },
   {
     path: '/settings',
     component: page('settings/index.vue'),

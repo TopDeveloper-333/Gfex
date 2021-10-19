@@ -8,5 +8,16 @@
 @import 'elements/navbar';
 @import 'elements/buttons';
 @import 'elements/transitions';
+@import 'elements/switch';
 
 @import 'components/server-error';
+
+body {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.gf-header {
+  padding: 0.8rem 1rem !important;
+  background:#0d6efd;
+  color:white;
+}
