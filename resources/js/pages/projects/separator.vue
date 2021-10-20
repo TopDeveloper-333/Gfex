@@ -15,7 +15,7 @@
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project
               </h3>
-              <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;">Separator Processing / Optimizer</p>
+              <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Stream PVT & Separator Data</u></p>
               
 
               <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
