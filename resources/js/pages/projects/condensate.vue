@@ -4,12 +4,16 @@
     <form>
       <div class="card mb-3">
         <div class="card-header gf-header">
-          FastPlan
+          FastPlan* Platform<br>
+          <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
-        <div class="row g-0">
-          <div class="">
+        <div class="row g-0" style="background-color:#fdf500;">
+          <div class="col-md-4" style="display:flex; justify-content:center;">
+            <img src="/assets/image/LOGO_GFEX.png" class="img-fluid rounded-start" style="opacity:0.6;max-width:250px;max-height:300px">
+          </div>
+          <div class="col-md-8">
             <div class="card-body">
-              <h3 class="card-title gf-title">Field X Project</h3>
+              <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
 
               <div>
                 <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPrevPage">Previous</label>
@@ -28,6 +32,8 @@
 
 <script>
 import store from '~/store'
+import { mapState } from 'vuex'
+
 
 // import axios from 'axios'
 export default {
@@ -42,12 +48,18 @@ export default {
   // },
 
   metaInfo () {
-    return { title: this.$t('FDP Calculation') }
+    return { title: this.$t('GAS Condensate') }
   },
 
   data() {
     return {
     }
+  },
+
+computed: {
+    ...mapState({
+      projectName : state => state.project.projectName,
+    }),
   },
 
   methods: {

@@ -14,8 +14,9 @@ export default [
 
   { path: '/home', name: 'home', component: page('projects/home.vue') },
   { path: '/create', name: 'create', component: page('projects/create.vue') },
-  { path: '/fdp', name: 'fdp', component: page('projects/fdp.vue') },
-  { path: '/monitoring', name: 'monitoring', component: page('projects/monitoring.vue') },
+  { path: '/condensate', name: 'condensate', component: page('projects/condensate.vue') },
+  { path: '/drygas', name: 'drygas', component: page('projects/drygas.vue') },
+  { path: '/separator', name: 'separator', component: page('projects/separator.vue') },
   {
     path: '/settings',
     component: page('settings/index.vue'),

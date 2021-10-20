@@ -12,3 +12,4 @@ export const SET_LOCALE = 'SET_LOCALE'
 // project.js
 export const SAVE_PROJECT_NAME = "SAVE_PROJECT_NAME"
 export const SAVE_PROJECT_TYPE = "SAVE_PROJECT_TYPE"
+export const SAVE_SEP = "SAVE_SEP"

@@ -3,17 +3,18 @@
     <div class="m-auto">
     <form>
       <div class="card mb-3">
-        <div class="card-header gf-header" style="text-align:center; font-size:2.5rem">
-          FastPlan
+        <div class="card-header gf-header">
+          FastPlan* Platform<br>
+          <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
-        <div class="row g-0">
+        <div class="row g-0" style="background-color:#fdf500;">
           <div class="col-md-4" style="display:flex; justify-content:center;">
             <img src="/assets/image/LOGO_GFEX.png" class="img-fluid rounded-start" style="opacity:0.6;max-width:250px;max-height:300px">
           </div>
           <div class="col-md-8">
             <div class="card-body">
               <h3 class="card-title gf-title text-wrap" >Project Management</h3>
-              <p class="card-text gf-comment">Create new or View past</p>
+              <p class="card-text gf-comment">Create new and View past</p>
               <hr class="gf-line">
 
               <div class="row">
@@ -22,7 +23,7 @@
                   </label>
 
                   <div style="display:flex;align-items:center;margin-bottom:16px;margin-top:16px">
-                    <input class="form-control gf-control" maxlength="20" v-model="myProjectName">
+                    <input class="form-control gf-control" maxlength="20" v-model="myProjectName" placeholder="Non Empty">                    
                   </div>
 
                   <div>
@@ -43,7 +44,7 @@
                   </div>
 
                   <div>
-                    <label class="btn btn-primary btn-simple active gf-button" v-on:click="onGoPage">Go</label>
+                    <label class="btn btn-primary btn-simple active gf-button" v-on:click="onGoPage">Open</label>
                   </div>
 
                 </div>
@@ -75,7 +76,7 @@ export default {
   // },
 
   metaInfo () {
-    return { title: this.$t('home') }
+    return { title: this.$t('Project Management') }
   },
 
   data() {
@@ -89,6 +90,9 @@ export default {
 
   methods: {
     onNextPage: async function(event) {
+      if (this.myProjectName=="")
+        return;
+
       await store.dispatch('project/saveProjectName', this.myProjectName)
       this.$router.push({ name: 'create' })
     },
