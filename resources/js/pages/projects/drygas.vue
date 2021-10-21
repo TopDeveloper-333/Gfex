@@ -71,13 +71,15 @@ export default {
     return {
       standardCondition: null,
       gasPVT : null,
-      rockProperties: null
+      rockProperties: null,
+      myDryGas: {}
     }
   },
 
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
+      drygas : state => state.project.drygas
     }),
   },
 
@@ -85,11 +87,38 @@ export default {
     onPrevPage: function(event) {
       this.$router.go(-1)
     },
-    onNextPage: function(event) {
+    onNextPage: async function(event) {
+      this.myDryGas = {
+        standardConditions: {
+          Psc: 0, Tsc : 0
+        },
+        gasProperties: {
+          gasCompressibility: "", gasViscosity:0, specificGravity: 0, resTemp: 0, N2:0, CO2:0, H2S:0
+        },
+        rockProperties: {
+          conateWaterSaturation:0, waterCompressibility: "", rockCompressibility: ""
+        }
+      }
 
+      this.myDryGas.standardConditions.Psc = this.standardCondition.getValue('A1');
+      this.myDryGas.standardConditions.Tsc = this.standardCondition.getValue('B1');
+      this.myDryGas.gasProperties.gasCompressibility = this.gasPVT.getValue('A1');
+      this.myDryGas.gasProperties.gasViscosity = this.gasPVT.getValue('B1');
+      this.myDryGas.gasProperties.specificGravity = this.gasPVT.getValue('C1');
+      this.myDryGas.gasProperties.resTemp = this.gasPVT.getValue('D1');
+      this.myDryGas.gasProperties.N2 = this.gasPVT.getValue('E1');
+      this.myDryGas.gasProperties.CO2 = this.gasPVT.getValue('F1');
+      this.myDryGas.gasProperties.H2S = this.gasPVT.getValue('G1');
+      this.myDryGas.rockProperties.conateWaterSaturation = this.rockProperties.getValue('A1');
+      this.myDryGas.rockProperties.waterCompressibility = this.rockProperties.getValue('B1');
+      this.myDryGas.rockProperties.rockCompressibility = this.rockProperties.getValue('C1');
+
+      await store.dispatch('project/saveDryGas', this.myDryGas)
     }
   },
   mounted() {
+
+    this.myDryGas = this.drygas
 
     // Standard Conditions
     var standardConditionsData = [
