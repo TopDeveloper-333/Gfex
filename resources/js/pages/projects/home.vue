@@ -27,7 +27,7 @@
                   </div>
 
                   <div>
-                    <label class="btn btn-primary btn-simple active gf-button" v-on:click="onNextPage">Create</label>
+                    <label class="btn btn-primary gf-button" v-on:click="onNextPage">Create</label>
                   </div>
 
                 </div>
@@ -44,7 +44,7 @@
                   </div>
 
                   <div>
-                    <label class="btn btn-primary btn-simple active gf-button" v-on:click="onGoPage">Open</label>
+                    <label class="btn btn-primary gf-button" v-on:click="onGoPage">Open</label>
                   </div>
 
                 </div>

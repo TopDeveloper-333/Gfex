@@ -54,14 +54,36 @@ body {
 .gf-button {
   font-size : 1.5rem !important;
   text-transform: uppercase !important;
+  font-weight: 600;
 }
 .gf-button-active {
   font-size : 1.5rem !important;
   text-transform: uppercase !important;
   color: rgb(253, 245, 0) !important;
   font-style: italic;
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  font-weight: 600;
 }
+.gf-button-done {
+  font-size : 1.5rem !important;
+  text-transform: uppercase !important;
+  background-color: green !important;
+  border: 1px solid green;
+  font-style: italic;
+  transform: translateY(-4px);
+  font-weight: 600;
+}
+.gf-button-done-active {
+  font-size : 1.5rem !important;
+  text-transform: uppercase !important;
+  color: rgb(253, 245, 0) !important;
+  background-color: green !important;
+  border: 1px solid green;
+  font-style: italic;
+  transform: translateY(-4px);
+  font-weight: 600;
+}
+
 
 .gf-nav-item {
   font-size:1.25rem !important;

@@ -16,6 +16,10 @@
               <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
               <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
 
+              <div>
+                <label class="btn btn-primary gf-button" style="float:right" v-on:click="onPlotPage">Plot</label>
+              </div>
+
               <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
                 <div id="gasCondensate1"></div>
               </div>
@@ -25,18 +29,21 @@
               </div>
 
               <div class="d-flex justify-content-between">
-                <label class="btn btn-primary btn-simple active gf-button " v-on:click="onPrevPage">Previous</label>
+                <label class="btn btn-primary gf-button " v-on:click="onPrevPage">Previous</label>
 
-                <div style="text-align:center" class="btn-group" role="group">
-                <!-- <div style="text-align:center"> -->
-                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPVTPage">PVT</label>
-                  <label class="btn btn-primary btn-simple active gf-button-active" v-on:click="onSurfacePage">Surface</label>
-                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onReservoirPage">Reservoir</label>
-                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onWellHistoryPage" v-show="isEconomics != '1'">Well History</label>
-                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onEconomicsPage" v-show="isEconomics == '1'">Economics</label>
+                <!-- <div style="text-align:center" class="btn-group" role="group"> -->
+                <div style="text-align:center">
+                  <label class="btn btn-danger gf-button-active" v-on:click="onPVTPage">PVT</label>
+                  <label class="btn btn-primary gf-button" v-on:click="onSurfacePage">Surface</label>
+                  <label class="btn btn-primary gf-button" v-on:click="onReservoirPage" v-show="isFDP=='1'">Reservoir</label>
+                  <label class="btn btn-primary gf-button" v-on:click="onWellHistoryPage" v-show="isEconomics != true">Well History</label>
+                  <label class="btn btn-primary gf-button" v-on:click="onEconomicsPage" v-show="isEconomics == true && isFDP =='1'">Economics</label>
                 </div>
 
-                <label class="btn btn-primary btn-simple active gf-button " style="float:right" v-on:click="onNextPage">Execute</label>
+                <div>
+                  <label class="btn btn-primary gf-button " v-on:click="onNextPage">Execute</label>
+                  <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
+                </div>
 
               </div>
 
@@ -84,10 +91,32 @@ export default {
       projectName : state => state.project.projectName,
       gasCondensate : state => state.project.gascondensate,
       isEconomics : state => state.project.isEconomics,
+      isFDP: state => state.project.isFDP,
     }),
   },
 
   methods: {
+    onPlotPage: function(event) {
+
+    },
+    onPVTPage: function(event) {
+
+    },
+    onSurfacePage: function(event) {
+
+    },
+    onReservoirPage: function(event) {
+
+    },
+    onWellHistoryPage: function(event) {
+      
+    },
+    onEconomicsPage: function(event) {
+
+    },
+    onExitPage: function(event) {
+
+    },
     onPrevPage: function(event) {
       this.$router.go(-1)
     },

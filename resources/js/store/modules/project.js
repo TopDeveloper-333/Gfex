@@ -4,14 +4,26 @@ import * as types from '../mutation-types'
 import Cookies from 'js-cookie'
 
 export const state = {  
-  projectName: Cookies.get('projectName') == undefined ? "" : Cookies.get('projectName'),
-  isFDP : Cookies.get('isFDP') == undefined ? "1" : Cookies.get('isFDP') ,
-  isCondensate: Cookies.get('isCondensate') == undefined ? "1" : Cookies.get('isCondensate') ,
-  isEconomics: Cookies.get('isEconomics') == undefined ? "1" : Cookies.get('isEconomics') ,
-  isSeparatorOptimizer: Cookies.get('isSeparatorOptimizer') == undefined ? false : (Cookies.get('isSeparatorOptimizer') === 'true') ,
-  sep : Cookies.get('sep') == undefined ? {} : Cookies.get('sep') ,
-  drygas : Cookies.get('drygas') == undefined ? {} : Cookies.get('drygas'),
-  gascondensate : Cookies.get('gascondensate') == undefined ? {} : Cookies.get('gascondensate'),
+  projectName: getCookie('projectName', ""),
+  isFDP : getCookie('isFDP', "1"),
+  isCondensate: getCookie('isCondensate', "1"),
+  isEconomics: getCookie('isEconomics', true),
+  isSeparatorOptimizer: getCookie('isSeparatorOptimizer', false),
+  sep : getCookie('sep', {}),
+  drygas : getCookie('drygas', {}),
+  gascondensate : getCookie('gascondensate', {}),
+}
+
+function getCookie(name, defaultValue) {
+  let value = Cookies.get(name)
+  if (value === "true") 
+    return true
+  else if (value === "false")
+    return false
+  else if (value === undefined)
+    return defaultValue
+  else
+    return value
 }
 
 export const getters = {

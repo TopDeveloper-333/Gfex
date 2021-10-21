@@ -69,9 +69,12 @@
                 </div>
               </div>
 
-              <div>
-                <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPrevPage">Previous</label>
-                <label class="btn btn-primary btn-simple active gf-button" style="float:right" v-on:click="onNextPage">Execute</label>
+              <div class="d-flex justify-content-between">
+                <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
+                <div>
+                  <label class="btn btn-primary gf-button " v-on:click="onNextPage">Execute</label>
+                  <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
+                </div>
               </div>
             </div>
           </div>
@@ -121,6 +124,9 @@ export default {
   },
 
   methods: {
+    onExitPage: function (event) {
+
+    },
     onPrevPage: function(event) {
       this.$router.go(-1)
     },

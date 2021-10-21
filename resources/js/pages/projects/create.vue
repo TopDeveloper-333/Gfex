@@ -72,9 +72,12 @@
                 </label>
               </div>
 
-              <div>
-                <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPrevPage">Previous</label>
-                <label class="btn btn-primary btn-simple active gf-button" style="float:right" v-on:click="onNextPage">Next</label>
+              <div class="d-flex justify-content-between">
+                <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
+                <div>
+                  <label class="btn btn-primary gf-button " v-on:click="onNextPage">Next</label>
+                  <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
+                </div>
               </div>
 
             </div>
@@ -131,6 +134,10 @@ export default {
       this.$router.go(-1)
     },
     onNextPage: async function(event) {
+
+      if (this.bFDP == false)
+        this.bEconomics = false
+
       var payload = {}
       payload.isFDP = this.bFDP
       payload.isCondensate = this.bCondensate
@@ -147,7 +154,10 @@ export default {
       else {
         this.$router.push({ name: 'drygas'})
       }
-    }
+    },
+    onExitPage: function(event) {
+
+    },
   },
 
   mounted() {
