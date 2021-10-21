@@ -55,6 +55,13 @@ body {
   font-size : 1.5rem !important;
   text-transform: uppercase !important;
 }
+.gf-button-active {
+  font-size : 1.5rem !important;
+  text-transform: uppercase !important;
+  color: rgb(253, 245, 0) !important;
+  font-style: italic;
+  transform: translateY(-2px);
+}
 
 .gf-nav-item {
   font-size:1.25rem !important;
@@ -75,4 +82,23 @@ td:empty::after{
 
 thead.resizable {
   font-weight: 600;
+}
+
+.pushable {
+  background: hsl(340deg 100% 32%);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+}
+.front {
+  display: block;
+  padding: 12px 42px;
+  background: hsl(345deg 100% 47%);
+  color: white;
+  transform: translateY(-6px);
+}
+
+.pushable:active .front {
+  transform: translateY(-2px);
 }

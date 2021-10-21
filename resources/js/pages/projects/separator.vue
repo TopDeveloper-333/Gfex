@@ -30,7 +30,7 @@
               </div>
 
               <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-                <p class="gf-item">Separator Conditions</p>
+                <p class="gf-item">Separator Conditions <span>(Input 2 or 3 stages)</span></p>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 1</p>
                   <div id="setNumber1"></div>

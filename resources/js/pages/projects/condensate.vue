@@ -24,9 +24,20 @@
                 <div id="gasCondensate2"></div>
               </div>
 
-              <div>
-                <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPrevPage">Previous</label>
-                <label class="btn btn-primary btn-simple active gf-button" style="float:right" v-on:click="onNextPage">Next</label>
+              <div class="d-flex justify-content-between">
+                <label class="btn btn-primary btn-simple active gf-button " v-on:click="onPrevPage">Previous</label>
+
+                <div style="text-align:center" class="btn-group" role="group">
+                <!-- <div style="text-align:center"> -->
+                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onPVTPage">PVT</label>
+                  <label class="btn btn-primary btn-simple active gf-button-active" v-on:click="onSurfacePage">Surface</label>
+                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onReservoirPage">Reservoir</label>
+                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onWellHistoryPage" v-show="isEconomics != '1'">Well History</label>
+                  <label class="btn btn-primary btn-simple active gf-button" v-on:click="onEconomicsPage" v-show="isEconomics == '1'">Economics</label>
+                </div>
+
+                <label class="btn btn-primary btn-simple active gf-button " style="float:right" v-on:click="onNextPage">Execute</label>
+
               </div>
 
             </div>
@@ -71,7 +82,8 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      gasCondensate : state => state.project.gascondensate
+      gasCondensate : state => state.project.gascondensate,
+      isEconomics : state => state.project.isEconomics,
     }),
   },
 
@@ -165,25 +177,25 @@ export default {
             },
             {
                 type: 'numeric',
-                title:'BO (rb/stb)',
+                title:'Bo (rb/stb)',
                 width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'RS (scf/stb)',
+                title:'Rs (scf/stb)',
                 width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'BG (rb/mscf)',
+                title:'Bg (rb/mscf)',
                 width: 140,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'RV (stb/mmscf)',
+                title:'Rv (stb/mmscf)',
                 width: 150,
                 decimal:','
             },
@@ -195,7 +207,7 @@ export default {
             },
             {
                 type: 'numeric',
-                title:'Gas Viscpsity (cp)',
+                title:'Gas Viscosity (cp)',
                 width: 170,
                 decimal:','
             },
