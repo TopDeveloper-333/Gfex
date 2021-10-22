@@ -82,7 +82,7 @@ export default {
       await this.$store.dispatch('auth/logout')
 
       // Redirect to login.
-      this.$router.push({ name: 'login' })
+      this.$router.replace({ name: 'login' })
     }
   }
 }

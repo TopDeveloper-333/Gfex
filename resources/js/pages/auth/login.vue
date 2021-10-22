@@ -106,9 +106,9 @@ export default {
 
       if (intendedUrl) {
         Cookies.remove('intended_url')
-        this.$router.push({ path: intendedUrl })
+        this.$router.replace({ path: intendedUrl })
       } else {
-        this.$router.push({ name: 'home' })
+        this.$router.replace({ name: 'home' })
       }
     }
   }

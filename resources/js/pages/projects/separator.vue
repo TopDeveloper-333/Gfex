@@ -72,7 +72,7 @@
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
                 <div>
-                  <label class="btn btn-primary gf-button " v-on:click="onNextPage">Execute</label>
+                  <label class="btn btn-outline-primary disabled gf-button " v-on:click="onNextPage">Execute</label>
                   <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
                 </div>
               </div>
@@ -83,6 +83,22 @@
     </form>
 
     </div>
+
+    <div id="exitModal" class="gf-modal">
+      <div class="gf-modal-content">
+        <div class="gf-modal-header">
+          <span class="gf-comment" style="margin-left:30px;color:white">Fastplan* platform</span>
+          <span class="gf-close">&times;</span>
+        </div>
+        <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
+        <span style="font-size: 1.25rem">Do you want to exit this project?</span>
+        <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onYes">Yes</label>
+          <label class="btn btn-primary gf-button" v-on:click="onNo">No</label>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -124,11 +140,25 @@ export default {
   },
 
   methods: {
-    onExitPage: function (event) {
+    onYes: function(event) {
+      // hide exit dialog
+      var modal = document.getElementById("exitModal");
+      modal.style.display = "none";
 
+      // go to home vue
+      this.$router.replace('home')
+    },
+    onNo: function(event) {
+      // hide exit dialog
+      var modal = document.getElementById("exitModal");
+      modal.style.display = "none";
+    },
+    onExitPage: function (event) {
+      var modal = document.getElementById("exitModal");
+      modal.style.display = "block";
     },
     onPrevPage: function(event) {
-      this.$router.go(-1)
+      this.$router.replace('create')
     },
     onNextPage: async function(event) {
       this.mySEP = { 
@@ -242,7 +272,8 @@ export default {
 
     // Original Stream Composition
     var originalStreamComposition1Data = [
-        [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769],
+        // [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769],
+      [,,,,,,,,,,,,],
     ];
     
     this.originalStreamComposition1 = jspreadsheet(document.getElementById('originalStreamComposition1'), {
@@ -332,7 +363,8 @@ export default {
 
     // 
     var originalStreamComposition2Data = [
-        [220, 0.7990],
+        // [220, 0.7990],
+      [,],
     ];
     
     this.originalStreamComposition2 = jspreadsheet(document.getElementById('originalStreamComposition2'), {
@@ -361,7 +393,8 @@ export default {
 
     // Saturated Reservoir Conditions
     var saturatedReservoirConditionsData = [
-      [2677, 244]
+      // [2677, 244]
+      [,],
     ];
 
     this.saturatedReservoirConditions = jspreadsheet(document.getElementById('saturatedReservoirConditions'), {
@@ -412,17 +445,21 @@ export default {
     }
     
     var setNumber1Data = [
-      [1000, 72],
-      [14.7, 60.0],
-      [,]
+      // [1000, 72],
+      // [14.7, 60.0],
+      [,],
+      [,],
+      [,],
     ];
     setNumberProps.data = setNumber1Data;
     this.setNumber1 = jspreadsheet(document.getElementById('setNumber1'), setNumberProps);
     this.setNumber1.hideIndex();
 
     var setNumber2Data = [
-      [800, 72],
-      [14.7, 60.0],
+      // [800, 72],
+      // [14.7, 60.0],
+      [,],
+      [,],
       [,]
     ];
     setNumberProps.data = setNumber2Data;
@@ -456,7 +493,31 @@ export default {
     this.setNumber9 = jspreadsheet(document.getElementById('setNumber9'), setNumberProps);
     this.setNumber9.hideIndex();
 
+    mountExitDialog();
+
   }
 
 }
+
+function mountExitDialog() {
+
+  // Get the modal
+  var modal = document.getElementById("exitModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("gf-close")[0];
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }      
+}
+
 </script>

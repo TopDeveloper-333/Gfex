@@ -61,16 +61,16 @@ body {
   text-transform: uppercase !important;
   color: rgb(253, 245, 0) !important;
   font-style: italic;
-  transform: translateY(-4px);
+  // transform: translateY(-4px);
   font-weight: 600;
 }
 .gf-button-done {
   font-size : 1.5rem !important;
+  color: white !important;
   text-transform: uppercase !important;
   background-color: green !important;
   border: 1px solid green;
   font-style: italic;
-  transform: translateY(-4px);
   font-weight: 600;
 }
 .gf-button-done-active {
@@ -80,7 +80,7 @@ body {
   background-color: green !important;
   border: 1px solid green;
   font-style: italic;
-  transform: translateY(-4px);
+  // transform: translateY(-4px);
   font-weight: 600;
 }
 
@@ -123,4 +123,53 @@ thead.resizable {
 
 .pushable:active .front {
   transform: translateY(-2px);
+}
+
+/* The Modal (background) */
+.gf-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Sit on top */
+  padding-top: 300px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.gf-modal-header{
+  background-color: #0d6efd;
+  border-radius: 3px 3px 0px 0px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Modal Content */
+.gf-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  // padding: 20px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  width: 40%;
+  text-align: center;
+}
+
+/* The Close Button */
+.gf-close {
+  color: #ffffff;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.gf-close:hover,
+.gf-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }

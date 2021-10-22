@@ -55,6 +55,19 @@
       </div>
     </form>
 
+    <div id="issueModal" class="gf-modal">
+      <div class="gf-modal-content">
+        <div class="gf-modal-header">
+          <span class="gf-comment" style="margin-left:30px;color:white">Fastplan* platform</span>
+          <span class="gf-close">&times;</span>
+        </div>
+        <p style="font-size: 1.25rem;margin-top:20px">Please input new project's name</p>
+        <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onOK">OK</label>
+        </div>
+      </div>
+    </div>
+
     </div>
   </div>
 </template>
@@ -86,19 +99,57 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      projectName : state => state.project.projectName
+    }),
   },
 
   methods: {
+    onOK: function(event) {
+      var modal = document.getElementById("issueModal");
+      modal.style.display = "none";
+    },
     onNextPage: async function(event) {
       if (this.myProjectName=="")
-        return;
+      {
+        var modal = document.getElementById("issueModal");
+        modal.style.display = "block";
+        return; 
+      }
 
       await store.dispatch('project/saveProjectName', this.myProjectName)
-      this.$router.push({ name: 'create' })
+      this.$router.replace({ name: 'create' })
     },
     onGoPage: async function(event) {
 
     }
   },
+  mounted() {
+
+    this.myProjectName = this.projectName
+    mountErrorDialog();
+  }
 }
+
+function mountErrorDialog() {
+
+  // Get the modal
+  var modal = document.getElementById("issueModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("gf-close")[0];
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }      
+}
+
 </script>
