@@ -272,8 +272,8 @@ export default {
 
     // Original Stream Composition
     var originalStreamComposition1Data = [
-        // [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769],
-      [,,,,,,,,,,,,],
+      [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769],
+      // [,,,,,,,,,,,,],
     ];
     
     this.originalStreamComposition1 = jspreadsheet(document.getElementById('originalStreamComposition1'), {
@@ -363,8 +363,8 @@ export default {
 
     // 
     var originalStreamComposition2Data = [
-        // [220, 0.7990],
-      [,],
+      [220, 0.7990],
+      // [,],
     ];
     
     this.originalStreamComposition2 = jspreadsheet(document.getElementById('originalStreamComposition2'), {
@@ -393,8 +393,8 @@ export default {
 
     // Saturated Reservoir Conditions
     var saturatedReservoirConditionsData = [
-      // [2677, 244]
-      [,],
+      [2677, 244]
+      // [,],
     ];
 
     this.saturatedReservoirConditions = jspreadsheet(document.getElementById('saturatedReservoirConditions'), {
@@ -445,22 +445,22 @@ export default {
     }
     
     var setNumber1Data = [
-      // [1000, 72],
-      // [14.7, 60.0],
+      [1000, 72],
+      [14.7, 60.0],
       [,],
-      [,],
-      [,],
+      // [,],
+      // [,],
     ];
     setNumberProps.data = setNumber1Data;
     this.setNumber1 = jspreadsheet(document.getElementById('setNumber1'), setNumberProps);
     this.setNumber1.hideIndex();
 
     var setNumber2Data = [
-      // [800, 72],
-      // [14.7, 60.0],
+      [800, 72],
+      [14.7, 60.0],
       [,],
-      [,],
-      [,]
+      // [,],
+      // [,]
     ];
     setNumberProps.data = setNumber2Data;
     this.setNumber2 = jspreadsheet(document.getElementById('setNumber2'), setNumberProps);

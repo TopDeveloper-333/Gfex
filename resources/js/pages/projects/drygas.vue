@@ -18,18 +18,14 @@
 
               <drygas-pvt v-show="screenType==='PVT_SCREEN'">
               </drygas-pvt>
-              <div v-show="screenType==='SURFACE_SCREEN'">
-                Surface screen
-              </div>
-              <div v-show="screenType==='RESERVOIR_SCREEN'">
-                Reservoir screen
-              </div>
-              <div v-show="screenType==='WELLHISTORY_SCREEN'">
-                Well History screen
-              </div>
-              <div v-show="screenType==='ECONOMICS_SCREEN'">
-                Economics screen
-              </div>
+              <surface v-show="screenType==='SURFACE_SCREEN'">
+              </surface>
+              <reservoir v-show="screenType==='RESERVOIR_SCREEN'">
+              </reservoir>
+              <well-history v-show="screenType==='WELLHISTORY_SCREEN'">
+              </well-history>
+              <economics v-show="screenType==='ECONOMICS_SCREEN'">
+              </economics>
 
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button " v-on:click="onPrevPage">Previous</label>
@@ -81,6 +77,10 @@
 import store from '~/store'
 import { mapState } from 'vuex'
 import DrygasPvt from '~/components/DrygasPvt.vue'
+import Surface from '~/components/Surface.vue'
+import Reservoir from '~/components/Reservoir.vue'
+import WellHistory from '~/components/WellHistory.vue'
+import Economics from '~/components/Economics.vue'
 
 const PVT_SCREEN = "PVT_SCREEN"
 const SURFACE_SCREEN = "SURFACE_SCREEN"
@@ -91,7 +91,11 @@ const WELLHISTORY_SCREEN = "WELLHISTORY_SCREEN"
 // import axios from 'axios'
 export default {
   components: { 
-    DrygasPvt 
+    DrygasPvt,
+    Surface,
+    Reservoir,
+    WellHistory,
+    Economics
   },
 
   middleware: 'auth',
@@ -110,11 +114,7 @@ export default {
 
   data() {
     return {
-      standardCondition: null,
       gasPVT : null,
-      rockProperties: null,
-      myDryGas: {},
-      selectedOptionPage : null,
       screenType: PVT_SCREEN
     }
   },
@@ -122,7 +122,6 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      drygas : state => state.project.drygas,
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
     }),

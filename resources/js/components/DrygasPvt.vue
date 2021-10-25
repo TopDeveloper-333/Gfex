@@ -29,8 +29,18 @@ export default {
 
   data() {
     return {
-
+      myDryGas: {},
+      standardCondition: null,
+      rockProperties: null,
+      selectedOptionPage : null,
     }
+  },
+
+  computed: {
+    ...mapState({
+      drygas : state => state.project.drygas,
+    }),
+
   },
 
   methods: {
@@ -71,8 +81,8 @@ export default {
 
     // Standard Conditions
     var standardConditionsData = [
-      [,],
-        // [14.7, 60],
+      // [,],
+      [14.7, 60],
     ];
     
     this.standardCondition = jspreadsheet(document.getElementById('standardCondition'), {
@@ -102,8 +112,8 @@ export default {
 
     // GAS PVT
     var gasPVTData = [
-      [,,,,,,],
-      // ["35.D-05", 0.025, 0.6, 300, 0.03, 0.06, 0.02]
+      // [,,,,,,],
+      ["35.D-05", 0.025, 0.6, 300, 0.03, 0.06, 0.02]
     ];
 
     this.gasPVT = jspreadsheet(document.getElementById('gasPVT'), {
@@ -163,8 +173,8 @@ export default {
 
     // ROCK PROPERTIES
     var rockPropertiesData = [
-      [,,],
-        // [0.30, "3.D-06", "3.D-06"],
+      // [,,],
+      [0.30, "3.D-06", "3.D-06"],
     ];
     
     this.rockProperties = jspreadsheet(document.getElementById('rockProperties'), {
