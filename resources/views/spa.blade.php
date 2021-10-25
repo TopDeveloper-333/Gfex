@@ -24,6 +24,13 @@ $appCss = mix('dist/css/app.css');
   <script src="https://jsuites.net/v4/jsuites.js"></script>
   <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
+  <!-- Load c3.css -->
+  <link href="/assets/css/c3.css" rel="stylesheet">
+
+  <!-- Load d3.js and c3.js -->
+  <script src="/assets/js/d3.v5.min.js" charset="utf-8"></script>
+  <script src="/assets/js/c3.min.js"></script>  
+
 </head>
 <body>
   <div id="app"></div>
