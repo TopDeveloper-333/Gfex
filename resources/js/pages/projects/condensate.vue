@@ -14,18 +14,20 @@
           <div class="col-md-9">
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
-              <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
 
-              <div>
-                <label class="btn btn-primary gf-button" style="float:right" v-on:click="onPlotPage">Plot</label>
+              <condensate-pvt v-show="screenType==='PVT_SCREEN'">
+              </condensate-pvt>
+              <div v-show="screenType==='SURFACE_SCREEN'">
+                Surface screen
               </div>
-
-              <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-                <div id="gasCondensate1"></div>
+              <div v-show="screenType==='RESERVOIR_SCREEN'">
+                Reservoir screen
               </div>
-
-              <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-                <div id="gasCondensate2"></div>
+              <div v-show="screenType==='WELLHISTORY_SCREEN'">
+                Well History screen
+              </div>
+              <div v-show="screenType==='ECONOMICS_SCREEN'">
+                Economics screen
               </div>
 
               <div class="d-flex justify-content-between">
@@ -33,11 +35,11 @@
 
                 <!-- <div style="text-align:center" class="btn-group" role="group"> -->
                 <div style="text-align:center">
-                  <label class="btn btn-outline-primary gf-button" v-on:click="onPVTPage">PVT</label>
-                  <label class="btn btn-outline-primary gf-button" v-on:click="onSurfacePage">Surface</label>
-                  <label class="btn btn-outline-primary gf-button" v-on:click="onReservoirPage" v-show="isFDP=='1'">Reservoir</label>
-                  <label class="btn btn-outline-primary gf-button" v-on:click="onWellHistoryPage" v-show="isEconomics != true">Well History</label>
-                  <label class="btn btn-outline-primary gf-button" v-on:click="onEconomicsPage" v-show="isEconomics == true && isFDP =='1'">Economics</label>
+                  <label class="btn gf-button" v-on:click="onPVTPage" v-bind:class="pvtButtonClass">PVT</label>
+                  <label class="btn gf-button" v-on:click="onSurfacePage" v-bind:class="surfaceButtonClass">Surface</label>
+                  <label class="btn gf-button" v-on:click="onReservoirPage" v-bind:class="reservoirButtonClass" v-show="isFDP=='1'">Reservoir</label>
+                  <label class="btn gf-button" v-on:click="onWellHistoryPage" v-bind:class="wellHistoryButtonClass" v-show="isEconomics != true">Well History</label>
+                  <label class="btn gf-button" v-on:click="onEconomicsPage" v-bind:class="economicsButtonClass" v-show="isEconomics == true && isFDP =='1'">Economics</label>
                 </div>
 
                 <div>
@@ -76,7 +78,13 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import CondensatePvt from '~/components/CondensatePvt';
 
+const PVT_SCREEN = "PVT_SCREEN"
+const SURFACE_SCREEN = "SURFACE_SCREEN"
+const RESERVOIR_SCREEN = "RESERVOIR_SCREEN"
+const ECONOMICS_SCREEN = "ECONOMICS_SCREEN"
+const WELLHISTORY_SCREEN = "WELLHISTORY_SCREEN"
 
 // import axios from 'axios'
 export default {
@@ -94,21 +102,42 @@ export default {
     return { title: this.$t('GAS Condensate') }
   },
 
+  components: {
+    CondensatePvt
+  },
+
   data() {
     return {
-      gasCondensate1: null,
-      gasCondensate2: null,
-      myGasCondensate : {}
+      screenType : PVT_SCREEN
     }
   },
 
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      gasCondensate : state => state.project.gascondensate,
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
     }),
+    pvtButtonClass: function() {
+      if (this.screenType === PVT_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
+    surfaceButtonClass: function () {
+      if (this.screenType === SURFACE_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
+    reservoirButtonClass: function () {
+      if (this.screenType === RESERVOIR_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
+    wellHistoryButtonClass: function () {
+      if (this.screenType === WELLHISTORY_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
+    economicsButtonClass: function () {
+      if (this.screenType === ECONOMICS_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
   },
 
   methods: {
@@ -125,23 +154,20 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
     },
-    onPlotPage: function(event) {
-
-    },
     onPVTPage: function(event) {
-
+      this.screenType = PVT_SCREEN
     },
     onSurfacePage: function(event) {
-
+      this.screenType = SURFACE_SCREEN
     },
     onReservoirPage: function(event) {
-
+      this.screenType = RESERVOIR_SCREEN
     },
     onWellHistoryPage: function(event) {
-      
+      this.screenType = WELLHISTORY_SCREEN
     },
     onEconomicsPage: function(event) {
-
+      this.screenType = ECONOMICS_SCREEN
     },
     onExitPage: function(event) {
       var modal = document.getElementById("exitModal");
@@ -150,138 +176,12 @@ export default {
     onPrevPage: function(event) {
       this.$router.replace('create')
     },
-    onNextPage: async function(event) {
-      this.myGasCondensate = {
-        gasCondensate1 : {
-          Psat: 0, Swi : 0
-        },
-        gasCondensate2 : [
-        ]
-      };
-
-      this.myGasCondensate.gasCondensate1.Psat = this.gasCondensate1.getValue('A1');
-      this.myGasCondensate.gasCondensate1.Swi = this.gasCondensate1.getValue('B1');
-
-      var numRows = this.gasCondensate2.options.data.length;
-      for (var i =0; i < numRows; i++) {
-        this.myGasCondensate.gasCondensate2[i] = [0, 0, 0, 0, 0, 0, 0, 0];
-        this.myGasCondensate.gasCondensate2[i][0] = this.gasCondensate2.getValue('A' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][1] = this.gasCondensate2.getValue('B' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][2] = this.gasCondensate2.getValue('C' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][3] = this.gasCondensate2.getValue('D' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][4] = this.gasCondensate2.getValue('E' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][5] = this.gasCondensate2.getValue('F' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][6] = this.gasCondensate2.getValue('G' + (i+1));
-        this.myGasCondensate.gasCondensate2[i][7] = this.gasCondensate2.getValue('H' + (i+1));
-      }
-
-      await store.dispatch('project/saveGasCondensate', this.myGasCondensate)
+    onNextPage: function(event) {
 
     }
   },
   mounted() {
-    this.myGasCondensate = this.gascondensate
-
-    var gasCondensate1Data = [
-      [5114.0, 0.0]
-    ];
-
-    this.gasCondensate1 = jspreadsheet(document.getElementById('gasCondensate1'), {
-        allowInsertRow:false,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:false,
-        allowDeleteColumn:false,
-        data:gasCondensate1Data,
-        columns: [
-            {
-                type: 'numeric',
-                title:'PSAT (psia)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Swi',
-                width: 120,
-                decimal:','
-            },
-        ]
-    });
-    this.gasCondensate1.hideIndex();
-
-    var gasCondensate2Data = [
-      [5114.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
-      [4000.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
-      [3000.0, 1.660, 1778.9, 0.958, 57.1,  0.4781, 0.0222, 0.0],
-      [2000.0, 1.409, 1075.8, 1.376, 31.2,  0.7746, 0.0166, 0.0],
-      [1000.0, 1.219, 596.4,  2.636, 25.8,  1.0295, 0.0148, 0.0]
-    ];
-
-    this.gasCondensate2 = jspreadsheet(document.getElementById('gasCondensate2'), {
-        allowInsertRow:true,
-        allowManualInsertRow:true,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:true,
-        allowDeleteColumn:false,
-        data:gasCondensate2Data,
-        columns: [
-            {
-                type: 'numeric',
-                title:'P (psia)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Bo (rb/stb)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Rs (scf/stb)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Bg (rb/mscf)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Rv (stb/mmscf)',
-                width: 150,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Oil Viscosity (cp)',
-                width: 170,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Gas Viscosity (cp)',
-                width: 170,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'PV Inj (%)',
-                width: 120,
-                decimal:','
-            },
-        ]
-    });
-    this.gasCondensate2.hideIndex();
-
     mountExitDialog();
-
   }
 
 }
