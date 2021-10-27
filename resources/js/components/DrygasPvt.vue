@@ -2,19 +2,19 @@
   <div>
     <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Dry Gas PVT Data</u></p>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Standard Conditions</p>
-      <div id="standardCondition"></div>
+      <div id="standardConditionSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Gas Properties</p>
-      <div id="gasPVT"></div>
+      <div id="gasPVTSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Rock Properties</p>
-      <div id="rockProperties"></div>
+      <div id="rockPropertiesSheet"></div>
     </div>
 
   </div>
@@ -30,8 +30,9 @@ export default {
   data() {
     return {
       myDryGas: {},
-      standardCondition: null,
-      rockProperties: null,
+      standardConditionSheet: null,
+      rockPropertiesSheet: null,
+      gasPVTSheet: null,
       selectedOptionPage : null,
     }
   },
@@ -57,18 +58,18 @@ export default {
         }
       }
 
-      this.myDryGas.standardConditions.Psc = this.standardCondition.getValue('A1');
-      this.myDryGas.standardConditions.Tsc = this.standardCondition.getValue('B1');
-      this.myDryGas.gasProperties.gasCompressibility = this.gasPVT.getValue('A1');
-      this.myDryGas.gasProperties.gasViscosity = this.gasPVT.getValue('B1');
-      this.myDryGas.gasProperties.specificGravity = this.gasPVT.getValue('C1');
-      this.myDryGas.gasProperties.resTemp = this.gasPVT.getValue('D1');
-      this.myDryGas.gasProperties.N2 = this.gasPVT.getValue('E1');
-      this.myDryGas.gasProperties.CO2 = this.gasPVT.getValue('F1');
-      this.myDryGas.gasProperties.H2S = this.gasPVT.getValue('G1');
-      this.myDryGas.rockProperties.conateWaterSaturation = this.rockProperties.getValue('A1');
-      this.myDryGas.rockProperties.waterCompressibility = this.rockProperties.getValue('B1');
-      this.myDryGas.rockProperties.rockCompressibility = this.rockProperties.getValue('C1');
+      this.myDryGas.standardConditions.Psc = this.standardConditionSheet.getValue('A1');
+      this.myDryGas.standardConditions.Tsc = this.standardConditionSheet.getValue('B1');
+      this.myDryGas.gasProperties.gasCompressibility = this.gasPVTSheet.getValue('A1');
+      this.myDryGas.gasProperties.gasViscosity = this.gasPVTSheet.getValue('B1');
+      this.myDryGas.gasProperties.specificGravity = this.gasPVTSheet.getValue('C1');
+      this.myDryGas.gasProperties.resTemp = this.gasPVTSheet.getValue('D1');
+      this.myDryGas.gasProperties.N2 = this.gasPVTSheet.getValue('E1');
+      this.myDryGas.gasProperties.CO2 = this.gasPVTSheet.getValue('F1');
+      this.myDryGas.gasProperties.H2S = this.gasPVTSheet.getValue('G1');
+      this.myDryGas.rockProperties.conateWaterSaturation = this.rockPropertiesSheet.getValue('A1');
+      this.myDryGas.rockProperties.waterCompressibility = this.rockPropertiesSheet.getValue('B1');
+      this.myDryGas.rockProperties.rockCompressibility = this.rockPropertiesSheet.getValue('C1');
 
       await store.dispatch('project/saveDryGas', this.myDryGas)
     }
@@ -76,6 +77,7 @@ export default {
 
   mounted() {
     this.myDryGas = this.drygas
+
     if (this.selectedOptionPage == null || this.selectedOptionPage == undefined)
       this.selectedOptionPage = "PVT_PAGE"
 
@@ -85,7 +87,7 @@ export default {
       [14.7, 60],
     ];
     
-    this.standardCondition = jspreadsheet(document.getElementById('standardCondition'), {
+    this.standardConditionSheet = jspreadsheet(document.getElementById('standardConditionSheet'), {
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -108,7 +110,7 @@ export default {
             },
         ]
     });
-    this.standardCondition.hideIndex();
+    this.standardConditionSheet.hideIndex();
 
     // GAS PVT
     var gasPVTData = [
@@ -116,7 +118,7 @@ export default {
       ["35.D-05", 0.025, 0.6, 300, 0.03, 0.06, 0.02]
     ];
 
-    this.gasPVT = jspreadsheet(document.getElementById('gasPVT'), {
+    this.gasPVTSheet = jspreadsheet(document.getElementById('gasPVTSheet'), {
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -169,7 +171,7 @@ export default {
             },
         ]
     });
-    this.gasPVT.hideIndex();
+    this.gasPVTSheet.hideIndex();
 
     // ROCK PROPERTIES
     var rockPropertiesData = [
@@ -177,7 +179,7 @@ export default {
       [0.30, "3.D-06", "3.D-06"],
     ];
     
-    this.rockProperties = jspreadsheet(document.getElementById('rockProperties'), {
+    this.rockPropertiesSheet = jspreadsheet(document.getElementById('rockPropertiesSheet'), {
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -204,7 +206,7 @@ export default {
             },
         ]
     });
-    this.rockProperties.hideIndex();    
+    this.rockPropertiesSheet.hideIndex();    
   }
 }
 </script>

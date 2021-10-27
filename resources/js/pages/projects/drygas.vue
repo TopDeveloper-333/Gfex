@@ -4,14 +4,15 @@
     <form>
       <div class="card mb-3">
         <div class="card-header gf-header">
-          FastPlan* Platform<br>
+          <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:150px;margin-top:16px;float:left">
+          FastPlan* Gas Platform<br>
           <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
         <div class="row g-0" style="background-color:#fdf500;">
-          <div class="col-md-3" style="display:flex; justify-content:center;">
+          <!-- <div class="col-md-3" style="display:flex; justify-content:center;">
             <img src="/assets/image/LOGO_GFEX.png" class="img-fluid rounded-start" style="opacity:0.6;max-width:250px;max-height:300px">
-          </div>
-          <div class="col-md-9">
+          </div> -->
+          <div class="col-md-10 offset-md-1">
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project
               </h3>
@@ -26,6 +27,8 @@
               </well-history>
               <economics v-show="screenType==='ECONOMICS_SCREEN'">
               </economics>
+              <operations v-show="screenType==='OPERATIONS_SCREEN'">
+              </operations>
 
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button " v-on:click="onPrevPage">Previous</label>
@@ -35,8 +38,9 @@
                   <label class="btn gf-button" v-on:click="onPVTPage" v-bind:class="pvtButtonClass">PVT</label>
                   <label class="btn gf-button" v-on:click="onSurfacePage" v-bind:class="surfaceButtonClass">Surface</label>
                   <label class="btn gf-button" v-on:click="onReservoirPage" v-bind:class="reservoirButtonClass" v-show="isFDP=='1'">Reservoir</label>
-                  <label class="btn gf-button" v-on:click="onWellHistoryPage" v-bind:class="wellHistoryButtonClass" v-show="isEconomics != true">Well History</label>
+                  <label class="btn gf-button" v-on:click="onWellHistoryPage" v-bind:class="wellHistoryButtonClass" v-show="isEconomics != true && isCondensate=='1' && isFDP =='0'">Well History</label>
                   <label class="btn gf-button" v-on:click="onEconomicsPage" v-bind:class="economicsButtonClass" v-show="isEconomics == true && isFDP =='1'">Economics</label>
+                  <label class="btn gf-button" v-on:click="onOperationPage" v-bind:class="operationButtonClass" v-show="isFDP=='1'">Operations</label>
                 </div>
 
                 <div>
@@ -55,12 +59,17 @@
     <div id="exitModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">Fastplan* platform</span>
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas platform</span>
           <span class="gf-close">&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
-        <span style="font-size: 1.25rem">Do you want to exit this project?</span>
+        <span style="font-size: 1.25rem" v-show="isSaveAs==false">Do you want to save this project?</span>
+        <div v-show="isSaveAs==true">
+          <span style="font-size: 1.25rem">Project Name: </span>
+          <input style="font-size: 1.25rem" maxlength="20" v-model="newProjectName" placeholder="Please input new project name">
+        </div>
         <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onSaveAs" v-show="hideSaveAsButton==false">Save As</label>
           <label class="btn btn-primary gf-button" v-on:click="onYes">Yes</label>
           <label class="btn btn-primary gf-button" v-on:click="onNo">No</label>
         </div>
@@ -81,12 +90,15 @@ import Surface from '~/components/Surface.vue'
 import Reservoir from '~/components/Reservoir.vue'
 import WellHistory from '~/components/WellHistory.vue'
 import Economics from '~/components/Economics.vue'
+import Operations from '~/components/Operations.vue'
 
 const PVT_SCREEN = "PVT_SCREEN"
 const SURFACE_SCREEN = "SURFACE_SCREEN"
 const RESERVOIR_SCREEN = "RESERVOIR_SCREEN"
 const ECONOMICS_SCREEN = "ECONOMICS_SCREEN"
 const WELLHISTORY_SCREEN = "WELLHISTORY_SCREEN"
+const OPERATIONS_SCREEN = "OPERATIONS_SCREEN"
+
 
 // import axios from 'axios'
 export default {
@@ -95,7 +107,8 @@ export default {
     Surface,
     Reservoir,
     WellHistory,
-    Economics
+    Economics,
+    Operations
   },
 
   middleware: 'auth',
@@ -115,7 +128,10 @@ export default {
   data() {
     return {
       gasPVT : null,
-      screenType: PVT_SCREEN
+      screenType: PVT_SCREEN,
+      isSaveAs : false,
+      hideSaveAsButton: false,
+      newProjectName: ""
     }
   },
 
@@ -124,6 +140,7 @@ export default {
       projectName : state => state.project.projectName,
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
+      isCondensate: state => state.project.isCondensate,
     }),
     pvtButtonClass: function() {
       if (this.screenType === PVT_SCREEN) return {'btn-primary': true}
@@ -145,9 +162,17 @@ export default {
       if (this.screenType === ECONOMICS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
+    operationButtonClass: function () {
+      if (this.screenType === OPERATIONS_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    }
   },
 
   methods: {
+    onSaveAs: function(event) {
+      this.isSaveAs = true
+      this.hideSaveAsButton = true
+    },
     onYes: function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
@@ -179,7 +204,13 @@ export default {
     onEconomicsPage: function(event) {
       this.screenType = ECONOMICS_SCREEN
     },
+    onOperationPage: function(event) {
+      this.screenType = OPERATIONS_SCREEN
+    },
     onExitPage: function(event) {
+      this.isSaveAs = false
+      this.hideSaveAsButton = false
+
       var modal = document.getElementById("exitModal");
       modal.style.display = "block";
     },

@@ -4,14 +4,15 @@
     <form>
       <div class="card mb-3">
         <div class="card-header gf-header">
-          FastPlan* Platform<br>
+          <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:150px;margin-top:16px;float:left">
+          FastPlan* Gas Platform<br>
           <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
         <div class="row g-0" style="background-color:#fdf500;">
-          <div class="col-md-4" style="display:flex; justify-content:center;">
+          <!-- <div class="col-md-4" style="display:flex; justify-content:center;">
             <img src="/assets/image/LOGO_GFEX.png" class="img-fluid rounded-start" style="opacity:0.6;max-width:250px;max-height:300px">
-          </div>
-          <div class="col-md-8">
+          </div> -->
+          <div class="col-md-8 offset-md-2">
             <div class="card-body">
               <h3 class="card-title gf-title text-wrap" >Project Management</h3>
               <p class="card-text gf-comment">Create new and View past</p>
@@ -23,7 +24,7 @@
                   </label>
 
                   <div style="display:flex;align-items:center;margin-bottom:16px;margin-top:16px">
-                    <input class="form-control gf-control" maxlength="20" v-model="myProjectName" placeholder="Non Empty">                    
+                    <input class="form-control gf-control" maxlength="20" v-model="myProjectName" placeholder="Non Empty">
                   </div>
 
                   <div>
@@ -58,7 +59,7 @@
     <div id="issueModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">Fastplan* platform</span>
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas platform</span>
           <span class="gf-close">&times;</span>
         </div>
         <p style="font-size: 1.25rem;margin-top:20px">Please input new project's name</p>

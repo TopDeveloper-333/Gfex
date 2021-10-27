@@ -1,29 +1,29 @@
 <template>
   <div>
-    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Surface Data</u></p>
+    <p class="card-text" style="font-size: 2.6rem !important;text-align: center !important;"><u>Surface Data</u></p>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Tubing Properties</p>
       <div id="tubingPropertiesSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-      <p class="gf-item">Pipeline WELLAHEAD to TIE-POINT/MANIFOLD</p>
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+      <p class="gf-item">Pipeline Wellhead to Tie-Point/Manifold</p>
       <div id="wellaheadToManifoldSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-      <p class="gf-item">Pipeline TIE-POINT/MANIFOLD to COMPRESSION STATION</p>
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+      <p class="gf-item">Pipeline Tie-Point/Manifold to Compression Station</p>
       <div id="manifoldToCompressionSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-      <p class="gf-item">Pipeline COMPRESSION STATION to SALES POINT</p>
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+      <p class="gf-item">Pipeline Compression Station to Sales Point</p>
       <div id="compressionToSalesSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
-      <p class="gf-item">COMPRESSION DISCHARGE RATIO & PRESSURE DIFFERENTIAL to START COMPRESSION</p>
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+      <p class="gf-item">Compression Discharge Ratio & Pressure Differential to Start Compression</p>
       <div id="compressionToStartSheet"></div>
     </div>
 
@@ -41,6 +41,10 @@ export default {
   data() {
     return {
       tubingPropertiesSheet: null,
+      wellaheadToManifoldSheet: null,
+      manifoldToCompressionSheet: null,
+      compressionToSalesSheet: null,
+      compressionToStartSheet: null,
       mySurface : {}
     }
   },
