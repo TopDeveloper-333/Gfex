@@ -9,20 +9,17 @@
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Dual-Porosity</p>
-      <multiselect v-model="ifracture" :options="ifractureOptions" track-by="name" label="name" placeholder="Select option"></multiselect>
-    </div>
-
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="ifracture!=null && ifracture.value==1">
-      <div id="ifracture1Sheet"></div>
+      <multiselect v-model="dualPorosity" :options="dualPorosityOptions" track-by="name" label="name" placeholder="Select option"></multiselect>
+      <div id="dualPorosityHSheet" style="margin-top:1rem" v-show="dualPorosity != null && dualPorosity.value ==1"></div>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">History & Forecast Runs</p>
-      <div id="ifracture2Sheet"></div>
+      <div id="historyForecastSheet"></div>
     </div>
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Operations Data</p>
-      <div id="historyForecastSheet"></div>
+      <div id="operationsDataSheet"></div>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
@@ -65,11 +62,11 @@ export default {
   data() {
     return {
       reservoirDataHSheet: null,
-      ifracture1Sheet: null,
-      ifracture2Sheet: null,
+      dualPorosityHSheet: null,
       historyForecastSheet: null,
-      ifracture: null,
-      ifractureOptions: [
+      operationsDataSheet: null,
+      dualPorosity: {name: "No", value: 0},
+      dualPorosityOptions: [
         {name: "Yes", value: 1},
         {name: "No", value: 0}
       ]
@@ -118,13 +115,14 @@ export default {
     });
     this.reservoirDataHSheet.hideIndex();
 
-    // IFracture 1 data
-    var ifracture1Data = [
+    // dualPorosity data
+    debugger
+    var dualPorosityData = [
       [1, 300, 0.00001, 15000]
     ];
 
-    this.ifracture1Sheet = jspreadsheet(document.getElementById('ifracture1Sheet'), {
-        data:ifracture1Data,
+    this.dualPorosityHSheet = jspreadsheet(document.getElementById('dualPorosityHSheet'), {
+        data:dualPorosityData,
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -158,15 +156,15 @@ export default {
             },
         ]
     });
-    this.ifracture1Sheet.hideIndex();
+    this.dualPorosityHSheet.hideIndex();
 
-    // IFracture 2 data
-    var ifracture2Data = [
+    // History & Broadcast data
+    var historyForecastData = [
       [2020, 50]
     ];
 
-    this.ifracture2Sheet = jspreadsheet(document.getElementById('ifracture2Sheet'), {
-        data:ifracture2Data,
+    this.historyForecastSheet = jspreadsheet(document.getElementById('historyForecastSheet'), {
+        data:historyForecastData,
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -188,15 +186,15 @@ export default {
             },
         ]
     });
-    this.ifracture2Sheet.hideIndex();
+    this.historyForecastSheet.hideIndex();
 
-    // History & Forecast Runs
-    var historyForecastData = [
+    // Operations Data
+    var operationsData = [
       [100, 800, 0.01, 70]
     ];
 
-    this.historyForecastSheet = jspreadsheet(document.getElementById('historyForecastSheet'), {
-        data:historyForecastData,
+    this.operationsDataSheet = jspreadsheet(document.getElementById('operationsDataSheet'), {
+        data:operationsData,
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -230,7 +228,7 @@ export default {
             },
         ]
     });
-    this.historyForecastSheet.hideIndex();
+    this.operationsDataSheet.hideIndex();
 
   }
 }

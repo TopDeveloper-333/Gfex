@@ -15,6 +15,8 @@
 
               <condensate-pvt v-show="screenType==='PVT_SCREEN'">
               </condensate-pvt>
+              <relative-permeability v-show="screenType==='RELPERM_SCREEN'">
+              </relative-permeability>
               <surface v-show="screenType==='SURFACE_SCREEN'">
               </surface>
               <reservoir v-show="screenType==='RESERVOIR_SCREEN'">
@@ -87,6 +89,7 @@ import Reservoir from '~/components/Reservoir.vue';
 import WellHistory from '~/components/WellHistory.vue';
 import Economics from '~/components/Economics.vue';
 import Operations from '~/components/Operations.vue';
+import RelativePermeability from '~/components/RelativePermeability.vue';
 
 const PVT_SCREEN = "PVT_SCREEN"
 const RELPERM_SCREEN = "RELPERM_SCREEN"
@@ -119,6 +122,7 @@ export default {
     Surface,
     Economics,
     Operations,
+    RelativePermeability
   },
 
   data() {
