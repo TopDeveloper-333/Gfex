@@ -33,15 +33,15 @@
       <!-- {{entry.id}} : {{ entry.option }} : {{entry.data}} -->
       <hr class="gf-line">
 
-      <p class="gf-item">Well-Test Data #{{entry.id}}</p>
+      <p class="gf-item">Well-Test Data #{{entry.id + 1}}</p>
       <multiselect v-model="entry.option" :options="testWellDataOptions" @select="onChangedOption"
         track-by="name" label="name" placeholder="Select option" :id="'option-' + entry.id"></multiselect>
 
-      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==1">C & N Model #{{entry.id}}</p>
-      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==2">Vertical Well Model #{{entry.id}}</p>
-      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==3">Horizontal Well Model #{{entry.id}}</p>
+      <!-- <p class="gf-item" v-show="entry.option!=null&&entry.option.value==1">C & n Model #{{entry.id + 1}}</p>
+      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==2">Vertical Well Model #{{entry.id + 1}}</p>
+      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==3">Horizontal Well Model #{{entry.id + 1}}</p> -->
 
-      <div :id="'networkSheet-' + entry.id"></div>
+      <div :id="'networkSheet-' + entry.id" style="margin-top:20px"></div>
     </div>
 
   </div>
@@ -88,7 +88,7 @@ export default {
       numberOfWells: 0,
       wellsNetwork: [],
       testWellDataOptions: [
-        { name: "C & N Method", value : 1 },
+        { name: "C & n Model", value : 1 },
         { name: "Vertical Model", value: 2 },
         { name: "Horizontal Model", value: 3 }
       ],
@@ -154,7 +154,7 @@ export default {
             },
             {
                 type: 'numeric',
-                title:'N',
+                title:'n',
                 width: 120,
                 decimal:','
             },
@@ -263,7 +263,8 @@ export default {
           allowManualInsertColumn:false,
           allowDeleteRow:false,
           allowDeleteColumn:false,
-          columns: columns
+          columns: columns,
+          updateTable: this.validationTable
       });
       this.wellsNetwork[index].sheet.hideIndex();
     }
@@ -297,7 +298,8 @@ export default {
                 width: 140,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.reservoirDataHSheet.hideIndex();
 
@@ -339,7 +341,8 @@ export default {
                 width: 160,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.dualPorosityHSheet.hideIndex();
 
@@ -369,7 +372,8 @@ export default {
                 width: 140,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.historyForecastSheet.hideIndex();
 
@@ -411,7 +415,8 @@ export default {
                 width: 240,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.operationsDataSheet.hideIndex();
 

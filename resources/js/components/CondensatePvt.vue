@@ -290,7 +290,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable,
     });
     this.gasCondensate1Sheet.hideIndex();
 
@@ -364,7 +365,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable,
     });
     this.gasCondensate2Sheet.hideIndex();
 
@@ -398,6 +400,6 @@ function mountPlotDialog() {
 
 <style scoped>
 #plot {
-  background: green;
+  background: red;
 }
 </style>

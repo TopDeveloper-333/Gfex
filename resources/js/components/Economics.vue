@@ -90,7 +90,8 @@ export default {
                 width: 240,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.economics1Sheet.hideIndex();
     
@@ -132,7 +133,8 @@ export default {
                 width: 250,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.economics2Sheet.hideIndex();
 
@@ -162,7 +164,8 @@ export default {
                 width: 300,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.economics3Sheet.hideIndex();
 
@@ -218,7 +221,8 @@ export default {
                 width: 160,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.economicsDataSheet.hideIndex();
   }

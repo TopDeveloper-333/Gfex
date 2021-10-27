@@ -31,6 +31,8 @@ $appCss = mix('dist/css/app.css');
   <script src="/assets/js/d3.v5.min.js" charset="utf-8"></script>
   <script src="/assets/js/c3.min.js"></script>  
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+  
 </head>
 <body>
   <div id="app"></div>

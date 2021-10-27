@@ -88,7 +88,8 @@ export default {
                 width: 100,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.relativePermeabilitySheet.hideIndex();
   }

@@ -373,7 +373,8 @@ export default {
                 width: 80,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.originalStreamComposition1.hideIndex();
 
@@ -403,7 +404,8 @@ export default {
                 title:'Specific Gravity',
                 width: 200,
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.originalStreamComposition2.hideIndex();
 
@@ -433,7 +435,8 @@ export default {
                 title:'TRES (Deg F)',
                 width: 160,
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.saturatedReservoirConditions.hideIndex();
 
@@ -457,7 +460,8 @@ export default {
                 title:'Temperature (Deg F)',
                 width: 190,
             },
-        ]
+        ],
+        updateTable: this.validationTable
     }
     
     var setNumber1Data = [

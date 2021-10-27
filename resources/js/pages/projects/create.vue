@@ -50,7 +50,7 @@
                 <label class="gf-item">DRY/WET GAS FIELD
                 </label>
                 <label class="switch" style="margin: 0 0 auto auto">
-                  <input type="checkbox" v-model="bCondensate" false-value=1 true-value=0>
+                  <input type="checkbox" v-model="bCondensate" false-value=1 true-value=0 :disabled="bFDP!='1'">
                   <span class="slider round"></span>
                 </label>
               </div>
@@ -59,7 +59,7 @@
                 <label class="gf-item">GAS CONDENSATE FIELD
                 </label>
                 <label class="switch" style="margin: 0 0 auto auto">
-                  <input type="checkbox" v-model="bCondensate" false-value=0 true-value=1>
+                  <input type="checkbox" v-model="bCondensate" false-value=0 true-value=1 :disabled="bFDP!='1'">
                   <span class="slider round"></span>
                 </label>
               </div>
@@ -154,6 +154,14 @@ export default {
     }),
   },
 
+  watch: {
+    bFDP: function() {
+      if (this.bFDP != '1') {
+        this.bCondensate = '0'
+      }
+    }
+  },
+  
   methods: {
     onSaveAs: function(event) {
       this.isSaveAs = true
@@ -177,7 +185,8 @@ export default {
     },
     onNextPage: async function(event) {
 
-      if (this.bFDP == false)
+      debugger
+      if (this.bFDP != '1')
         this.bEconomics = false
 
       var payload = {}

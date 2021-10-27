@@ -24,7 +24,7 @@
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 1">
-      <p class="gf-item">C & N Method</p>
+      <p class="gf-item">C & n Model</p>
       <div id="cnMethodSheet"></div>
     </div>
 
@@ -77,13 +77,13 @@ export default {
       verticalModelSheet: null,
       horizontalModelSheet: null,
       dualPorosity : { name: "No", value : 0},
-      testWellData : { name: "C & N Method", value : 1 },
+      testWellData : { name: "C & n Model", value : 1 },
       dualPorosityOptions: [
         { name: "Yes", value : 1 },
         { name: "No", value : 0} 
       ],
       testWellDataOptions: [
-        { name: "C & N Method", value : 1 },
+        { name: "C & n Model", value : 1 },
         { name: "Vertical Model", value: 2 },
         { name: "Horizontal Model", value: 3 }
       ]
@@ -141,7 +141,8 @@ export default {
                 width: 280,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.reservoirPVTSheet.hideIndex();
 
@@ -172,7 +173,8 @@ export default {
                 width: 240,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.reservoirDataSheet.hideIndex();
 
@@ -215,12 +217,13 @@ export default {
                 width: 200,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.dualPorositySheet.hideIndex();
 
     // ----------------------------------------------------
-    // C & N Method
+    // C & n Model
     var cnMethodData = [
       [26.9, 0.537]
     ];
@@ -246,7 +249,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.cnMethodSheet.hideIndex();
 
@@ -301,7 +305,8 @@ export default {
                 width: 90,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.verticalModelSheet.hideIndex();
 
@@ -368,7 +373,8 @@ export default {
                 width: 90,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.horizontalModelSheet.hideIndex();
   }

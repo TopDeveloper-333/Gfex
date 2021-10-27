@@ -87,7 +87,8 @@ export default {
                 width: 300,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.operationalConstraintsSheet.hideIndex();
 
@@ -136,7 +137,8 @@ export default {
                 width: 180,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.gasDeliveryReqSheet.hideIndex();
   }

@@ -118,7 +118,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.tubingPropertiesSheet.hideIndex();
 
@@ -160,7 +161,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.wellaheadToManifoldSheet.hideIndex();
 
@@ -202,7 +204,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.manifoldToCompressionSheet.hideIndex();
 
@@ -244,7 +247,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.compressionToSalesSheet.hideIndex();
 
@@ -274,7 +278,8 @@ export default {
                 width: 190,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.compressionToStartSheet.hideIndex();
 

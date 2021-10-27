@@ -108,7 +108,8 @@ export default {
                 width: 120,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.standardConditionSheet.hideIndex();
 
@@ -169,7 +170,8 @@ export default {
                 width: 140,
                 decimal:','
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.gasPVTSheet.hideIndex();
 
@@ -204,7 +206,8 @@ export default {
                 title:'Rock Compressibility (1/psi)',
                 width: 240,
             },
-        ]
+        ],
+        updateTable: this.validationTable
     });
     this.rockPropertiesSheet.hideIndex();    
   }
