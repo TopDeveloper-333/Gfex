@@ -282,6 +282,7 @@ export default {
       });
     },
     validateGasCondensate1: function(instance, cell, col, row, val, label, cellName) {
+      debugger
       var value = parseFloat(val)
 
       if (cellName == 'A1') {
@@ -289,7 +290,9 @@ export default {
         this.isGasCondensate1Validate = true
       }
 
-      if (value < 0) {
+      if ((isNaN(value) == true) || (value < 0) ||
+          (cellName == 'B1' && (value == 0 || value > 1)) ) 
+      {
         this.markInvalidCell(cell)
         this.isGasCondensate1Validate = false
       }
@@ -297,13 +300,28 @@ export default {
         this.markNormalCell(cell)
       }
 
-      if (cellName == 'B1' && (value == 0 || value > 1)) {
-        this.markInvalidCell(cell)
-        this.isGasCondensate1Validate = false
-      }
-
     },
     validateGasCondensate2: function(instance, cell, col, row, val, label, cellName) {
+      debugger
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isGasCondensate2Validate = true
+      }
+
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isGasCondensate2Validate = false
+      }
+      // else if (col == 7 && value > 100) {
+      //   this.markInvalidCell(cell)
+      //   this.isGasCondensate2Validate = false
+      // }
+      else {
+        this.markNormalCell(cell)
+      }
 
     },
   },
