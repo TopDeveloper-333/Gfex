@@ -43,7 +43,7 @@
                 </div>
 
                 <div>
-                  <label class="btn btn-outline-primary gf-button disabled" v-on:click="onNextPage">Execute</label>
+                  <label class="btn btn-outline-primary gf-button" v-bind:class="executeButtonClass" v-on:click="onNextPage">Execute</label>
                   <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
                 </div>
 
@@ -189,6 +189,10 @@ export default {
       else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
       else if (this.screenType === OPERATIONS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
+    },
+    executeButtonClass: function() {
+      if (this.isDataValidate == true) return {'btn-outline-primary': true}
+      else return {'btn-outline-primary': true, 'disabled': true}
     },
     isDataValidate: function() {
       debugger
