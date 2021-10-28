@@ -19,7 +19,14 @@ Vue.mixin({
       //   cell.style.backgroundColor = 'white'
       //   cell.style.color = 'black'
       // }
-
+    },
+    markInvalidCell: function(cell) {
+      cell.style.backgroundColor = '#f46e42'
+      cell.style.color = 'white'
+    },
+    markNormalCell: function(cell) {
+      cell.style.backgroundColor = 'white'
+      cell.style.color = 'black'
     }
   }
 })

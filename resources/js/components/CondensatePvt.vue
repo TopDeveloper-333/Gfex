@@ -3,16 +3,19 @@
     <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
 
     <div>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onPlotPage">Plot</label>
+      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onPlotPage">{{plotLabel}}</label>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
       <div id="gasCondensate1Sheet"></div>
       <div id="gasCondensate2Sheet"></div>
     </div>
 
+    <div style="height:50px" v-show="bShowPlot == true">
+    </div>
+
     <hr class="gf-line" v-show="bShowPlot == true">
-    <div style="display:flex;margin-bottom:6px;text-align:center;min-height:400px" class="row" v-show="bShowPlot == true">
+    <div style="display:flex;margin-bottom:6px;text-align:center;min-height:600px" class="row" v-show="bShowPlot == true">
       <div class="col-3">
         <label class="typo__label gf-item">Axis X:</label>
         <multiselect v-model="axisX" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select X axis."></multiselect>
@@ -82,7 +85,16 @@ export default {
       axisX: null,
       axisY: [],
       axisY2: null,
-      plot: null
+      plot: null,
+      plotLabel: "Plot",
+      isGasCondensate1Validate: true,
+      isGasCondensate2Validate: true,
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
@@ -93,6 +105,9 @@ export default {
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
     }),
+    isDataValidate: function() {
+      return this.isGasCondensate1Validate & this.isGasCondensate2Validate
+    }
   },
 
   methods: {
@@ -101,10 +116,14 @@ export default {
         modal.style.display = "none";
     },
     onPlotPage: function(event) {
-      if(this.bShowPlot == false)
+      if(this.bShowPlot == false) {
         this.bShowPlot = true
-      else
+        this.plotLabel = "Data"
+      }
+      else {
         this.bShowPlot = false
+        this.plotLabel = "Plot"
+      }
     },
     onSavePage: async function(event) {
       this.myGasCondensate = {
@@ -220,6 +239,9 @@ export default {
     updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
       this.plot = c3.generate({
           bindto: '#plot',
+          size: {
+              height: 600,
+          },
           data: {
             x: _axisX,
             columns: _columns,
@@ -258,7 +280,32 @@ export default {
             }
           }
       });
-    }
+    },
+    validateGasCondensate1: function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isGasCondensate1Validate = true
+      }
+
+      if (value < 0) {
+        this.markInvalidCell(cell)
+        this.isGasCondensate1Validate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+      if (cellName == 'B1' && (value == 0 || value > 1)) {
+        this.markInvalidCell(cell)
+        this.isGasCondensate1Validate = false
+      }
+
+    },
+    validateGasCondensate2: function(instance, cell, col, row, val, label, cellName) {
+
+    },
   },
 
   mounted() {
@@ -291,7 +338,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable,
+        updateTable: this.validateGasCondensate1,
     });
     this.gasCondensate1Sheet.hideIndex();
 
@@ -366,7 +413,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable,
+        updateTable: this.validateGasCondensate2,
     });
     this.gasCondensate2Sheet.hideIndex();
 
@@ -400,6 +447,6 @@ function mountPlotDialog() {
 
 <style scoped>
 #plot {
-  background: red;
+  background: #ff320e;
 }
 </style>

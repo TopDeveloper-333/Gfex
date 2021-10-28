@@ -155,7 +155,7 @@ export default {
   },
 
   watch: {
-    bFDP: function() {
+    bFDP: function(val, oldval) {
       if (this.bFDP != '1') {
         this.bCondensate = '0'
       }
