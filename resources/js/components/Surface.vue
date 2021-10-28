@@ -45,19 +45,123 @@ export default {
       manifoldToCompressionSheet: null,
       compressionToSalesSheet: null,
       compressionToStartSheet: null,
-      mySurface : {}
+      mySurface : {},
+      isTubingPropertiesValidate: true,
+      isWellHeadToTieValidate: true,
+      isTieToCompressionValidate: true,
+      isCompressionToSalesValidate: true,
+      isCompressionAndPressureValidate: true
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
   computed: {
     ...mapState({
     }),
+    isDataValidate: function() {
+      return this.isTubingPropertiesValidate & this.isWellHeadToTieValidate &
+          this.isTieToCompressionValidate & this.isCompressionToSalesValidate &
+          this.isCompressionAndPressureValidate
+    }
   },
 
   methods: {
     onSavePage: async function(event) {
 
-    }
+    },
+    validateTubingProperties:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isTubingPropertiesValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) || 
+          (col == 6 && !(value >=0 && value <=1)) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isTubingPropertiesValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateWellHeadToTie:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isWellHeadToTieValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ||
+          (col == 3 && !(value >=0 && value <=1)) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isWellHeadToTieValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateTieToCompression:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isTieToCompressionValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ||
+          (col == 3 && !(value >=0 && value <=1)) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isTieToCompressionValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateCompressionToSales:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isCompressionToSalesValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ||
+          (col == 3 && !(value >=0 && value <=1)) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isCompressionToSalesValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateCompressionAndPressure:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isCompressionAndPressureValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) {
+        this.markInvalidCell(cell)
+        this.isCompressionAndPressureValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
   },
 
   mounted() {
@@ -119,7 +223,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateTubingProperties
     });
     this.tubingPropertiesSheet.hideIndex();
 
@@ -162,7 +266,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateWellHeadToTie
     });
     this.wellaheadToManifoldSheet.hideIndex();
 
@@ -205,7 +309,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateTieToCompression
     });
     this.manifoldToCompressionSheet.hideIndex();
 
@@ -248,7 +352,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateCompressionToSales
     });
     this.compressionToSalesSheet.hideIndex();
 
@@ -279,7 +383,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateCompressionToSales
     });
     this.compressionToStartSheet.hideIndex();
 

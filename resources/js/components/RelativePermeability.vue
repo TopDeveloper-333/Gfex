@@ -28,6 +28,13 @@ export default {
   data() {
     return {
       relativePermeabilitySheet: null,
+      isRelPermValidate: true
+    }
+  },
+
+  watch: {
+    isRelPermValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
@@ -40,7 +47,27 @@ export default {
     },
     onPlot: function(event) {
       alert('plot is called')
-    }
+    },
+    validateRelPerm: function(instance, cell, col, row, val, label, cellName) {
+      debugger
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isRelPermValidate = true
+      }
+
+      if ((isNaN(value) == true) || (value < 0) || 
+          (col < 4 && !(value >=0 && value <=1) )) 
+      {
+        this.markInvalidCell(cell)
+        this.isRelPermValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+    },
   },
 
   mounted() {
@@ -89,7 +116,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateRelPerm
     });
     this.relativePermeabilitySheet.hideIndex();
   }
