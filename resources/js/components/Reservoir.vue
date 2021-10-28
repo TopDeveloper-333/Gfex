@@ -86,17 +86,141 @@ export default {
         { name: "C & n Model", value : 1 },
         { name: "Vertical Model", value: 2 },
         { name: "Horizontal Model", value: 3 }
-      ]
+      ],
+      isPVTValidate: true,
+      isParamValidate: true,
+      isDualPorosityValidate: true,
+      isCnModelValidate: true,
+      isVerticalModelValidate: true,
+      isHorizontalModelValidate: true    
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
   computed: {
     ...mapState({
+    }),
+    isDataValidate: function() {
+      debugger
+      var dualState = (this.dualPorosity == null || this.dualPorosity.value == 0) ? true : this.isDualPorosityValidate
+      var wellTestState = (this.testWellData == null || this.testWellData.value == 0) ? true :
+        (this.testWellData.value == 1 ? this.isCnModelValidate : 
+        (this.testWellData.value == 2 ? this.isVerticalModelValidate: 
+        (this.testWellData.value == 3 ? this.isHorizontalModelValidate : true)))
 
-    })
+      return this.isPVTValidate & this.isParamValidate & dualState & wellTestState
+    }
   },
 
   methods: {
+    validatePVT:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isPVTValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) || 
+          (col < 3 && !(value >=0 && value <= 1))) 
+      {
+        this.markInvalidCell(cell)
+        this.isPVTValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateParam:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isParamValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isParamValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateDualPorosity:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isDualPorosityValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isDualPorosityValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateCnModel:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isCnModelValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isCnModelValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateVerticalModel:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isVerticalModelValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isVerticalModelValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateHorizontalModel:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isHorizontalModelValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isHorizontalModelValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
 
   },
 
@@ -142,7 +266,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validatePVT
     });
     this.reservoirPVTSheet.hideIndex();
 
@@ -174,7 +298,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateParam
     });
     this.reservoirDataSheet.hideIndex();
 
@@ -218,7 +342,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateDualPorosity
     });
     this.dualPorositySheet.hideIndex();
 
@@ -250,7 +374,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateCnModel
     });
     this.cnMethodSheet.hideIndex();
 
@@ -306,7 +430,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateVerticalModel
     });
     this.verticalModelSheet.hideIndex();
 
@@ -374,7 +498,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateHorizontalModel
     });
     this.horizontalModelSheet.hideIndex();
   }

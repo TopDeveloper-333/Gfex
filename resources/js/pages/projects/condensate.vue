@@ -195,7 +195,6 @@ export default {
       else return {'btn-outline-primary': true, 'disabled': true}
     },
     isDataValidate: function() {
-      debugger
       return this.isPVTValidate & this.isRelPermValidate & this.isSurfaceValidate & 
           this.isReservoirValidate & this.isWellHistoryValidate & this.isEconomicsValidate &
           this.isOperationValidate

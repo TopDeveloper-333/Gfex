@@ -49,7 +49,6 @@ export default {
       alert('plot is called')
     },
     validateRelPerm: function(instance, cell, col, row, val, label, cellName) {
-      debugger
       var value = parseFloat(val)
 
       if (cellName == 'A1') {

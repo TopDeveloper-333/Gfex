@@ -282,7 +282,6 @@ export default {
       });
     },
     validateGasCondensate1: function(instance, cell, col, row, val, label, cellName) {
-      debugger
       var value = parseFloat(val)
 
       if (cellName == 'A1') {
@@ -302,7 +301,6 @@ export default {
 
     },
     validateGasCondensate2: function(instance, cell, col, row, val, label, cellName) {
-      debugger
       var value = parseFloat(val)
 
       if (cellName == 'A1') {
@@ -331,7 +329,7 @@ export default {
 
     var gasCondensate1Data = [
       // [,],
-      [5114.0, 0.0]
+      [5114.0, 0.1]
     ];
 
     this.gasCondensate1Sheet = jspreadsheet(document.getElementById('gasCondensate1Sheet'), {
