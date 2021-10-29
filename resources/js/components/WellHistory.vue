@@ -46,6 +46,7 @@
       <p class="gf-item" v-show="entry.option!=null&&entry.option.value==3">Horizontal Well Model #{{entry.id + 1}}</p> -->
 
       <div :id="'networkSheet-' + entry.id" style="margin-top:20px"></div>
+      <div :id="'networkSheet1-' + entry.id" style="margin-top:20px"></div>
     </div>
 
   </div>
@@ -121,7 +122,8 @@ export default {
             {
               id: this.wellsNetwork.length, 
               option:null, 
-              sheet: null
+              sheet: null,
+              sheet1: null
             }
           )
         }
@@ -140,7 +142,9 @@ export default {
 
       var index = id.replace('option-','');
       let divId = 'networkSheet-' + index;
+      let div1Id = 'networkSheet1-' + index;
       var columns = []
+      var columns1 = []
 
       if (index >= this.wellsNetwork.length) {
         alert('Selected Id is out of number.')
@@ -152,7 +156,7 @@ export default {
             {
                 type: 'numeric',
                 title:'C (Mscf/day/psia2)',
-                width: 230,
+                width: 260,
                 decimal:','
             },
             {
@@ -164,7 +168,7 @@ export default {
             {
                 type: 'numeric',
                 title:'Well to Tie-Point (miles)',
-                width: 280,
+                width: 330,
                 decimal:','
             },
         ]
@@ -213,6 +217,20 @@ export default {
                 width: 300,
                 decimal:','
             },
+        ],
+        columns1 =[
+          {
+              type: 'numeric',
+              title:'Pressure at Shutin',
+              width: 260,
+              decimal:','
+          },
+          {
+              type: 'numeric',
+              title:'Pressure at Re-opening',
+              width: 300,
+              decimal:','
+          },
         ]
       }
       else if (selectedOption.value == 3) {
@@ -221,31 +239,31 @@ export default {
             {
                 type: 'numeric',
                 title:'k (md)',
-                width: 90,
+                width: 110,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Porosity',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Net Pay (ft)',
                 width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Net Pay (ft)',
+                width: 150,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Drainage Area (acres)',
-                width: 220,
+                width: 280,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Wellbore ID (in)',
-                width: 160,
+                width: 220,
                 decimal:','
             },
             {
@@ -257,7 +275,7 @@ export default {
             {
                 type: 'numeric',
                 title:'Well Length',
-                width: 120,
+                width: 160,
                 decimal:','
             },
             {
@@ -269,9 +287,23 @@ export default {
             {
                 type: 'numeric',
                 title:'Well to Tie-point (miles)',
-                width: 200,
+                width: 300,
                 decimal:','
             },
+        ]
+        columns1 =[
+          {
+              type: 'numeric',
+              title:'Pressure at Shutin',
+              width: 260,
+              decimal:','
+          },
+          {
+              type: 'numeric',
+              title:'Pressure at Re-opening',
+              width: 300,
+              decimal:','
+          },
         ]
       }
 
@@ -288,6 +320,24 @@ export default {
           updateTable: this.validationTable
       });
       this.wellsNetwork[index].sheet.hideIndex();
+
+      if (selectedOption.value == 2 || selectedOption.value == 3) 
+      {
+        document.getElementById(div1Id).innerHTML = '';
+        this.wellsNetwork[index].sheet1 = jspreadsheet(document.getElementById(div1Id), {
+            data:[[]],
+            allowInsertRow:false,
+            allowManualInsertRow:false,
+            allowInsertColumn:false,
+            allowManualInsertColumn:false,
+            allowDeleteRow:false,
+            allowDeleteColumn:false,
+            columns: columns1,
+            updateTable: this.validationTable
+        });
+        this.wellsNetwork[index].sheet1.hideIndex();
+      }
+
     }
   },
 
