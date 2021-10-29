@@ -33,8 +33,12 @@
       <!-- {{entry.id}} : {{ entry.option }} : {{entry.data}} -->
       <hr class="gf-line">
 
-      <p class="gf-item">Well #{{entry.id + 1}}</p>
-      <multiselect v-model="entry.option" :options="testWellDataOptions" @select="onChangedOption"
+      <div class="row" style="margin-bottom:24px">
+        <span class="gf-item" style="width:160px">Well #{{entry.id + 1}} :</span>
+        <input class="form-control gf-control" style="width:300px;background:yellow" type="text">
+      </div>
+
+      <multiselect v-model="entry.option" :options="testWellDataOptions" @select="onChangedOption" style="width:460px"
         track-by="name" label="name" placeholder="Select option" :id="'option-' + entry.id"></multiselect>
 
       <!-- <p class="gf-item" v-show="entry.option!=null&&entry.option.value==1">C & n Model #{{entry.id + 1}}</p>
@@ -110,7 +114,6 @@ export default {
 
       this.numberOfWells = val;
 
-      debugger
       if (val > oldVal) {
         // add new entry to wellsNetwork
         for (let index = 0; index < (val - oldVal); index++) {
