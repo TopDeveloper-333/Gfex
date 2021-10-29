@@ -32,6 +32,13 @@ $appCss = mix('dist/css/app.css');
   <script src="/assets/js/c3.min.js"></script>  
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+  <!-- html2canvas.js -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script> -->
+
+  <!-- saveSvgAsPng.js -->
+  <!-- <script src="/assets/js/saveSvgAsPng.js"></script> -->
+
   
 </head>
 <body>

@@ -37,9 +37,10 @@
         <multiselect v-model="axisY2" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select Y2 axis."></multiselect> -->
       </div>
       <div class="col-2">
-        <label class="btn btn-primary gf-button" style="margin-top:85px" v-on:click="onShow">Graph</label>
+        <label class="btn btn-primary gf-button" style="margin-top:48px" v-on:click="onShow">Graph</label>
+        <label class="btn btn-primary gf-button" style="margin-top:32px" v-on:click="onPrintGraph">Print Graph</label>
       </div>
-      <div id="plot" class="col-7">
+      <div id="plot" class="col-7" ref="plot">
       </div>
     </div>
 
@@ -64,6 +65,8 @@
 import store from '~/store'
 import { mapState } from 'vuex'
 import Multiselect from 'vue-multiselect'
+import * as svg from 'save-svg-as-png';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'CondensatePvt',
@@ -173,8 +176,29 @@ export default {
 
       await store.dispatch('project/saveGasCondensate', this.myGasCondensate)
     },
-    onApplyColor: function(e) {
+    onPrintGraph: async function(event) {
+      console.log("printing..");
+      // svg.saveSvgAsPng(document.getElementById('plot').firstChild, 'diagram.png');
+
+      const el = document.getElementById('plot');
+      const options = { type: "dataURL" };
+
+      const printCanvas = await html2canvas(el, options);
       debugger
+
+      const link = document.createElement("a");
+      link.setAttribute("download", "download.png");
+      link.setAttribute(
+        "href",
+        printCanvas
+          .toDataURL("image/png")
+          .replace("image/png", "image/octet-stream")
+      );
+      link.click();
+
+      console.log("done");
+    },
+    onApplyColor: function(event) {
       document.documentElement.style.setProperty('--axis-color', this.axisColor);
       document.documentElement.style.setProperty('--graph-color', this.graphColor);
     },
@@ -193,7 +217,6 @@ export default {
       // ----------------------------------------------------------
       // Initialize variables
       // ----------------------------------------------------------
-      debugger
       document.documentElement.style.setProperty('--axis-color', this.axisColor);
       document.documentElement.style.setProperty('--secondary-color', this.graphColor);
 
