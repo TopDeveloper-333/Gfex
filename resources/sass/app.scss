@@ -174,46 +174,94 @@ thead.resizable {
   cursor: pointer;
 }
 
-.c3-axis-y-label {
-  font-size: 1.25rem !important;
-}
-
-.c3-axis-y2-label {
-  font-size: 1.25rem !important
-}
-
-.c3-axis-x-label {
-  font-size: 1.25rem !important;
-}
-
-.c3-axis {
-  stroke-width: 3px !important;
-}
-
-.c3 svg {
-  font-size: 13px !important;
-}
-
-.c3 path, .c3 line {
-  stroke: white !important;
-  stroke-width: 2px;
-}
-
-.c3 text {
-  font: bold 18px sans-serif; 
-  fill: black; 
-}
-tspan {
-  font: bold 16px sans-serif; 
-  fill: white; 
-}
 
 .card-body {
   min-height: 800px;
 }
 
 .multiselect__tags {
-  font-size: 17px !important;
+  font-size: 22px !important;
   font-weight: 600 !important;
 }
 
+.multiselect__input, .multiselect__single {
+  font-size: 22px !important;
+  text-align: center;
+}
+
+.jexcel > thead > tr > td {
+  font-size: 22px;
+}
+
+.jexcel > tbody > tr > td {
+  font-size: 22px;
+}
+
+:root {
+  --axis-color : white;
+  --graph-color : #ffbb78;
+}
+
+.c3-axis-y-label {
+  font-size: 1.5rem !important;
+  fill: var(--axis-color) !important; 
+}
+
+.c3-axis-y2-label {
+  font-size: 1.5rem !important;
+  fill: var(--axis-color) !important; 
+}
+
+.c3-axis-x-label {
+  font-size: 1.5rem !important;
+  fill: var(--axis-color) !important; 
+}
+
+.c3-axis {
+  stroke-width: 4px !important;
+}
+
+/* .c3 svg {
+  font-size: 13px !important;
+} */
+
+.c3 path {
+  stroke: var(--graph-color) !important;
+  stroke-width: 4px;
+}
+.c3-circle {
+  fill: var(--graph-color) !important;
+  stroke-width: 4px;
+}
+.c3 line {
+  stroke-width: 2px;
+}
+
+.c3 path.domain {
+  stroke: var(--axis-color) !important;
+  stroke-width: 4px;
+}
+
+g.tick line {
+  stroke: var(--axis-color) !important;
+  stroke-width: 4px;
+}
+
+.c3 text {
+  font: bold 22px sans-serif; 
+  fill: var(--axis-color); 
+}
+
+tspan {
+  font: bold 16px sans-serif; 
+  fill: var(--axis-color) !important; 
+}
+
+.c3-legend-background {
+  visibility: hidden !important;
+}
+
+.c3-legend-item-tile {
+  stroke: var(--graph-color) !important;
+  stroke-width: 2px;
+}

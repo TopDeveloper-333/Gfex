@@ -63,31 +63,31 @@ export default {
             {
                 type: 'numeric',
                 title:'Price of Gas ($/MMBTU)',
-                width: 220,
+                width: 300,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Price of Condensate ($/barrels)',
-                width: 280,
+                width: 380,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Price of Compression ($/MMscf/psi)',
-                width: 320,
+                width: 430,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Life',
-                width: 70,
+                width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Salvage rate of the CAPEX',
-                width: 240,
+                width: 320,
                 decimal:','
             },
         ],
@@ -112,25 +112,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Investment (Budget $MM)',
-                width: 240,
+                width: 330,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'ROR',
-                width: 80,
+                width: 90,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Royalty (% of Revenues)',
-                width: 220,
+                width: 320,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Tax (% of Taxable Revenues)',
-                width: 250,
+                width: 350,
                 decimal:','
             },
         ],
@@ -160,8 +160,8 @@ export default {
             },
             {
                 type: 'numeric',
-                title:'1st Year of Production (IPROD)',
-                width: 300,
+                title:'1st Year of Production',
+                width: 380,
                 decimal:','
             },
         ],
@@ -206,19 +206,19 @@ export default {
             {
                 type: 'numeric',
                 title:'Year',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'CAPEX (MM $)',
-                width: 150,
+                width: 200,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'OPEX (MM $)',
-                width: 160,
+                width: 180,
                 decimal:','
             },
         ],

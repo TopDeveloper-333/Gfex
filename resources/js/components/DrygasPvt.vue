@@ -99,13 +99,13 @@ export default {
             {
                 type: 'numeric',
                 title:'Psc (psia)',
-                width: 120,
+                width: 150,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Tsc (Deg F)',
-                width: 120,
+                width: 170,
                 decimal:','
             },
         ],
@@ -131,43 +131,43 @@ export default {
             {
                 type: 'text',
                 title:'GAS COMPRESSIBILITY (1/psi)',
-                width: 240,
+                width: 350,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'GAS VISCOSITY (cp)',
-                width: 180,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'SPECIFIC GRAVITY',
-                width: 160,
+                width: 220,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'RES. TEMP. (Deg F)',
-                width: 160,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'N2 (decimal)',
-                width: 120,
+                width: 160,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'CO2 (decimal)',
-                width: 140,
+                width: 180,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'H2S (decimal)',
-                width: 140,
+                width: 180,
                 decimal:','
             },
         ],
@@ -193,18 +193,18 @@ export default {
             {
                 type: 'numeric',
                 title:'Conate Water Saturation',
-                width: 240,
+                width: 300,
                 decimal:','
             },
             {
                 type: 'text',
                 title:'Water Compressibility (1/psi)',
-                width: 240,
+                width: 360,
             },
             {
                 type: 'numeric',
                 title:'Rock Compressibility (1/psi)',
-                width: 240,
+                width: 360,
             },
         ],
         updateTable: this.validationTable

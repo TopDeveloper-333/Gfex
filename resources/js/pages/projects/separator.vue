@@ -310,61 +310,61 @@ export default {
             {
                 type: 'numeric',
                 title:'CO2',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'H2S',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'C1',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'C2',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'C3',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'iC4',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'nC4',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'iC5',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'nC5',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'C6',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
@@ -396,13 +396,13 @@ export default {
             {
                 type: 'numeric',
                 title:'Molecular Weight',
-                width: 200,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Specific Gravity',
-                width: 200,
+                width: 220,
             },
         ],
         updateTable: this.validationTable
@@ -427,13 +427,13 @@ export default {
             {
                 type: 'numeric',
                 title:'PSAT (psia)',
-                width: 160,
+                width: 180,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'TRES (Deg F)',
-                width: 160,
+                width: 240,
             },
         ],
         updateTable: this.validationTable
@@ -452,13 +452,13 @@ export default {
             {
                 type: 'numeric',
                 title:'Pressure (psia)',
-                width: 190,
+                width: 210,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Temperature (Deg F)',
-                width: 190,
+                width: 250,
             },
         ],
         updateTable: this.validationTable

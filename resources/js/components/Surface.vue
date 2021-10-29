@@ -183,43 +183,43 @@ export default {
             {
                 type: 'numeric',
                 title:'Length (ft)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Size (in)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Perfs (ft)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'SSSV_ID (in)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'SSSV_Depth (ft)',
-                width: 150,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Temperature (Deg F)',
                 width: 190,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Size (in)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Perfs (ft)',
+                width: 130,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'SSSV_ID (in)',
+                width: 170,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'SSSV_Depth (ft)',
+                width: 230,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Temperature (Deg F)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Gas Z-Factor',
-                width: 120,
+                width: 190,
                 decimal:','
             },
         ],
@@ -244,25 +244,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Length (miles)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Size (in)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Temperature (Deg F)',
                 width: 190,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Size (in)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Temperature (Deg F)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Gas Z-Factor',
-                width: 120,
+                width: 180,
                 decimal:','
             },
         ],
@@ -287,25 +287,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Length (miles)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Size (in)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Temperature (Deg F)',
                 width: 190,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Size (in)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Temperature (Deg F)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Gas Z-Factor',
-                width: 120,
+                width: 180,
                 decimal:','
             },
         ],
@@ -330,25 +330,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Length (miles)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Size (in)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Temperature (Deg F)',
                 width: 190,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Size (in)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Temperature (Deg F)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Gas Z-Factor',
-                width: 120,
+                width: 180,
                 decimal:','
             },
         ],
@@ -373,13 +373,13 @@ export default {
             {
                 type: 'numeric',
                 title:'Compression Discharge Ratio',
-                width: 280,
+                width: 370,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'DELTA_P_MIN (psia)',
-                width: 190,
+                width: 270,
                 decimal:','
             },
         ],

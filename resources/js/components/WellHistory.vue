@@ -33,7 +33,7 @@
       <!-- {{entry.id}} : {{ entry.option }} : {{entry.data}} -->
       <hr class="gf-line">
 
-      <p class="gf-item">Well-Test Data #{{entry.id + 1}}</p>
+      <p class="gf-item">Well #{{entry.id + 1}}</p>
       <multiselect v-model="entry.option" :options="testWellDataOptions" @select="onChangedOption"
         track-by="name" label="name" placeholder="Select option" :id="'option-' + entry.id"></multiselect>
 
@@ -149,13 +149,19 @@ export default {
             {
                 type: 'numeric',
                 title:'C (Mscf/day/psia2)',
-                width: 190,
+                width: 230,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'n',
                 width: 120,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Well to Tie-Point (miles)',
+                width: 280,
                 decimal:','
             },
         ]
@@ -171,31 +177,37 @@ export default {
             {
                 type: 'numeric',
                 title:'Porosity',
-                width: 100,
+                width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Net Pay (ft)',
-                width: 140,
+                width: 160,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Drainage Area (acres)',
-                width: 220,
+                width: 260,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Wellbore ID (in)',
-                width: 160,
+                width: 220,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Skin',
                 width: 90,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Well to Tie-Point (miles)',
+                width: 300,
                 decimal:','
             },
         ]
@@ -249,6 +261,12 @@ export default {
                 type: 'numeric',
                 title:'Kv/Kh',
                 width: 90,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Well to Tie-point (miles)',
+                width: 200,
                 decimal:','
             },
         ]
@@ -320,13 +338,13 @@ export default {
             {
                 type: 'numeric',
                 title:'km (md)',
-                width: 100,
+                width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'hm (ft)',
-                width: 100,
+                width: 120,
                 decimal:','
             },
             {
@@ -338,7 +356,7 @@ export default {
             {
                 type: 'numeric',
                 title:'Matrix GIIP (bcf)',
-                width: 160,
+                width: 220,
                 decimal:','
             },
         ],
@@ -363,13 +381,13 @@ export default {
             {
                 type: 'numeric',
                 title:'First Year of Production',
-                width: 220,
+                width: 290,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Life of the Field',
-                width: 140,
+                width: 220,
                 decimal:','
             },
         ],
@@ -394,25 +412,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Sales Pressure (psia)',
-                width: 200,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Pressure Limit (psia)',
-                width: 200,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Economic Rate (MMscf/day)',
                 width: 260,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Pressure Limit (psia)',
+                width: 260,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Economic Rate (MMscf/day)',
+                width: 340,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Qgtot initial (MMscf/day)',
-                width: 240,
+                width: 340,
                 decimal:','
             },
         ],

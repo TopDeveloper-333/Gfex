@@ -32,14 +32,24 @@ export default {
   data() {
     return {
       operationalConstraintsSheet: null,
-      gasDeliveryReqSheet: null
+      gasDeliveryReqSheet: null,
+      isOperationalValidate: true,
+      isGasDeliveryValidate: true
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
   computed: {
     ...mapState({
-
-    })
+    }),
+    isDataValidate: function() {
+      return this.isOperationalValidate & this.isGasDeliveryValidate
+    }
   },
 
   methods: {
@@ -66,25 +76,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Start of Operations',
-                width: 180,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'End of Contract',
-                width: 160,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Maximum Number of Wells',
                 width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'End of Contract',
+                width: 200,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Maximum Number of Wells',
+                width: 330,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Rig Schedule (Infill Wells per Year)',
-                width: 300,
+                width: 420,
                 decimal:','
             },
         ],
@@ -110,31 +120,31 @@ export default {
             {
                 type: 'numeric',
                 title:'Sales Pressure (psia)',
-                width: 200,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Target Rate (MMscf/day)',
-                width: 230,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Pressure Limit (psia)',
-                width: 190,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Economics Rate (MMscf/day)',
                 width: 260,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Target Rate (MMscf/day)',
+                width: 300,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Pressure Limit (psia)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Economics Rate (MMscf/day)',
+                width: 360,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Max Field Recovery',
-                width: 180,
+                width: 260,
                 decimal:','
             },
         ],

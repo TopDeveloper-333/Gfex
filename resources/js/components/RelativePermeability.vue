@@ -7,7 +7,7 @@
       <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate">Calculate</label>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
       <div id="relativePermeabilitySheet"></div>
     </div>
 
@@ -111,7 +111,7 @@ export default {
             {
                 type: 'numeric',
                 title:'Lambda',
-                width: 100,
+                width: 140,
                 decimal:','
             },
         ],
@@ -122,3 +122,8 @@ export default {
 
 }
 </script>
+<style scoped>
+.jexcel > thead > tr > td {
+  font-size: 20px;
+}
+</style>

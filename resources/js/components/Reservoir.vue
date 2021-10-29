@@ -244,25 +244,25 @@ export default {
             {
                 type: 'numeric',
                 title:'Viscosity (psia)',
-                width: 160,
+                width: 220,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Gas Z-Factor',
-                width: 140,
+                width: 190,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Specific Gravity',
-                width: 160,
+                width: 220,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Reservoir Temperature (Deg F)',
-                width: 280,
+                width: 360,
                 decimal:','
             },
         ],
@@ -288,13 +288,13 @@ export default {
             {
                 type: 'numeric',
                 title:'GIIP (Bcf)',
-                width: 120,
+                width: 160,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Reservoir Pressure (psia)',
-                width: 240,
+                width: 320,
                 decimal:','
             },
         ],
@@ -320,25 +320,25 @@ export default {
             {
                 type: 'numeric',
                 title:'km (md)',
-                width: 120,
+                width: 140,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'hm (ft)',
-                width: 120,
+                width: 140,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Shape Factor Sigma',
-                width: 200,
+                width: 260,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Matrix GIIP (bcf)',
-                width: 200,
+                width: 240,
                 decimal:','
             },
         ],
@@ -364,12 +364,12 @@ export default {
             {
                 type: 'numeric',
                 title:'C (Mscf/day/psia2)',
-                width: 190,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'N',
+                title:'n',
                 width: 120,
                 decimal:','
             },
@@ -396,37 +396,37 @@ export default {
             {
                 type: 'numeric',
                 title:'k (md)',
-                width: 100,
+                width: 110,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Porosity',
-                width: 100,
+                width: 130,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Net Pay (ft)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Drainage Area (acres)',
-                width: 220,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Wellbore ID (in)',
                 width: 160,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Drainage Area (acres)',
+                width: 280,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Wellbore ID (in)',
+                width: 200,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Skin',
-                width: 90,
+                width: 120,
                 decimal:','
             },
         ],
@@ -452,49 +452,49 @@ export default {
             {
                 type: 'numeric',
                 title:'k (md)',
-                width: 90,
+                width: 110,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Porosity',
-                width: 100,
+                width: 130,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Net Pay (ft)',
-                width: 120,
+                width: 180,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Drainage Area (acres)',
-                width: 220,
+                width: 280,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Wellbore ID (in)',
-                width: 160,
+                width: 200,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Skin',
-                width: 90,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Well Length',
                 width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Well Length',
+                width: 160,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Kv/Kh',
-                width: 90,
+                width: 120,
                 decimal:','
             },
         ],

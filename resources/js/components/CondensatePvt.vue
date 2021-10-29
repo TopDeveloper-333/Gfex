@@ -7,7 +7,7 @@
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
-      <div id="gasCondensate1Sheet"></div>
+      <div id="gasCondensate1Sheet" style="text-align:center"></div>
       <div id="gasCondensate2Sheet"></div>
     </div>
 
@@ -73,6 +73,14 @@ export default {
       myGasCondensate : {},
       bShowPlot : false,
       options: [
+        // { name: "P ", column: 'A'}, 
+        // { name: "Bo ", column: 'B'},
+        // { name: "Rs ", column: 'C'}, 
+        // { name: "Bg ", column: 'D'},
+        // { name: "Rv ", column: 'E'}, 
+        // { name: "Oil Viscosity ", column: 'F'}, 
+        // { name: "Gas Viscosity ", column: 'G'},
+        // { name: "PV Inj ", column:'H'}
         { name: "P (psia)", column: 'A'}, 
         { name: "Bo (rb/stb)", column: 'B'},
         { name: "Rs (scf/stb)", column: 'C'}, 
@@ -195,8 +203,11 @@ export default {
       
       // ----------------------------------------------------------------
       // add y data
+      const fWords = this.axisX.name.split('(');
+      const bWords = this.axisY.name.split('(');
+
       columns[1] = []
-      columns[1][0] = this.axisY.name
+      columns[1][0] = fWords[0] + " vs " + bWords[0]
       for (let index = 1; index <= numRows; index++) {
         columns[1][index] = this.gasCondensate2Sheet.getValue(this.axisY.column + '' + index)        
       }
@@ -240,26 +251,27 @@ export default {
       this.plot = c3.generate({
           bindto: '#plot',
           size: {
-              height: 600,
+              height: 800,
           },
           data: {
             x: _axisX,
             columns: _columns,
             axes: _axes,
           },
-          color: {
-            pattern: ['#ffbb78']
-          },
+          // color: {
+          //   pattern: ['#ffbb78']
+          // },
           legend: {
             position: 'inset',
             inset: {
-              anchor: 'bottom-right',
+              anchor: 'top-left',
               x: 20,
-              y: 80,
-            }
+              y: 40,
+            },
           },
           axis: {
             x: {
+              height: 55,
               label: {
                 text: _axisX,
                 position: 'outer-center'
@@ -290,7 +302,7 @@ export default {
       }
 
       if ((isNaN(value) == true) || (value < 0) ||
-          (cellName == 'B1' && (value == 0 || value > 1)) ) 
+          (cellName == 'B1' && (value > 1)) ) 
       {
         this.markInvalidCell(cell)
         this.isGasCondensate1Validate = false
@@ -344,7 +356,7 @@ export default {
             {
                 type: 'numeric',
                 title:'PSAT (psia)',
-                width: 120,
+                width: 180,
                 decimal:','
             },
             {
@@ -383,49 +395,49 @@ export default {
             {
                 type: 'numeric',
                 title:'P (psia)',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Bo (rb/stb)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Rs (scf/stb)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Bg (rb/mscf)',
                 width: 140,
                 decimal:','
             },
             {
                 type: 'numeric',
+                title:'Bo (rb/stb)',
+                width: 160,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Rs (scf/stb)',
+                width: 180,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Bg (rb/mscf)',
+                width: 200,
+                decimal:','
+            },
+            {
+                type: 'numeric',
                 title:'Rv (stb/mmscf)',
-                width: 150,
+                width: 200,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Oil Viscosity (cp)',
-                width: 170,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'Gas Viscosity (cp)',
-                width: 170,
+                width: 240,
                 decimal:','
             },
             {
                 type: 'numeric',
                 title:'PV Inj (%)',
-                width: 120,
+                width: 150,
                 decimal:','
             },
         ],
@@ -462,7 +474,8 @@ function mountPlotDialog() {
 </script>
 
 <style scoped>
+
 #plot {
-  background: #ff320e;
+  background: green;
 }
 </style>
