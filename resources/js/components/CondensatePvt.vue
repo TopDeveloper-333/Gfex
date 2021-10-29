@@ -382,6 +382,8 @@ export default {
 
   mounted() {
     this.myGasCondensate = this.gascondensate
+    document.documentElement.style.setProperty('--axis-color', '#ffffff');
+    document.documentElement.style.setProperty('--graph-color', '#ffbb78');
 
     var gasCondensate1Data = [
       // [,],

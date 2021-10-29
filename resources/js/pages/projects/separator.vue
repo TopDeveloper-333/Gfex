@@ -73,7 +73,7 @@
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
                 <div>
-                  <label class="btn btn-outline-primary disabled gf-button " v-on:click="onNextPage">Execute</label>
+                  <label class="btn gf-button" v-bind:class="executeButtonClass" v-on:click="onNextPage">Execute</label>
                   <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
                 </div>
               </div>
@@ -137,7 +137,17 @@ export default {
       mySEP : {},
       isSaveAs : false,
       hideSaveAsButton: false,
-      newProjectName: ""
+      newProjectName: "",
+      isOriginalStreamValidate: true,
+      isOriginalStream1Validate: true,
+      isSaturatedReservoirValidate: true,
+      isSeparatorConditionValidate: true
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
@@ -146,9 +156,82 @@ export default {
       projectName : state => state.project.projectName,
       sep : state => state.project.sep
     }),
+    isDataValidate: function() {
+      debugger
+      return this.isOriginalStreamValidate & this.isOriginalStream1Validate & 
+            this.isSaturatedReservoirValidate & this.isSeparatorConditionValidate
+    },
+    executeButtonClass: function() {
+      debugger
+      if (this.isDataValidate == true) return {'btn-outline-primary': true}
+      else return {'btn-outline-primary': true, 'disabled': true}
+    },
   },
 
   methods: {
+    validateOriginalStream1:function(instance, cell, col, row, val, label, cellName) {
+      let value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isOriginalStreamValidate = true
+      }
+      
+      if ((cellName != 'M1') && ((isNaN(value) == true) || (value < 0)) )
+      {
+        this.markInvalidCell(cell)
+        this.isOriginalStreamValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+      if (cellName == 'M1') {
+        debugger
+        let total = parseFloat(cell.innerText)
+        if (total != 1.00) {
+          this.markInvalidCell(cell)
+          this.isOriginalStreamValidate = false
+        }
+        else {
+          this.markNormalCell(cell)
+        }
+      }
+    },
+    validateOriginalStream2:function(instance, cell, col, row, val, label, cellName) {
+      let value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isOriginalStream1Validate = true
+      }
+      
+      if((isNaN(value) == true) || (value < 0))
+      {
+        this.markInvalidCell(cell)
+        this.isOriginalStream1Validate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateSaturatedReservoir:function(instance, cell, col, row, val, label, cellName) {
+      let value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isSaturatedReservoirValidate = true
+      }
+      
+      if((isNaN(value) == true) || (value < 0))
+      {
+        this.markInvalidCell(cell)
+        this.isSaturatedReservoirValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
     onSaveAs: function(event) {
       this.isSaveAs = true
       this.hideSaveAsButton = true
@@ -288,8 +371,8 @@ export default {
 
     // Original Stream Composition
     var originalStreamComposition1Data = [
-      [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769],
-      // [,,,,,,,,,,,,],
+      [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769, '=ROUND(SUM(A1:L1), 2)'],
+      // [,,,,,,,,,,,,,],
     ];
     
     this.originalStreamComposition1 = jspreadsheet(document.getElementById('originalStreamComposition1'), {
@@ -304,7 +387,7 @@ export default {
             {
                 type: 'numeric',
                 title:'N2',
-                width: 80,
+                width: 100,
                 decimal:','
             },
             {
@@ -370,11 +453,17 @@ export default {
             {
                 type: 'numeric',
                 title:'C7+',
-                width: 80,
+                width: 120,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Total',
+                width: 120,
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateOriginalStream1
     });
     this.originalStreamComposition1.hideIndex();
 
@@ -405,7 +494,7 @@ export default {
                 width: 220,
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateOriginalStream2
     });
     this.originalStreamComposition2.hideIndex();
 
@@ -436,7 +525,7 @@ export default {
                 width: 240,
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateSaturatedReservoir
     });
     this.saturatedReservoirConditions.hideIndex();
 
@@ -461,7 +550,6 @@ export default {
                 width: 250,
             },
         ],
-        updateTable: this.validationTable
     }
     
     var setNumber1Data = [
