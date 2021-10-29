@@ -21,6 +21,17 @@
         <multiselect v-model="axisX" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select X axis."></multiselect>
         <label class="typo__label gf-item">Axis Y:</label>
         <multiselect v-model="axisY" :options="options" track-by="name" label="name" :maxHeight="250" :taggable="true" placeholder="Select Y axis."></multiselect>
+
+        <div style="margin-top:32px;display:flex;text-align:left">
+            <input type="color" style="height:50px;margin-right:20px;" id="axisColor" name="axisColor" v-model="axisColor" @change="onApplyColor($event)">
+            <label for="axisColor" class="typo__label gf-item">Axis Color</label>
+        </div>
+
+        <div style="margin-top:32px;display:flex;text-align:left">
+            <input type="color" style="height:50px;margin-right:20px;" id="graphColor" name="graphColor" v-model="graphColor" @change="onApplyColor($event)">
+            <label for="graphColor" class="typo__label gf-item">Graph Color</label>
+        </div>
+
         <!-- <multiselect v-model="axisY" :options="options" track-by="name" label="name" :close-on-select="false" :maxHeight="250" :multiple="true" :taggable="true" placeholder="Select multiple Y axis."></multiselect> -->
         <!-- <label class="typo__label gf-item">Axis Y2:</label>
         <multiselect v-model="axisY2" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select Y2 axis."></multiselect> -->
@@ -97,6 +108,8 @@ export default {
       plotLabel: "Plot",
       isGasCondensate1Validate: true,
       isGasCondensate2Validate: true,
+      axisColor: '#ffffff',
+      graphColor: '#ffbb78'
     }
   },
 
@@ -160,6 +173,11 @@ export default {
 
       await store.dispatch('project/saveGasCondensate', this.myGasCondensate)
     },
+    onApplyColor: function(e) {
+      debugger
+      document.documentElement.style.setProperty('--axis-color', this.axisColor);
+      document.documentElement.style.setProperty('--graph-color', this.graphColor);
+    },
     onShow: function(event) {
       
       // ----------------------------------------------------------
@@ -175,6 +193,9 @@ export default {
       // ----------------------------------------------------------
       // Initialize variables
       // ----------------------------------------------------------
+      debugger
+      document.documentElement.style.setProperty('--axis-color', this.axisColor);
+      document.documentElement.style.setProperty('--secondary-color', this.graphColor);
 
       var axisX = this.axisX.name
       var columns = [
