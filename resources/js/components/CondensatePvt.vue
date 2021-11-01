@@ -29,7 +29,7 @@
 
         <div style="margin-top:32px;display:flex;text-align:left">
             <input type="color" style="height:50px;margin-right:20px;" id="graphColor" name="graphColor" v-model="graphColor" @change="onApplyColor($event)">
-            <label for="graphColor" class="typo__label gf-item">Graph Color</label>
+            <label for="graphColor" class="typo__label gf-item">Curve Color</label>
         </div>
 
         <!-- <multiselect v-model="axisY" :options="options" track-by="name" label="name" :close-on-select="false" :maxHeight="250" :multiple="true" :taggable="true" placeholder="Select multiple Y axis."></multiselect> -->

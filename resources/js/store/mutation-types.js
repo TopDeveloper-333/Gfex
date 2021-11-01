@@ -15,3 +15,6 @@ export const SAVE_PROJECT_TYPE = "SAVE_PROJECT_TYPE"
 export const SAVE_SEP = "SAVE_SEP"
 export const SAVE_DRY_GAS = "SAVE_DRY_GAS"
 export const SAVE_GAS_CONDENSATE = "SAVE_GAS_CONDENSATE"
+export const SAVE_REL_PERM = "SAVE_REL_PERM"
+
+export const SAVE_RES_KGKO = "SAVE_RES_KGKO"

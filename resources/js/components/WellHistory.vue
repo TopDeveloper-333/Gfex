@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Historical Input Data</u></p>
+    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Historical / Forecast Runs</u></p>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Reservoir Data</p>
@@ -34,7 +34,7 @@
       <hr class="gf-line">
 
       <div class="row" style="margin-bottom:24px">
-        <span class="gf-item" style="width:160px">Well #{{entry.id + 1}} :</span>
+        <span class="gf-item" style="width:200px">Well #{{entry.id + 1}} :</span>
         <input class="form-control gf-control" style="width:300px;background:yellow" type="text">
       </div>
 
@@ -93,9 +93,9 @@ export default {
       numberOfWells: 0,
       wellsNetwork: [],
       testWellDataOptions: [
-        { name: "C & n Model", value : 1 },
-        { name: "Vertical Model", value: 2 },
-        { name: "Horizontal Model", value: 3 }
+        { name: "C & n MODEL", value : 1 },
+        { name: "VERTICAL MODEL", value: 2 },
+        { name: "HORIZONTAL MODEL", value: 3 }
       ],
     }
   },
@@ -172,6 +172,20 @@ export default {
                 decimal:','
             },
         ]
+        columns1 =[
+          {
+              type: 'numeric',
+              title:'Pressure at Shut-in (psia)',
+              width: 320,
+              decimal:','
+          },
+          {
+              type: 'numeric',
+              title:'Pressure at Re-opening (psia)',
+              width: 360,
+              decimal:','
+          },
+        ]
       }
       else if (selectedOption.value == 2) {
         columns = [
@@ -221,14 +235,14 @@ export default {
         columns1 =[
           {
               type: 'numeric',
-              title:'Pressure at Shutin',
-              width: 260,
+              title:'Pressure at Shut-in (psia)',
+              width: 320,
               decimal:','
           },
           {
               type: 'numeric',
-              title:'Pressure at Re-opening',
-              width: 300,
+              title:'Pressure at Re-opening (psia)',
+              width: 360,
               decimal:','
           },
         ]
@@ -294,14 +308,14 @@ export default {
         columns1 =[
           {
               type: 'numeric',
-              title:'Pressure at Shutin',
-              width: 260,
+              title:'Pressure at Shut-in (psia)',
+              width: 320,
               decimal:','
           },
           {
               type: 'numeric',
-              title:'Pressure at Re-opening',
-              width: 300,
+              title:'Pressure at Re-opening (psia)',
+              width: 360,
               decimal:','
           },
         ]
@@ -321,7 +335,6 @@ export default {
       });
       this.wellsNetwork[index].sheet.hideIndex();
 
-      if (selectedOption.value == 2 || selectedOption.value == 3) 
       {
         document.getElementById(div1Id).innerHTML = '';
         this.wellsNetwork[index].sheet1 = jspreadsheet(document.getElementById(div1Id), {

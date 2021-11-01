@@ -15,7 +15,7 @@
           <div class="col-md-8 offset-md-2">
             <div class="card-body">
               <h3 class="card-title gf-title text-wrap" >Project Management</h3>
-              <p class="card-text gf-comment">Create new and View past</p>
+              <p class="card-text gf-comment"></p>
               <hr class="gf-line">
 
               <div class="row">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-2"></div>
                 <div class="col-5">
-                  <label class="gf-item">Past Projects
+                  <label class="gf-item">Existing Projects
                   </label>
 
                   <div style="display:flex;align-items:center;margin-bottom:16px;margin-top:16px">

@@ -192,8 +192,8 @@ export default {
         columns: [
             {
                 type: 'numeric',
-                title:'Conate Water Saturation',
-                width: 300,
+                title:'Connate Water Saturation',
+                width: 320,
                 decimal:','
             },
             {

@@ -9,6 +9,7 @@
 
     <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
       <div id="relativePermeabilitySheet"></div>
+      <div id="responseKGKOSheet"></div>
     </div>
 
   </div>
@@ -28,6 +29,7 @@ export default {
   data() {
     return {
       relativePermeabilitySheet: null,
+      responseKGKOSheet: null,
       isRelPermValidate: true
     }
   },
@@ -39,11 +41,27 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      resKGKO : state => state.project.resKGKO,
+    }),
   },
 
   methods: {
-    onCalculate: function(event) {
-      alert('calculate is called')
+    onCalculate: async function(event) {
+
+      let corey = {}
+      corey.sgi = this.relativePermeabilitySheet.getValue('A1');
+      corey.krgl = this.relativePermeabilitySheet.getValue('B1');
+      corey.kroi = this.relativePermeabilitySheet.getValue('C1');
+      corey.sor = this.relativePermeabilitySheet.getValue('D1');
+      corey.lambda = this.relativePermeabilitySheet.getValue('E1');
+
+      await store.dispatch('project/fetchKGKO', corey)
+
+      debugger
+      this.responseKGKOSheet.setData(this.resKGKO)
+      this.responseKGKOSheet.refresh()
+
     },
     onPlot: function(event) {
       alert('plot is called')
@@ -118,6 +136,40 @@ export default {
         updateTable: this.validateRelPerm
     });
     this.relativePermeabilitySheet.hideIndex();
+
+    debugger
+    this.responseKGKOSheet = jspreadsheet(document.getElementById('responseKGKOSheet'), {
+        data:this.resKGKO,
+        allowInsertRow:false,
+        allowManualInsertRow:false,
+        allowInsertColumn:false,
+        allowManualInsertColumn:false,
+        allowDeleteRow:false,
+        allowDeleteColumn:false,
+        lazyLoading:true,
+        loadingSpin:true,
+        columns: [
+            {
+                type: 'numeric',
+                title:'SGM',
+                width: 90,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'KRG',
+                width: 100,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'KRO',
+                width: 100,
+                decimal:','
+            },
+        ],
+    });
+    this.responseKGKOSheet.hideIndex();
   }
 
 }

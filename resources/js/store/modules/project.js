@@ -12,6 +12,8 @@ export const state = {
   sep : getCookie('sep', {}),
   drygas : getCookie('drygas', {}),
   gascondensate : getCookie('gascondensate', {}),
+  relPerm: getCookie('relPerm', {}),
+  resKGKO: getCookie('resKGKO', [])  
 }
 
 function getCookie(name, defaultValue) {
@@ -34,7 +36,9 @@ export const getters = {
   isSeparatorOptimizer: state => state.isSeparatorOptimizer,
   sep : state => state.sep,
   drygas : state => state.drygas,
-  gascondensate : state => state.gascondensate
+  gascondensate : state => state.gascondensate,
+  relPerm: state => state.relPerm,
+  resKGKO: state => state.resKGKO
 }
 
 export const mutations = {
@@ -64,6 +68,14 @@ export const mutations = {
   [types.SAVE_GAS_CONDENSATE] (state, gascondensate) {
     state.gascondensate = gascondensate
     Cookies.set('gascondensate', gascondensate, { expires: 1 })
+  },
+  [types.SAVE_REL_PERM] (state, relPerm) {
+    state.relPerm = relPerm
+    Cookies.set('relPerm', relPerm, {expires: 1})
+  },
+  [types.SAVE_RES_KGKO] (state, resKGKO) {
+    state.resKGKO = resKGKO
+    Cookies.set('resKGKO', resKGKO, {expires: 1})
   }
 }
 
@@ -86,5 +98,10 @@ export const actions = {
   },
   async saveGasCondensate({commit}, gascondensate) {
     commit(types.SAVE_GAS_CONDENSATE, gascondensate)
+  },
+  async fetchKGKO({commit}, relPerm) {
+    commit(types.SAVE_REL_PERM, relPerm)
+    const { data } = await axios.post('/api/requestKGKO')
+    commit(types.SAVE_RES_KGKO, data)
   }
 }
