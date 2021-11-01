@@ -140,31 +140,30 @@ export default {
     debugger
     this.responseKGKOSheet = jspreadsheet(document.getElementById('responseKGKOSheet'), {
         data:this.resKGKO,
-        allowInsertRow:false,
+        allowInsertRow:true,
         allowManualInsertRow:false,
         allowInsertColumn:false,
         allowManualInsertColumn:false,
-        allowDeleteRow:false,
+        allowDeleteRow:true,
         allowDeleteColumn:false,
-        lazyLoading:true,
-        loadingSpin:true,
+        tableOverflow: true,
         columns: [
             {
                 type: 'numeric',
-                title:'SGM',
-                width: 90,
+                title:'Sg',
+                width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'KRG',
-                width: 100,
+                title:'Krg',
+                width: 120,
                 decimal:','
             },
             {
                 type: 'numeric',
-                title:'KRO',
-                width: 100,
+                title:'Kro',
+                width: 120,
                 decimal:','
             },
         ],

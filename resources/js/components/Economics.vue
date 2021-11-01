@@ -202,6 +202,7 @@ export default {
         allowManualInsertColumn:false,
         allowDeleteRow:true,
         allowDeleteColumn:false,
+        tableOverflow: true,
         columns: [
             {
                 type: 'numeric',

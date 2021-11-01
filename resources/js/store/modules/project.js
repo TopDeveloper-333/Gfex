@@ -101,7 +101,7 @@ export const actions = {
   },
   async fetchKGKO({commit}, relPerm) {
     commit(types.SAVE_REL_PERM, relPerm)
-    const { data } = await axios.post('/api/requestKGKO')
+    const { data } = await axios.post('/api/requestKGKO', relPerm)
     commit(types.SAVE_RES_KGKO, data)
   }
 }
