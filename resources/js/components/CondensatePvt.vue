@@ -1,5 +1,7 @@
 <template>
   <div>
+    <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
     <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
 
     <div>
@@ -67,13 +69,15 @@ import { mapState } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import * as svg from 'save-svg-as-png';
 import html2canvas from 'html2canvas';
+import Loading from 'vue-loading-overlay';
 
 export default {
   name: 'CondensatePvt',
   middleware: 'auth',
 
   components: {
-    Multiselect
+    Multiselect,
+    Loading
   },
 
   props: {
@@ -104,7 +108,9 @@ export default {
       isGasCondensate1Validate: true,
       isGasCondensate2Validate: true,
       axisColor: '#ffffff',
-      graphColor: '#ffbb78'
+      graphColor: '#ffbb78',
+      isLoading: false,
+      fullPage: true,
     }
   },
 
@@ -170,6 +176,7 @@ export default {
     },
     onPrintGraph: async function(event) {
       console.log("printing..");
+      this.isLoading = true
       // svg.saveSvgAsPng(document.getElementById('plot').firstChild, 'diagram.png');
 
       const el = document.getElementById('plot');
@@ -188,6 +195,7 @@ export default {
       );
       link.click();
 
+      this.isLoading = false
       console.log("done");
     },
     onApplyColor: function(event) {

@@ -34,7 +34,7 @@
 
         <div style="margin-top:32px;display:flex;text-align:left">
             <input type="color" style="height:50px;margin-right:20px;" id="graphColor" name="graphColor" v-model="graphColor" @change="onApplyColor($event)">
-            <label for="graphColor" class="typo__label gf-item">Curve Color</label>
+            <label for="graphColor" class="typo__label gf-item">Curve1 Color</label>
         </div>
 
         <div style="margin-top:32px;display:flex;text-align:left">
@@ -74,6 +74,7 @@ import Multiselect from 'vue-multiselect'
 import Loading from 'vue-loading-overlay';
 // Import stylesheet
 import 'vue-loading-overlay/dist/vue-loading.css';
+import html2canvas from 'html2canvas';
 
 export default {
   name: 'RelativePermeability',
@@ -242,8 +243,29 @@ export default {
       }
       this.plot = c3.generate(plotOptions);
     },
-    onPrintGraph: function(event) {
+    onPrintGraph: async function(event) {
+      console.log("printing..");
+      this.isLoading = true
+      // svg.saveSvgAsPng(document.getElementById('plot').firstChild, 'diagram.png');
 
+      const el = document.getElementById('plot2');
+      const options = { type: "dataURL" };
+
+      const printCanvas = await html2canvas(el, options);
+      debugger
+
+      const link = document.createElement("a");
+      link.setAttribute("download", "download.png");
+      link.setAttribute(
+        "href",
+        printCanvas
+          .toDataURL("image/png")
+          .replace("image/png", "image/octet-stream")
+      );
+      link.click();
+
+      this.isLoading = false
+      console.log("done");
     },
     onApplyColor: function(event) {
       document.documentElement.style.setProperty('--axis-color', this.axisColor);
