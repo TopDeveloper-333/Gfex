@@ -200,6 +200,9 @@ thead.resizable {
 :root {
   --axis-color : white;
   --graph-color : #ffbb78;
+  --graph1-color : #b9ff78;
+  --graph2-color : #a178ff;
+  --graph3-color : #ff78f4;
 }
 
 .c3-axis-y-label {
@@ -226,13 +229,14 @@ thead.resizable {
 } */
 
 .c3 path {
-  stroke: var(--graph-color) !important;
+  // stroke: var(--graph-color) !important;
   stroke-width: 4px;
 }
 .c3-circle {
-  fill: var(--graph-color) !important;
+  // fill: var(--graph-color) !important;
   stroke-width: 4px;
 }
+
 .c3 line {
   stroke-width: 2px;
 }
@@ -262,6 +266,6 @@ tspan {
 }
 
 .c3-legend-item-tile {
-  stroke: var(--graph-color) !important;
-  stroke-width: 2px;
+  // stroke: var(--graph-color) !important;
+  stroke-width: 4px;
 }

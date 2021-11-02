@@ -1,15 +1,68 @@
 <template>
   <div>
+    <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
     <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Relative Permeability Data via Corey Function</u></p>
 
     <div>
-      <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlot">Plot</label>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate">Calculate</label>
+      <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlot">{{plotLabel}}</label>
+      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate</label>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:center" class="row" v-show="bShowPlot == false">
       <div id="relativePermeabilitySheet"></div>
-      <div id="responseKGKOSheet"></div>
+      <div id="responseKGKOSheet" v-show="bCalculate == true"></div>
+    </div>
+
+    <div style="height:50px" v-show="bShowPlot == true">
+    </div>
+
+    <hr class="gf-line" v-show="bShowPlot == true">
+    <div style="display:flex;margin-bottom:6px;text-align:center;min-height:600px" class="row" v-show="bShowPlot == true">
+      <div class="col-3">
+        <label class="typo__label gf-item">Axis X:</label>
+        <multiselect v-model="axisX" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select X axis."></multiselect>
+        <label class="typo__label gf-item">Axis Y:</label>
+        <multiselect v-model="axisY" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select Y axis."></multiselect>
+        <label class="typo__label gf-item">Axis Y2:</label>
+        <multiselect v-model="axisY2" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select Y2 axis."></multiselect>
+
+        <div style="margin-top:32px;display:flex;text-align:left">
+            <input type="color" style="height:50px;margin-right:20px;" id="axisColor" name="axisColor" v-model="axisColor" @change="onApplyColor($event)">
+            <label for="axisColor" class="typo__label gf-item">Axis Color</label>
+        </div>
+
+        <div style="margin-top:32px;display:flex;text-align:left">
+            <input type="color" style="height:50px;margin-right:20px;" id="graphColor" name="graphColor" v-model="graphColor" @change="onApplyColor($event)">
+            <label for="graphColor" class="typo__label gf-item">Curve Color</label>
+        </div>
+
+        <div style="margin-top:32px;display:flex;text-align:left">
+            <input type="color" style="height:50px;margin-right:20px;" id="graph1Color" name="graph1Color" v-model="graph1Color" @change="onApplyColor($event)">
+            <label for="graph1Color" class="typo__label gf-item">Curve2 Color</label>
+        </div>
+
+      </div>
+      <div class="col-2">
+        <label class="btn btn-primary gf-button" style="margin-top:48px" v-on:click="onShow">Graph</label>
+        <label class="btn btn-primary gf-button" style="margin-top:32px" v-on:click="onPrintGraph">Print Graph</label>
+      </div>
+      <div id="plot2" class="col-7" ref="plot2">
+      </div>
+    </div>
+
+    <div id="plotModal2" class="gf-modal">
+      <div class="gf-modal-content">
+        <div class="gf-modal-header">
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas platform</span>
+          <span class="gf-close" id="plot-gf-close2">&times;</span>
+        </div>
+        <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
+        <span style="font-size: 1.25rem">Please select all X, Y axes</span>
+        <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onOK">OK</label>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -17,6 +70,10 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import Multiselect from 'vue-multiselect'
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'RelativePermeability',
@@ -26,11 +83,34 @@ export default {
     title: { type: String, default: null }
   },
   
+  components: {
+    Multiselect,
+    Loading
+  },
+
   data() {
     return {
       relativePermeabilitySheet: null,
       responseKGKOSheet: null,
-      isRelPermValidate: true
+      isRelPermValidate: true,
+      bCalculate: false,
+      bShowPlot : false,
+      plotLabel: "Plot",
+      axisX: null,
+      axisY: null,
+      axisY2: null,
+      plot: null,
+      axisColor: '#ffffff',
+      graphColor: '#ffbb78',
+      graph1Color: '#b9ff78',
+      options: [
+        { name: "Sgm", column: 'A'}, 
+        { name: "Krg", column: 'B'},
+        { name: "Kro", column: 'C'}, 
+      ],
+      isLoading: false,
+      fullPage: true,
+      plot: null
     }
   },
 
@@ -42,12 +122,138 @@ export default {
 
   computed: {
     ...mapState({
+      projectName : state => state.project.projectName,
       resKGKO : state => state.project.resKGKO,
     }),
   },
 
   methods: {
+    onOK: function(event) {
+        var modal = document.getElementById("plotModal2");
+        modal.style.display = "none";
+    },
+    onShow: function(event) {
+
+      // ----------------------------------------------------------
+      // Validation
+      // ----------------------------------------------------------
+      if (this.axisX == null || (this.axisY == null && this.axisY2 == null)) {
+        var modal = document.getElementById("plotModal2");
+        modal.style.display = "block";
+        return;
+      }
+
+      // ----------------------------------------------------------
+      // Initialize variables
+      // ----------------------------------------------------------
+      document.documentElement.style.setProperty('--axis-color', this.axisColor);
+      document.documentElement.style.setProperty('--secondary-color', this.graphColor);
+
+      var axisX = this.axisX.name
+      var columns = []
+      var axes = {}
+      var ylabel = null
+      var ylabel2 = null
+
+      // ----------------------------------------------------------
+      // Start HERE
+      // ----------------------------------------------------------
+      var numRows = this.responseKGKOSheet.options.data.length;
+
+      // ----------------------------------------------------------------
+      // add x data
+      columns[0] = []
+      columns[0][0] = this.axisX.name
+      for (let index = 1; index <= numRows; index++) {
+        columns[0][index] = this.responseKGKOSheet.getValue(this.axisX.column + '' + index)        
+      }
+
+      // ----------------------------------------------------------------
+      // add y data
+      columns[1] = []
+      columns[1][0] = this.axisX.name + " vs " + this.axisY.name
+      for (let index = 1; index <= numRows; index++) {
+        columns[1][index] = this.responseKGKOSheet.getValue(this.axisY.column + '' + index)        
+      }
+      ylabel = this.axisY.name
+
+      // ----------------------------------------------------------------
+      // add y2 data : removed axis Y2
+      // ----------------------------------------------------------------
+      if (this.axisY2 != null) {
+        columns[2] = []
+        columns[2][0] = this.axisX.name + " vs " + this.axisY2.name
+        for (let j = 1; j <= numRows; j++) {
+          columns[2][j] = this.responseKGKOSheet.getValue(this.axisY2.column + '' + j)
+        }
+
+        axes[this.axisY2.name] = 'y2'
+        ylabel2 = this.axisY2.name
+      }
+      
+      this.updatePlot(axisX, columns, axes, ylabel, ylabel2);
+
+    },
+    updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
+      debugger
+      let plotOptions = {
+          bindto: '#plot2',
+          size: {
+              height: 800,
+          },
+          data: {
+            x: _axisX,
+            columns: _columns,
+            axes: _axes,
+          },
+          color: {
+            pattern: [this.graphColor, this.graph1Color]
+          },
+          legend: {
+            position: 'inset',
+            inset: {
+              anchor: 'top-left',
+              x: 20,
+              y: 40,
+            },
+          },
+          axis: {
+            x: {
+              height: 55,
+              label: {
+                text: _axisX,
+                position: 'outer-center'
+              }
+            },
+            y: {
+              label: {
+                text: _ylabel,
+                position: 'outer-middle'
+              }
+            },
+            y2: {
+              show: _ylabel2 != null, // ADD
+              label: {
+                text: _ylabel2,
+                position: 'outer-middle'
+              }
+            }
+          }
+      }
+      this.plot = c3.generate(plotOptions);
+    },
+    onPrintGraph: function(event) {
+
+    },
+    onApplyColor: function(event) {
+      document.documentElement.style.setProperty('--axis-color', this.axisColor);
+      document.documentElement.style.setProperty('--graph-color', this.graphColor);
+      document.documentElement.style.setProperty('--graph1-color', this.graph1Color);
+      this.onShow(null);
+    },
     onCalculate: async function(event) {
+
+      this.isLoading = true
 
       let corey = {}
       corey.sgi = this.relativePermeabilitySheet.getValue('A1');
@@ -58,13 +264,22 @@ export default {
 
       await store.dispatch('project/fetchKGKO', corey)
 
-      debugger
       this.responseKGKOSheet.setData(this.resKGKO)
       this.responseKGKOSheet.refresh()
 
+      this.bCalculate = true
+      this.isLoading = false
+
     },
     onPlot: function(event) {
-      alert('plot is called')
+      if(this.bShowPlot == false) {
+        this.bShowPlot = true
+        this.plotLabel = "Data"
+      }
+      else {
+        this.bShowPlot = false
+        this.plotLabel = "Plot"
+      }
     },
     validateRelPerm: function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
@@ -169,12 +384,48 @@ export default {
         ],
     });
     this.responseKGKOSheet.hideIndex();
+
+    mountPlotDialog();
   }
 
 }
+
+function mountPlotDialog() {
+
+  // Get the modal
+  var modal = document.getElementById("plotModal2");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementById("plot-gf-close2");
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }      
+}
+
 </script>
+
+<style>
+.c3-line-data2 {
+  stroke: red !important;
+}
+
+</style>
+
 <style scoped>
 .jexcel > thead > tr > td {
   font-size: 20px;
 }
+#plot2 {
+  background: green;
+}
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

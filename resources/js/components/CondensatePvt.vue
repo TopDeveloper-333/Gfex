@@ -87,14 +87,6 @@ export default {
       myGasCondensate : {},
       bShowPlot : false,
       options: [
-        // { name: "P ", column: 'A'}, 
-        // { name: "Bo ", column: 'B'},
-        // { name: "Rs ", column: 'C'}, 
-        // { name: "Bg ", column: 'D'},
-        // { name: "Rv ", column: 'E'}, 
-        // { name: "Oil Viscosity ", column: 'F'}, 
-        // { name: "Gas Viscosity ", column: 'G'},
-        // { name: "PV Inj ", column:'H'}
         { name: "P (psia)", column: 'A'}, 
         { name: "Bo (rb/stb)", column: 'B'},
         { name: "Rs (scf/stb)", column: 'C'}, 
@@ -201,6 +193,7 @@ export default {
     onApplyColor: function(event) {
       document.documentElement.style.setProperty('--axis-color', this.axisColor);
       document.documentElement.style.setProperty('--graph-color', this.graphColor);
+      this.onShow(null);
     },
     onShow: function(event) {
       
@@ -302,9 +295,9 @@ export default {
             columns: _columns,
             axes: _axes,
           },
-          // color: {
-          //   pattern: ['#ffbb78']
-          // },
+          color: {
+            pattern: [ this.graphColor]
+          },
           legend: {
             position: 'inset',
             inset: {
