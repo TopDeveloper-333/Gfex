@@ -106,7 +106,6 @@ export default {
     ...mapState({
     }),
     isDataValidate: function() {
-      debugger
       var dualState = (this.dualPorosity == null || this.dualPorosity.value == 0) ? true : this.isDualPorosityValidate
       var wellTestState = (this.testWellData == null || this.testWellData.value == 0) ? true :
         (this.testWellData.value == 1 ? this.isCnModelValidate : 

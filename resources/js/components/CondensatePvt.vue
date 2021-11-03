@@ -183,8 +183,6 @@ export default {
       const options = { type: "dataURL" };
 
       const printCanvas = await html2canvas(el, options);
-      debugger
-
       const link = document.createElement("a");
       link.setAttribute("download", "download.png");
       link.setAttribute(

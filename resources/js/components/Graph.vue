@@ -2,23 +2,7 @@
   <div>
     <loading :active.sync="isLoading" 
              :is-full-page="fullPage"></loading>
-    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Relative Permeability Data via Corey Function</u></p>
-
-    <div>
-      <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlot">{{plotLabel}}</label>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate</label>
-    </div>
-
-    <div style="display:flex;margin-bottom:6px;text-align:center" class="row" v-show="bShowPlot == false">
-      <div id="relativePermeabilitySheet"></div>
-      <div id="responseKGKOSheet" v-show="bCalculate == true"></div>
-    </div>
-
-    <div style="height:50px" v-show="bShowPlot == true">
-    </div>
-
-    <hr class="gf-line" v-show="bShowPlot == true">
-    <div style="display:flex;margin-bottom:6px;text-align:center;min-height:600px" class="row" v-show="bShowPlot == true">
+    <div style="display:flex;margin-bottom:6px;text-align:center;min-height:600px" class="row">
       <div class="col-3">
         <label class="typo__label gf-item">Axis X:</label>
         <multiselect v-model="axisX" :options="options" track-by="name" label="name" :taggable="true" placeholder="Select X axis."></multiselect>
@@ -47,15 +31,15 @@
         <label class="btn btn-primary gf-button" style="margin-top:48px" v-on:click="onShow">Graph</label>
         <label class="btn btn-primary gf-button" style="margin-top:32px" v-on:click="onPrintGraph">Print Graph</label>
       </div>
-      <div id="plot2" class="col-7" ref="plot2">
+      <div id="plot3" class="col-7" ref="plot3">
       </div>
     </div>
 
-    <div id="plotModal2" class="gf-modal">
+    <div id="plotModal3" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
           <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas platform</span>
-          <span class="gf-close" id="plot-gf-close2">&times;</span>
+          <span class="gf-close" id="plot-gf-close3" v-on:click="onCancel" >&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
         <span style="font-size: 1.25rem">Please select all X, Y axes</span>
@@ -72,17 +56,14 @@ import store from '~/store'
 import { mapState } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
 import html2canvas from 'html2canvas';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
-  name: 'RelativePermeability',
+  name: 'Graph',
   middleware: 'auth',
 
-  props: {
-    title: { type: String, default: null }
-  },
+  props: ['options', 'data'],
   
   components: {
     Multiselect,
@@ -91,12 +72,6 @@ export default {
 
   data() {
     return {
-      relativePermeabilitySheet: null,
-      responseKGKOSheet: null,
-      isRelPermValidate: true,
-      bCalculate: false,
-      bShowPlot : false,
-      plotLabel: "Plot",
       axisX: null,
       axisY: null,
       axisY2: null,
@@ -104,33 +79,23 @@ export default {
       axisColor: '#ffffff',
       graphColor: '#ffbb78',
       graph1Color: '#b9ff78',
-      options: [
-        { name: "Sg", column: 'A'}, 
-        { name: "Krg", column: 'B'},
-        { name: "Kro", column: 'C'}, 
-      ],
       isLoading: false,
       fullPage: true,
-    }
-  },
-
-  watch: {
-    isRelPermValidate: function(val, oldVal) {
-      this.$emit('changedValidate', val)
     }
   },
 
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      resKGKO : state => state.project.resKGKO,
     }),
   },
 
   methods: {
-    onOK: function(event) {
-        var modal = document.getElementById("plotModal2");
-        modal.style.display = "none";
+    onApplyColor: function(event) {
+      document.documentElement.style.setProperty('--axis-color', this.axisColor);
+      document.documentElement.style.setProperty('--graph-color', this.graphColor);
+      document.documentElement.style.setProperty('--graph1-color', this.graph1Color);
+      this.onShow(null);
     },
     onShow: function(event) {
 
@@ -138,11 +103,12 @@ export default {
       // Validation
       // ----------------------------------------------------------
       if (this.axisX == null || (this.axisY == null && this.axisY2 == null)) {
-        var modal = document.getElementById("plotModal2");
+        var modal = document.getElementById("plotModal3");
         modal.style.display = "block";
         return;
       }
 
+      debugger
       // ----------------------------------------------------------
       // Initialize variables
       // ----------------------------------------------------------
@@ -158,14 +124,15 @@ export default {
       // ----------------------------------------------------------
       // Start HERE
       // ----------------------------------------------------------
-      var numRows = this.responseKGKOSheet.options.data.length;
+      var numRows = this.data.length;
 
+      debugger
       // ----------------------------------------------------------------
       // add x data
       columns[0] = []
       columns[0][0] = this.axisX.name
       for (let index = 1; index <= numRows; index++) {
-        columns[0][index] = this.responseKGKOSheet.getValue(this.axisX.column + '' + index)        
+        columns[0][index] = this.data[index-1][this.axisX.index]
       }
 
       // ----------------------------------------------------------------
@@ -173,7 +140,7 @@ export default {
       columns[1] = []
       columns[1][0] = this.axisX.name + " vs " + this.axisY.name
       for (let index = 1; index <= numRows; index++) {
-        columns[1][index] = this.responseKGKOSheet.getValue(this.axisY.column + '' + index)        
+        columns[1][index] = this.data[index-1][this.axisY.index]
       }
       ylabel = this.axisY.name
 
@@ -184,19 +151,18 @@ export default {
         columns[2] = []
         columns[2][0] = this.axisX.name + " vs " + this.axisY2.name
         for (let j = 1; j <= numRows; j++) {
-          columns[2][j] = this.responseKGKOSheet.getValue(this.axisY2.column + '' + j)
+          columns[2][j] = this.data[j-1][this.axisY2.index]
         }
 
         axes[this.axisY2.name] = 'y2'
         ylabel2 = this.axisY2.name
       }
-      
       this.updatePlot(axisX, columns, axes, ylabel, ylabel2);
 
     },
     updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
       let plotOptions = {
-          bindto: '#plot2',
+          bindto: '#plot3',
           size: {
               height: 800,
           },
@@ -246,7 +212,7 @@ export default {
       this.isLoading = true
       // svg.saveSvgAsPng(document.getElementById('plot').firstChild, 'diagram.png');
 
-      const el = document.getElementById('plot2');
+      const el = document.getElementById('plot3');
       const options = { type: "dataURL" };
 
       const printCanvas = await html2canvas(el, options);
@@ -264,145 +230,17 @@ export default {
       this.isLoading = false
       console.log("done");
     },
-    onApplyColor: function(event) {
-      document.documentElement.style.setProperty('--axis-color', this.axisColor);
-      document.documentElement.style.setProperty('--graph-color', this.graphColor);
-      document.documentElement.style.setProperty('--graph1-color', this.graph1Color);
-      this.onShow(null);
+    onOK: function(event) {
+        var modal = document.getElementById("plotModal3");
+        modal.style.display = "none";
     },
-    onCalculate: async function(event) {
-
-      this.isLoading = true
-
-      let corey = {}
-      corey.sgi = this.relativePermeabilitySheet.getValue('A1');
-      corey.krgl = this.relativePermeabilitySheet.getValue('B1');
-      corey.kroi = this.relativePermeabilitySheet.getValue('C1');
-      corey.sor = this.relativePermeabilitySheet.getValue('D1');
-      corey.lambda = this.relativePermeabilitySheet.getValue('E1');
-
-      await store.dispatch('project/fetchKGKO', corey)
-
-      this.responseKGKOSheet.setData(this.resKGKO)
-      this.responseKGKOSheet.refresh()
-
-      this.bCalculate = true
-      this.isLoading = false
-
-    },
-    onPlot: function(event) {
-      if(this.bShowPlot == false) {
-        this.bShowPlot = true
-        this.plotLabel = "Data"
-      }
-      else {
-        this.bShowPlot = false
-        this.plotLabel = "Plot"
-      }
-    },
-    validateRelPerm: function(instance, cell, col, row, val, label, cellName) {
-      var value = parseFloat(val)
-
-      if (cellName == 'A1') {
-        // this means start to update table
-        this.isRelPermValidate = true
-      }
-
-      if ((isNaN(value) == true) || (value < 0) || 
-          (col < 4 && !(value >=0 && value <=1) )) 
-      {
-        this.markInvalidCell(cell)
-        this.isRelPermValidate = false
-      }
-      else {
-        this.markNormalCell(cell)
-      }
-
+    onCancel: function(event) {
+        var modal = document.getElementById("plotModal3");
+        modal.style.display = "none";
     },
   },
 
   mounted() {
-    var relativePermeabilityData = [
-      // [,],
-      [0, 0.0, 1.0, 0.40, 2.0]
-    ];
-
-    this.relativePermeabilitySheet = jspreadsheet(document.getElementById('relativePermeabilitySheet'), {
-        data:relativePermeabilityData,
-        allowInsertRow:false,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:false,
-        allowDeleteColumn:false,
-        columns: [
-            {
-                type: 'numeric',
-                title:'Sgi',
-                width: 90,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Krgl',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Kroi',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Sor',
-                width: 100,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Lambda',
-                width: 140,
-                decimal:','
-            },
-        ],
-        updateTable: this.validateRelPerm
-    });
-    this.relativePermeabilitySheet.hideIndex();
-
-    this.responseKGKOSheet = jspreadsheet(document.getElementById('responseKGKOSheet'), {
-        data:this.resKGKO,
-        allowInsertRow:true,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:true,
-        allowDeleteColumn:false,
-        tableOverflow: true,
-        columns: [
-            {
-                type: 'numeric',
-                title:'Sg',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Krg',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Kro',
-                width: 120,
-                decimal:','
-            },
-        ],
-    });
-    this.responseKGKOSheet.hideIndex();
-
     mountPlotDialog();
   }
 
@@ -411,10 +249,10 @@ export default {
 function mountPlotDialog() {
 
   // Get the modal
-  var modal = document.getElementById("plotModal2");
+  var modal = document.getElementById("plotModal3");
 
   // Get the <span> element that closes the modal
-  var span = document.getElementById("plot-gf-close2");
+  var span = document.getElementById("plot-gf-close3");
 
   // When the user clicks on <span> (x), close the modal
   span.onclick = function() {
@@ -432,10 +270,7 @@ function mountPlotDialog() {
 </script>
 
 <style scoped>
-.jexcel > thead > tr > td {
-  font-size: 20px;
-}
-#plot2 {
+#plot3 {
   background: green;
 }
 </style>

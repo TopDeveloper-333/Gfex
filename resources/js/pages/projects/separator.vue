@@ -2,6 +2,8 @@
   <div class="row">
     <div class="m-auto">
     <form>
+      <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
       <div class="card mb-3">
         <div class="card-header gf-header">
           <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:150px;margin-top:16px;float:left">
@@ -34,39 +36,39 @@
                 <p class="gf-item">Separator Conditions <span>(Input 2 or 3 stages)</span></p>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 1</p>
-                  <div id="setNumber1"></div>
+                  <div id="setNumber1Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 2</p>
-                  <div id="setNumber2"></div>
+                  <div id="setNumber2Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 3</p>
-                  <div id="setNumber3"></div>
+                  <div id="setNumber3Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 4</p>
-                  <div id="setNumber4"></div>
+                  <div id="setNumber4Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 5</p>
-                  <div id="setNumber5"></div>
+                  <div id="setNumber5Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 6</p>
-                  <div id="setNumber6"></div>
+                  <div id="setNumber6Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 7</p>
-                  <div id="setNumber7"></div>
+                  <div id="setNumber7Sheet"></div>
                 </div>
                 <div class="col-lg-4 col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 8</p>
-                  <div id="setNumber8"></div>
+                  <div id="setNumber8Sheet"></div>
                 </div>
                 <div class="col-4" style="text-align:center">
                   <p class="gf-subitem">Set Number 9</p>
-                  <div id="setNumber9"></div>
+                  <div id="setNumber9Sheet"></div>
                 </div>
               </div>
 
@@ -111,6 +113,9 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 // import axios from 'axios'
 export default {
@@ -128,6 +133,10 @@ export default {
     return { title: this.$t('Separtor Processing / Optimizer') }
   },
 
+  components: {
+    Loading
+  },
+
   data() {
     return {
       originalStreamComposition1: null,
@@ -141,7 +150,26 @@ export default {
       isOriginalStreamValidate: true,
       isOriginalStream1Validate: true,
       isSaturatedReservoirValidate: true,
-      isSeparatorConditionValidate: true
+      isSeparatorConditionValidate1: true,
+      isSeparatorConditionValidate2: true,
+      isSeparatorConditionValidate3: true,
+      isSeparatorConditionValidate4: true,
+      isSeparatorConditionValidate5: true,
+      isSeparatorConditionValidate6: true,
+      isSeparatorConditionValidate7: true,
+      isSeparatorConditionValidate8: true,
+      isSeparatorConditionValidate9: true,
+      isLoading: false,
+      fullPage: true,
+      setNumber1Sheet: null,
+      setNumber2Sheet: null,
+      setNumber3Sheet: null,
+      setNumber4Sheet: null,
+      setNumber5Sheet: null,
+      setNumber6Sheet: null,
+      setNumber7Sheet: null,
+      setNumber8Sheet: null,
+      setNumber9Sheet: null,
     }
   },
 
@@ -157,12 +185,14 @@ export default {
       sep : state => state.project.sep
     }),
     isDataValidate: function() {
-      debugger
       return this.isOriginalStreamValidate & this.isOriginalStream1Validate & 
-            this.isSaturatedReservoirValidate & this.isSeparatorConditionValidate
+            this.isSaturatedReservoirValidate & this.isSeparatorConditionValidate1 &
+            this.isSeparatorConditionValidate2 & this.isSeparatorConditionValidate3 &
+            this.isSeparatorConditionValidate4 & this.isSeparatorConditionValidate5 &
+            this.isSeparatorConditionValidate6 & this.isSeparatorConditionValidate7 &
+            this.isSeparatorConditionValidate8 & this.isSeparatorConditionValidate9
     },
     executeButtonClass: function() {
-      debugger
       if (this.isDataValidate == true) return {'btn-outline-primary': true}
       else return {'btn-outline-primary': true, 'disabled': true}
     },
@@ -187,7 +217,6 @@ export default {
       }
 
       if (cellName == 'M1') {
-        debugger
         let total = parseFloat(cell.innerText)
         if (total != 1.00) {
           this.markInvalidCell(cell)
@@ -232,6 +261,169 @@ export default {
         this.markNormalCell(cell)
       }
     },
+    updateNumberValidate: function(instance, state) {
+      if (instance.id == 'setNumber1Sheet') {
+        this.isSeparatorConditionValidate1 = state
+      }
+      else if (instance.id == 'setNumber2Sheet') {
+        this.isSeparatorConditionValidate2 = state
+      }
+      else if (instance.id == 'setNumber3Sheet') {
+        this.isSeparatorConditionValidate3 = state
+      }
+      else if (instance.id == 'setNumber4Sheet') {
+        this.isSeparatorConditionValidate4 = state
+      }
+      else if (instance.id == 'setNumber5Sheet') {
+        this.isSeparatorConditionValidate5 = state
+      }
+      else if (instance.id == 'setNumber6Sheet') {
+        this.isSeparatorConditionValidate6 = state
+      }
+      else if (instance.id == 'setNumber7Sheet') {
+        this.isSeparatorConditionValidate7 = state
+      }
+      else if (instance.id == 'setNumber8Sheet') {
+        this.isSeparatorConditionValidate8 = state
+      }
+      else if (instance.id == 'setNumber9Sheet') {
+        this.isSeparatorConditionValidate9 = state
+      }
+    },
+    validateNumberProps: function(instance, cell, col, row, val, label, cellName) {
+      let value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        debugger
+        this.updateNumberValidate(instance, true)
+      }
+
+      if((isNaN(value) != true) && (value < 0))
+      {
+        this.markInvalidCell(cell)
+        this.updateNumberValidate(instance, false)
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+      if (cellName == 'A2') {
+        if ((isNaN(value) != true) && instance.jspreadsheet.getValue('A1') == '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('A1'))
+          this.markInvalidCell(instance.jspreadsheet.getCell('B1'))
+          this.updateNumberValidate(instance, false)
+        }
+      }
+
+      if (cellName == 'A3') {
+        if ((isNaN(value) != true) && instance.jspreadsheet.getValue('A1') == '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('A1'))
+          this.markInvalidCell(instance.jspreadsheet.getCell('B1'))
+          this.updateNumberValidate(instance, false)
+        }
+        if ((isNaN(value) != true) && instance.jspreadsheet.getValue('A2') == '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('A2'))
+          this.markInvalidCell(instance.jspreadsheet.getCell('B2'))
+          this.updateNumberValidate(instance, false)
+        }
+      }
+
+      if (cellName == 'B1') {
+        if ((isNaN(value) == true) && instance.jspreadsheet.getValue('A1') != '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('B1'))
+          this.updateNumberValidate(instance, false)
+        }
+      }
+
+      if (cellName == 'B2') {
+        if ((isNaN(value) == true) && instance.jspreadsheet.getValue('A2') != '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('B2'))
+          this.updateNumberValidate(instance, false)
+        }
+      }
+
+      if (cellName == 'B3') { 
+        if ((isNaN(value) == true) && instance.jspreadsheet.getValue('A3') != '') {
+          this.markInvalidCell(instance.jspreadsheet.getCell('B3'))
+          this.updateNumberValidate(instance, false)
+        }
+      }
+
+      if (cellName == 'B3') 
+      {
+        if (instance.jspreadsheet.getValue('A1') != '' || instance.jspreadsheet.getValue('B1') != '' ||
+            instance.jspreadsheet.getValue('A2') != '' || instance.jspreadsheet.getValue('B2') != '' ||
+            instance.jspreadsheet.getValue('A3') != '' || instance.jspreadsheet.getValue('B3') != '') 
+        {
+          if (instance.jspreadsheet.getValue('A2') == '') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A2'))
+            this.updateNumberValidate(instance, false)
+          }
+          if (instance.jspreadsheet.getValue('A3') != '' && instance.jspreadsheet.getValue('A3') != '14.7') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A3'))
+            this.updateNumberValidate(instance, false)
+          }
+          if (instance.jspreadsheet.getValue('A3') == '' && instance.jspreadsheet.getValue('B3') != '') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('B3'))
+            this.updateNumberValidate(instance, false)
+          }
+          if (instance.jspreadsheet.getValue('A3') == '' && 
+              instance.jspreadsheet.getValue('A2') != '' &&
+              instance.jspreadsheet.getValue('A2') != '14.7') 
+          {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A2'))
+            this.updateNumberValidate(instance, false)
+          }
+
+          if (instance.jspreadsheet.getValue('A3') != '' && this.setNumber1Sheet.getValue('A3') == '') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A3'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('B3'))
+            this.updateNumberValidate(instance, false)
+          }
+
+          // compare with setnumber1sheet
+          if (this.setNumber1Sheet!=null && this.setNumber1Sheet.getValue('A3') != '' && instance.jspreadsheet.getValue('A3') == '') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A3'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('B3'))
+            this.updateNumberValidate(instance, false)
+          }
+          if (this.setNumber1Sheet!=null && this.setNumber1Sheet.getValue('A3') == '' && instance.jspreadsheet.getValue('A3') != '') {
+            this.markInvalidCell(instance.jspreadsheet.getCell('A3'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('B3'))
+            this.updateNumberValidate(instance, false)
+          }
+
+          // update other tables
+          if (instance.id == 'setNumber1Sheet')
+          {
+            debugger
+            if (this.setNumber2Sheet != null)  // skip init
+            {
+              this.setNumber2Sheet.setValue('A1', this.setNumber2Sheet.getValue('A1'), true)
+              this.setNumber3Sheet.setValue('A1', this.setNumber3Sheet.getValue('A1'), true)
+              this.setNumber4Sheet.setValue('A1', this.setNumber4Sheet.getValue('A1'), true)
+              this.setNumber5Sheet.setValue('A1', this.setNumber5Sheet.getValue('A1'), true)
+              this.setNumber6Sheet.setValue('A1', this.setNumber6Sheet.getValue('A1'), true)
+              this.setNumber7Sheet.setValue('A1', this.setNumber7Sheet.getValue('A1'), true)
+              this.setNumber8Sheet.setValue('A1', this.setNumber8Sheet.getValue('A1'), true)
+              this.setNumber9Sheet.setValue('A1', this.setNumber9Sheet.getValue('A1'), true)
+            }
+            
+          }
+        }
+        else {
+          if (instance.id == 'setNumber1Sheet'){
+            this.markInvalidCell(instance.jspreadsheet.getCell('A1'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('B1'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('A2'))
+            this.markInvalidCell(instance.jspreadsheet.getCell('B2'))
+            this.updateNumberValidate(instance, false)
+          }
+        }
+
+      }
+
+    },
     onSaveAs: function(event) {
       this.isSaveAs = true
       this.hideSaveAsButton = true
@@ -260,6 +452,8 @@ export default {
       this.$router.replace('create')
     },
     onNextPage: async function(event) {
+
+      this.isLoading = true;
       this.mySEP = { 
         originalStreamComposition1: {
           N2:0, CO2:0, H2S:0, C1:0, C2:0, C3:0, iC4:0, nC4:0, iC5:0, nC5:0, C6:0, C7:0,
@@ -271,15 +465,15 @@ export default {
           PSAT:0, TRES:0,
         },
         separatorConditions: {
-          setNumber1: [ [0, 0], [0, 0]],
-          setNumber2: [ [0, 0], [0, 0]],
-          setNumber3: [ [0, 0], [0, 0]],
-          setNumber4: [ [0, 0], [0, 0]],
-          setNumber5: [ [0, 0], [0, 0]],
-          setNumber6: [ [0, 0], [0, 0]],
-          setNumber7: [ [0, 0], [0, 0]],
-          setNumber8: [ [0, 0], [0, 0]],
-          setNumber9: [ [0, 0], [0, 0]],
+          setNumber1: [ [0, 0], [0, 0], [0, 0]],
+          setNumber2: [ [0, 0], [0, 0], [0, 0]],
+          setNumber3: [ [0, 0], [0, 0], [0, 0]],
+          setNumber4: [ [0, 0], [0, 0], [0, 0]],
+          setNumber5: [ [0, 0], [0, 0], [0, 0]],
+          setNumber6: [ [0, 0], [0, 0], [0, 0]],
+          setNumber7: [ [0, 0], [0, 0], [0, 0]],
+          setNumber8: [ [0, 0], [0, 0], [0, 0]],
+          setNumber9: [ [0, 0], [0, 0], [0, 0]],
         }
       }
       this.mySEP.originalStreamComposition1.N2 = this.originalStreamComposition1.getValue('A1');
@@ -362,7 +556,10 @@ export default {
       this.mySEP.separatorConditions.setNumber9[2][0] = this.setNumber9.getValue('A3');
       this.mySEP.separatorConditions.setNumber9[2][1] = this.setNumber9.getValue('B3');
 
-      await store.dispatch('project/saveSEP', this.mySEP)
+      await store.dispatch('project/fetchSEP', this.mySEP)
+
+      this.isLoading = false
+      this.$router.replace('separatorresult')
     }
   },
   mounted() {
@@ -550,6 +747,7 @@ export default {
                 width: 250,
             },
         ],
+        updateTable: this.validateNumberProps
     }
     
     var setNumber1Data = [
@@ -560,8 +758,8 @@ export default {
       // [,],
     ];
     setNumberProps.data = setNumber1Data;
-    this.setNumber1 = jspreadsheet(document.getElementById('setNumber1'), setNumberProps);
-    this.setNumber1.hideIndex();
+    this.setNumber1Sheet = jspreadsheet(document.getElementById('setNumber1Sheet'), setNumberProps);
+    this.setNumber1Sheet.hideIndex();
 
     var setNumber2Data = [
       [800, 72],
@@ -571,8 +769,8 @@ export default {
       // [,]
     ];
     setNumberProps.data = setNumber2Data;
-    this.setNumber2 = jspreadsheet(document.getElementById('setNumber2'), setNumberProps);
-    this.setNumber2.hideIndex();
+    this.setNumber2Sheet = jspreadsheet(document.getElementById('setNumber2Sheet'), setNumberProps);
+    this.setNumber2Sheet.hideIndex();
 
     var setNumber3Data = [
       [, ],
@@ -580,26 +778,26 @@ export default {
       [, ],
     ];
     setNumberProps.data = setNumber3Data;
-    this.setNumber3 = jspreadsheet(document.getElementById('setNumber3'), setNumberProps);
-    this.setNumber3.hideIndex();
+    this.setNumber3Sheet = jspreadsheet(document.getElementById('setNumber3Sheet'), setNumberProps);
+    this.setNumber3Sheet.hideIndex();
 
-    this.setNumber4 = jspreadsheet(document.getElementById('setNumber4'), setNumberProps);
-    this.setNumber4.hideIndex();
+    this.setNumber4Sheet = jspreadsheet(document.getElementById('setNumber4Sheet'), setNumberProps);
+    this.setNumber4Sheet.hideIndex();
 
-    this.setNumber5 = jspreadsheet(document.getElementById('setNumber5'), setNumberProps);
-    this.setNumber5.hideIndex();
+    this.setNumber5Sheet = jspreadsheet(document.getElementById('setNumber5Sheet'), setNumberProps);
+    this.setNumber5Sheet.hideIndex();
 
-    this.setNumber6 = jspreadsheet(document.getElementById('setNumber6'), setNumberProps);
-    this.setNumber6.hideIndex();
+    this.setNumber6Sheet = jspreadsheet(document.getElementById('setNumber6Sheet'), setNumberProps);
+    this.setNumber6Sheet.hideIndex();
 
-    this.setNumber7 = jspreadsheet(document.getElementById('setNumber7'), setNumberProps);
-    this.setNumber7.hideIndex();
+    this.setNumber7Sheet = jspreadsheet(document.getElementById('setNumber7Sheet'), setNumberProps);
+    this.setNumber7Sheet.hideIndex();
 
-    this.setNumber8 = jspreadsheet(document.getElementById('setNumber8'), setNumberProps);
-    this.setNumber8.hideIndex();
+    this.setNumber8Sheet = jspreadsheet(document.getElementById('setNumber8Sheet'), setNumberProps);
+    this.setNumber8Sheet.hideIndex();
 
-    this.setNumber9 = jspreadsheet(document.getElementById('setNumber9'), setNumberProps);
-    this.setNumber9.hideIndex();
+    this.setNumber9Sheet = jspreadsheet(document.getElementById('setNumber9Sheet'), setNumberProps);
+    this.setNumber9Sheet.hideIndex();
 
     mountExitDialog();
 

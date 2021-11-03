@@ -13,7 +13,8 @@ export const state = {
   drygas : getCookie('drygas', {}),
   gascondensate : getCookie('gascondensate', {}),
   relPerm: getCookie('relPerm', {}),
-  resKGKO: getCookie('resKGKO', [])  
+  resKGKO: getCookie('resKGKO', []),
+  resOPT: getCookie('resOPT', [])
 }
 
 function getCookie(name, defaultValue) {
@@ -38,7 +39,8 @@ export const getters = {
   drygas : state => state.drygas,
   gascondensate : state => state.gascondensate,
   relPerm: state => state.relPerm,
-  resKGKO: state => state.resKGKO
+  resKGKO: state => state.resKGKO,
+  resOPT: state => state.resOPT
 }
 
 export const mutations = {
@@ -76,6 +78,10 @@ export const mutations = {
   [types.SAVE_RES_KGKO] (state, resKGKO) {
     state.resKGKO = resKGKO
     Cookies.set('resKGKO', resKGKO, {expires: 1})
+  },
+  [types.SAVE_RES_OPTIMIZER] (state, resOPT) {
+    state.resOPT = resOPT
+    Cookies.set('resOPT', resOPT, {expires: 1})
   }
 }
 
@@ -90,8 +96,14 @@ export const actions = {
     const isSeparatorOptimizer = payload.isSeparatorOptimizer
     commit(types.SAVE_PROJECT_TYPE, {isFDP, isCondensate, isEconomics, isSeparatorOptimizer})
   },
-  async saveSEP ({commit}, sep) {
+  async fetchSEP ({commit}, sep) {
     commit(types.SAVE_SEP, sep)
+    const { data } = await axios.post('/api/requestOPT', sep)
+    if (typeof (data) == 'string') {
+      console.log('Convert string to variable: OPT')
+      data = JSON.parse(data)
+    }
+    commit(types.SAVE_RES_OPTIMIZER, data)
   },
   async saveDryGas({commit}, dryGas) {
     commit(types.SAVE_DRY_GAS, dryGas)
@@ -102,6 +114,10 @@ export const actions = {
   async fetchKGKO({commit}, relPerm) {
     commit(types.SAVE_REL_PERM, relPerm)
     const { data } = await axios.post('/api/requestKGKO', relPerm)
+    if (typeof (data) == 'string') {
+      console.log('Convert string to variable: KGKO')
+      data = JSON.parse(data)
+    }
     commit(types.SAVE_RES_KGKO, data)
   }
 }

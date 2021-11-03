@@ -185,7 +185,6 @@ export default {
     },
     onNextPage: async function(event) {
 
-      debugger
       if (this.bFDP != '1')
         this.bEconomics = false
 

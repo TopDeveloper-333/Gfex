@@ -12,6 +12,7 @@ use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Project\CoreyController;
+use App\Http\Controllers\Project\SepController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('settings/password', [PasswordController::class, 'update']);
 
     Route::post('requestKGKO', [CoreyController::class, 'requestKGKO']);
+    Route::post('requestOPT', [SepController::class, 'requestOPT']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
