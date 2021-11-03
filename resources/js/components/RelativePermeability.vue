@@ -162,6 +162,7 @@ export default {
 
       // ----------------------------------------------------------------
       // add x data
+      debugger
       columns[0] = []
       columns[0][0] = this.axisX.name
       for (let index = 1; index <= numRows; index++) {

@@ -493,68 +493,68 @@ export default {
       this.mySEP.saturatedReservoirConditions.PSAT = this.saturatedReservoirConditions.getValue('A1');
       this.mySEP.saturatedReservoirConditions.TRES = this.saturatedReservoirConditions.getValue('B1');
 
-      this.mySEP.separatorConditions.setNumber1[0][0] = this.setNumber1.getValue('A1');
-      this.mySEP.separatorConditions.setNumber1[0][1] = this.setNumber1.getValue('B1');
-      this.mySEP.separatorConditions.setNumber1[1][0] = this.setNumber1.getValue('A2');
-      this.mySEP.separatorConditions.setNumber1[1][1] = this.setNumber1.getValue('B2');
-      this.mySEP.separatorConditions.setNumber1[2][0] = this.setNumber1.getValue('A3');
-      this.mySEP.separatorConditions.setNumber1[2][1] = this.setNumber1.getValue('B3');
+      this.mySEP.separatorConditions.setNumber1[0][0] = this.setNumber1Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber1[0][1] = this.setNumber1Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber1[1][0] = this.setNumber1Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber1[1][1] = this.setNumber1Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber1[2][0] = this.setNumber1Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber1[2][1] = this.setNumber1Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber2[0][0] = this.setNumber2.getValue('A1');
-      this.mySEP.separatorConditions.setNumber2[0][1] = this.setNumber2.getValue('B1');
-      this.mySEP.separatorConditions.setNumber2[1][0] = this.setNumber2.getValue('A2');
-      this.mySEP.separatorConditions.setNumber2[1][1] = this.setNumber2.getValue('B2');
-      this.mySEP.separatorConditions.setNumber2[2][0] = this.setNumber2.getValue('A3');
-      this.mySEP.separatorConditions.setNumber2[2][1] = this.setNumber2.getValue('B3');
+      this.mySEP.separatorConditions.setNumber2[0][0] = this.setNumber2Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber2[0][1] = this.setNumber2Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber2[1][0] = this.setNumber2Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber2[1][1] = this.setNumber2Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber2[2][0] = this.setNumber2Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber2[2][1] = this.setNumber2Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber3[0][0] = this.setNumber3.getValue('A1');
-      this.mySEP.separatorConditions.setNumber3[0][1] = this.setNumber3.getValue('B1');
-      this.mySEP.separatorConditions.setNumber3[1][0] = this.setNumber3.getValue('A2');
-      this.mySEP.separatorConditions.setNumber3[1][1] = this.setNumber3.getValue('B2');
-      this.mySEP.separatorConditions.setNumber3[2][0] = this.setNumber3.getValue('A3');
-      this.mySEP.separatorConditions.setNumber3[2][1] = this.setNumber3.getValue('B3');
+      this.mySEP.separatorConditions.setNumber3[0][0] = this.setNumber3Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber3[0][1] = this.setNumber3Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber3[1][0] = this.setNumber3Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber3[1][1] = this.setNumber3Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber3[2][0] = this.setNumber3Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber3[2][1] = this.setNumber3Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber4[0][0] = this.setNumber4.getValue('A1');
-      this.mySEP.separatorConditions.setNumber4[0][1] = this.setNumber4.getValue('B1');
-      this.mySEP.separatorConditions.setNumber4[1][0] = this.setNumber4.getValue('A2');
-      this.mySEP.separatorConditions.setNumber4[1][1] = this.setNumber4.getValue('B2');
-      this.mySEP.separatorConditions.setNumber4[2][0] = this.setNumber4.getValue('A3');
-      this.mySEP.separatorConditions.setNumber4[2][1] = this.setNumber4.getValue('B3');
+      this.mySEP.separatorConditions.setNumber4[0][0] = this.setNumber4Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber4[0][1] = this.setNumber4Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber4[1][0] = this.setNumber4Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber4[1][1] = this.setNumber4Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber4[2][0] = this.setNumber4Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber4[2][1] = this.setNumber4Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber5[0][0] = this.setNumber5.getValue('A1');
-      this.mySEP.separatorConditions.setNumber5[0][1] = this.setNumber5.getValue('B1');
-      this.mySEP.separatorConditions.setNumber5[1][0] = this.setNumber5.getValue('A2');
-      this.mySEP.separatorConditions.setNumber5[1][1] = this.setNumber5.getValue('B2');
-      this.mySEP.separatorConditions.setNumber5[2][0] = this.setNumber5.getValue('A3');
-      this.mySEP.separatorConditions.setNumber5[2][1] = this.setNumber5.getValue('B3');
+      this.mySEP.separatorConditions.setNumber5[0][0] = this.setNumber5Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber5[0][1] = this.setNumber5Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber5[1][0] = this.setNumber5Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber5[1][1] = this.setNumber5Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber5[2][0] = this.setNumber5Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber5[2][1] = this.setNumber5Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber6[0][0] = this.setNumber6.getValue('A1');
-      this.mySEP.separatorConditions.setNumber6[0][1] = this.setNumber6.getValue('B1');
-      this.mySEP.separatorConditions.setNumber6[1][0] = this.setNumber6.getValue('A2');
-      this.mySEP.separatorConditions.setNumber6[1][1] = this.setNumber6.getValue('B2');
-      this.mySEP.separatorConditions.setNumber6[2][0] = this.setNumber6.getValue('A3');
-      this.mySEP.separatorConditions.setNumber6[2][1] = this.setNumber6.getValue('B3');
+      this.mySEP.separatorConditions.setNumber6[0][0] = this.setNumber6Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber6[0][1] = this.setNumber6Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber6[1][0] = this.setNumber6Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber6[1][1] = this.setNumber6Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber6[2][0] = this.setNumber6Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber6[2][1] = this.setNumber6Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber7[0][0] = this.setNumber7.getValue('A1');
-      this.mySEP.separatorConditions.setNumber7[0][1] = this.setNumber7.getValue('B1');
-      this.mySEP.separatorConditions.setNumber7[1][0] = this.setNumber7.getValue('A2');
-      this.mySEP.separatorConditions.setNumber7[1][1] = this.setNumber7.getValue('B2');
-      this.mySEP.separatorConditions.setNumber7[2][0] = this.setNumber7.getValue('A3');
-      this.mySEP.separatorConditions.setNumber7[2][1] = this.setNumber7.getValue('B3');
+      this.mySEP.separatorConditions.setNumber7[0][0] = this.setNumber7Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber7[0][1] = this.setNumber7Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber7[1][0] = this.setNumber7Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber7[1][1] = this.setNumber7Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber7[2][0] = this.setNumber7Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber7[2][1] = this.setNumber7Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber8[0][0] = this.setNumber8.getValue('A1');
-      this.mySEP.separatorConditions.setNumber8[0][1] = this.setNumber8.getValue('B1');
-      this.mySEP.separatorConditions.setNumber8[1][0] = this.setNumber8.getValue('A2');
-      this.mySEP.separatorConditions.setNumber8[1][1] = this.setNumber8.getValue('B2');
-      this.mySEP.separatorConditions.setNumber8[2][0] = this.setNumber8.getValue('A3');
-      this.mySEP.separatorConditions.setNumber7[2][1] = this.setNumber8.getValue('B3');
+      this.mySEP.separatorConditions.setNumber8[0][0] = this.setNumber8Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber8[0][1] = this.setNumber8Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber8[1][0] = this.setNumber8Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber8[1][1] = this.setNumber8Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber8[2][0] = this.setNumber8Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber7[2][1] = this.setNumber8Sheet.getValue('B3');
 
-      this.mySEP.separatorConditions.setNumber9[0][0] = this.setNumber9.getValue('A1');
-      this.mySEP.separatorConditions.setNumber9[0][1] = this.setNumber9.getValue('B1');
-      this.mySEP.separatorConditions.setNumber9[1][0] = this.setNumber9.getValue('A2');
-      this.mySEP.separatorConditions.setNumber9[1][1] = this.setNumber9.getValue('B2');
-      this.mySEP.separatorConditions.setNumber9[2][0] = this.setNumber9.getValue('A3');
-      this.mySEP.separatorConditions.setNumber9[2][1] = this.setNumber9.getValue('B3');
+      this.mySEP.separatorConditions.setNumber9[0][0] = this.setNumber9Sheet.getValue('A1');
+      this.mySEP.separatorConditions.setNumber9[0][1] = this.setNumber9Sheet.getValue('B1');
+      this.mySEP.separatorConditions.setNumber9[1][0] = this.setNumber9Sheet.getValue('A2');
+      this.mySEP.separatorConditions.setNumber9[1][1] = this.setNumber9Sheet.getValue('B2');
+      this.mySEP.separatorConditions.setNumber9[2][0] = this.setNumber9Sheet.getValue('A3');
+      this.mySEP.separatorConditions.setNumber9[2][1] = this.setNumber9Sheet.getValue('B3');
 
       await store.dispatch('project/fetchSEP', this.mySEP)
 
@@ -747,7 +747,7 @@ export default {
                 width: 250,
             },
         ],
-        updateTable: this.validateNumberProps
+        // updateTable: this.validateNumberProps
     }
     
     var setNumber1Data = [
