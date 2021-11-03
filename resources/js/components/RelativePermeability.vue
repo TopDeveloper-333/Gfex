@@ -188,6 +188,7 @@ export default {
           columns[2][j] = this.responseKGKOSheet.getValue(this.axisY2.column + '' + j)
         }
 
+        axes[this.axisY.name] = 'y'
         axes[this.axisY2.name] = 'y2'
         ylabel2 = this.axisY2.name
       }

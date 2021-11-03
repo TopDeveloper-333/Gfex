@@ -108,7 +108,6 @@ export default {
         return;
       }
 
-      debugger
       // ----------------------------------------------------------
       // Initialize variables
       // ----------------------------------------------------------
@@ -126,7 +125,6 @@ export default {
       // ----------------------------------------------------------
       var numRows = this.data.length;
 
-      debugger
       // ----------------------------------------------------------------
       // add x data
       columns[0] = []
@@ -154,9 +152,11 @@ export default {
           columns[2][j] = this.data[j-1][this.axisY2.index]
         }
 
-        axes[this.axisY2.name] = 'y2'
+        axes[this.axisX.name + " vs " + this.axisY.name] = 'y'
+        axes[this.axisX.name + " vs " + this.axisY2.name] = 'y2'
         ylabel2 = this.axisY2.name
       }
+      debugger
       this.updatePlot(axisX, columns, axes, ylabel, ylabel2);
 
     },

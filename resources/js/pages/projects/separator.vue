@@ -568,8 +568,7 @@ export default {
 
     // Original Stream Composition
     var originalStreamComposition1Data = [
-      [0.0198, 0.02313, 0.000, 0.26659, 0.12725, 0.1031, 0.01282, 0.05188, 0.01424, 0.02977, 0.04801, 0.30769, '=ROUND(SUM(A1:L1), 2)'],
-      // [,,,,,,,,,,,,,],
+      [0.00875, 0.00211, 0.000, 0.36723, 0.03873, 0.02982, 0.01152, 0.01741, 0.01608, 0.01909, 0.03825, 0.420094, '=ROUND(SUM(A1:L1), 2)'],
     ];
     
     this.originalStreamComposition1 = jspreadsheet(document.getElementById('originalStreamComposition1'), {
@@ -666,7 +665,7 @@ export default {
 
     // 
     var originalStreamComposition2Data = [
-      [220, 0.7990],
+      [194.4143, 0.8277],
       // [,],
     ];
     
@@ -773,8 +772,8 @@ export default {
     this.setNumber2Sheet.hideIndex();
 
     var setNumber3Data = [
-      [, ],
-      [, ],
+      [600, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber3Data;
@@ -782,8 +781,8 @@ export default {
     this.setNumber3Sheet.hideIndex();
 
     var setNumber4Data = [
-      [, ],
-      [, ],
+      [400, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber4Data;
@@ -791,8 +790,8 @@ export default {
     this.setNumber4Sheet.hideIndex();
 
     var setNumber5Data = [
-      [, ],
-      [, ],
+      [100, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber5Data;
@@ -800,8 +799,8 @@ export default {
     this.setNumber5Sheet.hideIndex();
 
     var setNumber6Data = [
-      [, ],
-      [, ],
+      [80, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber6Data;
@@ -809,8 +808,8 @@ export default {
     this.setNumber6Sheet.hideIndex();
 
     var setNumber7Data = [
-      [, ],
-      [, ],
+      [60, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber7Data;
@@ -818,8 +817,8 @@ export default {
     this.setNumber7Sheet.hideIndex();
 
     var setNumber8Data = [
-      [, ],
-      [, ],
+      [50, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber8Data;
@@ -827,8 +826,8 @@ export default {
     this.setNumber8Sheet.hideIndex();
 
     var setNumber9Data = [
-      [, ],
-      [, ],
+      [20, 72],
+      [14.7, 60],
       [, ],
     ];
     setNumberProps.data = setNumber9Data;
