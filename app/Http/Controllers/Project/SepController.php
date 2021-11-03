@@ -73,6 +73,7 @@ class SepController extends Controller
         // create set numbers
         if ($separatorConditions["setNumber1"][0][0] != '') 
         {
+            $content = $content . '1' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber1"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber1"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber1"][1][0] . '  ';
@@ -85,6 +86,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber2"][0][0] != '') 
         {
+            $content = $content . '2' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber2"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber2"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber2"][1][0] . '  ';
@@ -97,6 +99,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber3"][0][0] != '') 
         {
+            $content = $content . '3' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber3"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber3"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber3"][1][0] . '  ';
@@ -109,6 +112,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber4"][0][0] != '') 
         {
+            $content = $content . '4' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber4"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber4"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber4"][1][0] . '  ';
@@ -121,6 +125,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber5"][0][0] != '') 
         {
+            $content = $content . '5' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber5"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber5"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber5"][1][0] . '  ';
@@ -133,6 +138,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber6"][0][0] != '') 
         {
+            $content = $content . '6' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber6"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber6"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber6"][1][0] . '  ';
@@ -145,6 +151,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber7"][0][0] != '') 
         {
+            $content = $content . '7' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber7"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber7"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber7"][1][0] . '  ';
@@ -157,6 +164,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber8"][0][0] != '') 
         {
+            $content = $content . '8' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber8"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber8"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber8"][1][0] . '  ';
@@ -169,6 +177,7 @@ class SepController extends Controller
 
         if ($separatorConditions["setNumber9"][0][0] != '') 
         {
+            $content = $content . '9' . PHP_EOL;
             $content = $content . $separatorConditions["setNumber9"][0][0] . '  ';
             $content = $content . $separatorConditions["setNumber9"][0][1] . PHP_EOL;
             $content = $content . $separatorConditions["setNumber9"][1][0] . '  ';
