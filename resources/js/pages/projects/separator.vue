@@ -781,21 +781,57 @@ export default {
     this.setNumber3Sheet = jspreadsheet(document.getElementById('setNumber3Sheet'), setNumberProps);
     this.setNumber3Sheet.hideIndex();
 
+    var setNumber4Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber4Data;
     this.setNumber4Sheet = jspreadsheet(document.getElementById('setNumber4Sheet'), setNumberProps);
     this.setNumber4Sheet.hideIndex();
 
+    var setNumber5Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber5Data;
     this.setNumber5Sheet = jspreadsheet(document.getElementById('setNumber5Sheet'), setNumberProps);
     this.setNumber5Sheet.hideIndex();
 
+    var setNumber6Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber6Data;
     this.setNumber6Sheet = jspreadsheet(document.getElementById('setNumber6Sheet'), setNumberProps);
     this.setNumber6Sheet.hideIndex();
 
+    var setNumber7Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber7Data;
     this.setNumber7Sheet = jspreadsheet(document.getElementById('setNumber7Sheet'), setNumberProps);
     this.setNumber7Sheet.hideIndex();
 
+    var setNumber8Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber8Data;
     this.setNumber8Sheet = jspreadsheet(document.getElementById('setNumber8Sheet'), setNumberProps);
     this.setNumber8Sheet.hideIndex();
 
+    var setNumber9Data = [
+      [, ],
+      [, ],
+      [, ],
+    ];
+    setNumberProps.data = setNumber9Data;
     this.setNumber9Sheet = jspreadsheet(document.getElementById('setNumber9Sheet'), setNumberProps);
     this.setNumber9Sheet.hideIndex();
 
