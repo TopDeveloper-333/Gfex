@@ -196,6 +196,7 @@ export default {
 
     },
     updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
+      debugger
       let plotOptions = {
           bindto: '#plot2',
           size: {
@@ -226,12 +227,18 @@ export default {
               }
             },
             y: {
+              max: 1,
+              min: 0,
+              padding: 0,
               label: {
                 text: _ylabel,
                 position: 'outer-middle'
               }
             },
             y2: {
+              max: 1,
+              min: 0,
+              padding: 0,
               show: _ylabel2 != null, // ADD
               label: {
                 text: _ylabel2,
@@ -325,7 +332,7 @@ export default {
   mounted() {
     var relativePermeabilityData = [
       // [,],
-      [0, 0.0, 1.0, 0.40, 2.0]
+      [0, 0.0, 1.0, 0.35, 2.0]
     ];
 
     this.relativePermeabilitySheet = jspreadsheet(document.getElementById('relativePermeabilitySheet'), {
