@@ -34,39 +34,39 @@
 
               <div style="display:flex;margin-bottom:6px;text-align:center" class="row">
                 <p class="gf-item">Separator Conditions <span>(Input 2 or 3 stages)</span></p>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 1</p>
                   <div id="setNumber1Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 2</p>
                   <div id="setNumber2Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 3</p>
                   <div id="setNumber3Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 4</p>
                   <div id="setNumber4Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 5</p>
                   <div id="setNumber5Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 6</p>
                   <div id="setNumber6Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 7</p>
                   <div id="setNumber7Sheet"></div>
                 </div>
-                <div class="col-lg-4 col-md-6" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 8</p>
                   <div id="setNumber8Sheet"></div>
                 </div>
-                <div class="col-4" style="text-align:center">
+                <div class="col-md-6" style="text-align:center">
                   <p class="gf-subitem">Set Number 9</p>
                   <div id="setNumber9Sheet"></div>
                 </div>
