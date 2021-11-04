@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 export const state = {
   projectList: getCookie('projectList', []),
   projectName: getCookie('projectName', ""),
+  projectId : getCookie('projectId', -1),
   isFDP : getCookie('isFDP', "1"),
   isCondensate: getCookie('isCondensate', "1"),
   isEconomics: getCookie('isEconomics', true),
@@ -32,6 +33,7 @@ function getCookie(name, defaultValue) {
 
 export const getters = {
   projectName: state => state.projectName,
+  projectId: state => state.projectId,
   isFDP : state => state.isFDP,
   isCondensate : state => state.isCondensate,
   isEconomics: state => state.isEconomics,
@@ -52,6 +54,7 @@ export const mutations = {
   [types.LOAD_PROJECT] (state, {projectName, payload}) {
     console.log('LOAD_PROJECT')
     state.projectName = projectName
+    state.projectId = payload.id
     state.isFDP = payload.fastplan.isFDP
     state.isCondensate = payload.fastplan.isCondensate
     state.isEconomics = payload.fastplan.isEconomics
@@ -128,28 +131,25 @@ export const actions = {
   async createProject ({commit}, projectName) {
     const { data } = await axios.post('/api/createProject', {'project': projectName})
 
-    if (typeof(data) == 'string') {
-      let payload = JSON.parse(data)
-      commit(types.LOAD_PROJECT, {projectName, payload})
-    }
-    else {
-      let payload = data
-      commit(types.LOAD_PROJECT, {projectName, payload})
-    }
+    let payload = JSON.parse(data.content)
+    payload.id = data.id
+    commit(types.LOAD_PROJECT, {projectName, payload})
 
   },
-  async openProject({commit}, projectName) {
-    const { data } = await axios.post('/api/openProject', {'project': projectName})
+  async openProject({commit}, project) {
+    let id = project.id
+    let projectName = project.name
 
-    if (typeof(data) == 'string') {
-      let payload = JSON.parse(data)
-      commit(types.LOAD_PROJECT, {projectName, payload})      
-    }
-    else {
-      let payload = data
-      commit(types.LOAD_PROJECT, {projectName, payload})
-    }
+    const { data } = await axios.post('/api/openProject', { 'id': id, 'project': projectName})
 
+    let payload = JSON.parse(data.content)
+    payload.id = data.id
+    commit(types.LOAD_PROJECT, {projectName, payload})
+
+  },
+  async saveProject({commit}, payload) {
+    debugger
+    const { data } = await axios.post('api/saveProject', payload)    
   },
   saveFastPlan ({commit}, payload) {
     const isFDP = payload.isFDP

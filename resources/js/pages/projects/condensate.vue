@@ -272,7 +272,7 @@ export default {
       modal.style.display = "block";
     },
     onPrevPage: function(event) {
-      this.$router.replace('create')
+      this.$router.replace('fastplan')
     },
     onNextPage: function(event) {
 

@@ -1,6 +1,8 @@
 <template>
   <div class="row">
     <div class="m-auto">
+    <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
     <form>
       <div class="card mb-3">
         <div class="card-header gf-header">
@@ -115,18 +117,15 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import Loading from 'vue-loading-overlay';
 
 // import axios from 'axios'
 export default {
   middleware: 'auth',
 
-  // async asyncData () {
-  //   const { data: projects } = await axios.get('/api/projects')
-
-  //   return {
-  //     projects
-  //   }
-  // },
+  components: {
+    Loading
+  },
 
   metaInfo () {
     return { title: this.$t('Project Setting') }
@@ -140,17 +139,23 @@ export default {
       bSeparatorOptimizer: false,
       isSaveAs : false,
       hideSaveAsButton: false,
-      newProjectName: ""
+      newProjectName: "",
+      isLoading: false,
+      fullPage: true,
     }
   },
 
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
+      projectId: state => state.project.projectId,
       isFDP: state => state.project.isFDP,
       isCondensate: state => state.project.isCondensate,
       isEconomics: state => state.project.isEconomics,
-      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      gascondensate : state => state.project.gascondensate,
     }),
   },
 
@@ -167,12 +172,38 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
+    onSaveProject: async function() {
+      let payload = {}
+
+      if (this.newProjectName != "") {
+        payload.projectName = this.newProjectName
+        payload.isSaveAs = true
+      }
+      else {
+        payload.projectName = this.projectName
+        payload.isSaveAs = false
+      }
+
+      payload.projectId = this.projectId
+      payload.isFDP = this.bFDP
+      payload.isCondensate = this.bCondensate
+      payload.isEconomics = this.bEconomics
+      payload.isSeparatorOptimizer = this.bSeparatorOptimizer
+      payload.sep = this.sep
+      payload.drygas = this.drygas
+      payload.gascondensate = this.gascondensate
+      await store.dispatch('project/saveProject', payload)
+    },
     onYes: function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
+      this.isLoading = true
       this.onSavePage()
+      this.onSaveProject()
+      this.isLoading = false
+
       // go to home vue
       this.$router.replace('home')
     },
@@ -189,13 +220,12 @@ export default {
       if (this.bFDP != '1')
         this.bEconomics = false
 
-      var payload = {}
+      let payload = {}
       payload.isFDP = this.bFDP
       payload.isCondensate = this.bCondensate
       payload.isEconomics = this.bEconomics
       payload.isSeparatorOptimizer = this.bSeparatorOptimizer
       await store.dispatch('project/saveFastPlan', payload)
-
     },
     onPrevPage: function(event) {    
       this.onExitPage();

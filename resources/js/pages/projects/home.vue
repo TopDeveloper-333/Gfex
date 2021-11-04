@@ -143,9 +143,9 @@ export default {
       }
 
       this.isLoading = true
-      await store.dispatch('project/openProject', this.existProject.name)
+      await store.dispatch('project/openProject', this.existProject)
       this.isLoading = false
-      
+
       this.$router.replace({ name: 'fastplan' })
     }
   },
