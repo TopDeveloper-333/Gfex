@@ -185,6 +185,9 @@ export default {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
+
+      // go to home vue
+      this.$router.replace('home')
     },
     updateOptionButtonStatus: function(optionPage) {
       // HERE I AM
