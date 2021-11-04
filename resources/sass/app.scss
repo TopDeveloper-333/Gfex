@@ -17,7 +17,7 @@ body {
 }
 
 .gf-header {
-  padding: 0.8rem 1rem !important;
+  //padding: 0.8rem 1rem !important;
   background:#0d6efd;
   color:white;
   text-align:center; 
@@ -100,6 +100,7 @@ td:empty::after{
 .jexcel_textarea {
   top: -3999px !important;
   left: -3999px !important;
+  color: white !important;
 }
 
 thead.resizable {
@@ -191,11 +192,40 @@ thead.resizable {
 
 .jexcel > thead > tr > td {
   font-size: 22px;
+  background-color: green !important;
+  border-top: 0px !important;
+  color: white;
 }
 
 .jexcel > tbody > tr > td {
   font-size: 22px;
+  background-color: green;
+  border-top: 0px !important;
+  color: white;
 }
+.jexcel .highlight-selected {
+  background-color: green !important;
+  color: white !important;
+}
+
+.jexcel .highlight-bottom {
+  border-bottom: 1px solid white !important;
+}
+.jexcel .highlight-right {
+  border-right: 1px solid white !important;
+}
+.jexcel .highlight-left {
+  border-left: 1px solid white !important;
+  box-shadow: -1px 0px #ccc;
+}
+.jexcel .highlight-top {
+  border-top: 1px solid white !important;
+  box-shadow: 0px -1px #ccc;
+}
+.jexcel .highlight {
+  background-color: rgba(0,0,0,0.05);
+}
+
 
 :root {
   --axis-color : white;

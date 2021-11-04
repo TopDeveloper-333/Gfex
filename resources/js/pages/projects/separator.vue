@@ -6,8 +6,8 @@
              :is-full-page="fullPage"></loading>
       <div class="card mb-3">
         <div class="card-header gf-header">
-          <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:150px;margin-top:16px;float:left">
-          FastPlan* Gas Platform<br>
+          <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:180px;margin-left:-7px;float:left">
+          FastPlan* Gas & Gas Condensate<br>
           <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
         <div class="row g-0" style="background-color:#fdf500;">
@@ -90,7 +90,7 @@
     <div id="exitModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas platform</span>
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close">&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>

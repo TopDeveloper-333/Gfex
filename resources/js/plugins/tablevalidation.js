@@ -17,8 +17,8 @@ Vue.mixin({
       cell.style.color = 'white'
     },
     markNormalCell: function(cell) {
-      cell.style.backgroundColor = 'white'
-      cell.style.color = 'black'
+      cell.style.backgroundColor = 'green'
+      cell.style.color = 'white'
     }
   }
 })

@@ -18,7 +18,24 @@
 
     <div class="text-center">
       <div>
-        <img class="titleImage" src="/assets/image/LOGO_GFEX.png" width="300" height="300">
+        <p style="font-size:2.5rem !important;font-weight:600;color:#4172c4">"FastPlan*"</p>
+        <p style="font-size:2rem !important;font-weight:400;color:#4172c4">DEVELOPMENT SCREENING / PLANNING<br/>
+        &<br/>
+        FIELD MONITORING / SURVEILLANCE<br/>
+        PLATFORM</p>
+
+        <img class="titleImage" src="/assets/image/LOGO_GFEX.png" width="200" height="200">
+
+        <p style="font-size:1rem !important;font-weight:300;color:#4172c4">GFeX, LLC<br/>
+        73 Timberlake Dr<br/>
+        Suga Land, Texas 77479<br/>
+        USA<br/>
+        +1 (713) 997-0356<br/>
+        &<br/>
+        36 Rue Gaultier<br/>
+        Paris, 92400<br/>
+        France<br/>
+        +(33) 787-71-2503</p>
       </div>
     </div>
   </div>
