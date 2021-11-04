@@ -1,6 +1,8 @@
 <template>
   <div class="row">
     <div class="m-auto">
+    <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
     <form>
       <div class="card mb-3">
         <div class="card-header gf-header">
@@ -28,7 +30,7 @@
                   </div>
 
                   <div>
-                    <label class="btn btn-primary gf-button" v-on:click="onNextPage">Create</label>
+                    <label class="btn btn-primary gf-button" v-on:click="onCreatePage">Create</label>
                   </div>
 
                 </div>
@@ -38,14 +40,11 @@
                   </label>
 
                   <div style="display:flex;align-items:center;margin-bottom:16px;margin-top:16px">
-                    <select class="form-select gf-control" aria-label="Default select example">
-                      <option selected value="US Test">US Test</option>
-                      <option value="Russia Test">Russia Test </option>
-                    </select>
+                    <multiselect v-model="existProject" :options="options" track-by="id" label="name" placeholder="Please select project name"></multiselect>
                   </div>
 
                   <div>
-                    <label class="btn btn-primary gf-button" v-on:click="onGoPage">Open</label>
+                    <label class="btn btn-primary gf-button" v-on:click="onOpenPage">Open</label>
                   </div>
 
                 </div>
@@ -62,7 +61,7 @@
           <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close">&times;</span>
         </div>
-        <p style="font-size: 1.25rem;margin-top:20px">Please input new project's name</p>
+        <p style="font-size: 1.25rem;margin-top:20px">{{description}}</p>
         <div style="margin-bottom:16px;margin-top:16px">
           <label class="btn btn-primary gf-button" v-on:click="onOK">OK</label>
         </div>
@@ -76,18 +75,17 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import Multiselect from 'vue-multiselect'
+import Loading from 'vue-loading-overlay';
 
 // import axios from 'axios'
 export default {
   middleware: 'auth',
 
-  // async asyncData () {
-  //   const { data: projects } = await axios.get('/api/projects')
-
-  //   return {
-  //     projects
-  //   }
-  // },
+  components: {
+    Multiselect,
+    Loading
+  },
 
   metaInfo () {
     return { title: this.$t('Project Management') }
@@ -95,14 +93,24 @@ export default {
 
   data() {
     return {
-      myProjectName : ""
+      myProjectName : "",
+      existProject: "",
+      isLoading: false,
+      fullPage: true,
+      description: "",
     }
   },
 
   computed: {
     ...mapState({
-      projectName : state => state.project.projectName
+      projectList : state => state.project.projectList
     }),
+    options: function() {
+      if (typeof(this.projectList) == 'string')
+        return JSON.parse(this.projectList)
+      else 
+        return this.projectList
+    }
   },
 
   methods: {
@@ -110,24 +118,41 @@ export default {
       var modal = document.getElementById("issueModal");
       modal.style.display = "none";
     },
-    onNextPage: async function(event) {
+    onCreatePage: async function(event) {
       if (this.myProjectName=="")
       {
         var modal = document.getElementById("issueModal");
+        this.description = "Please input new project's name"
         modal.style.display = "block";
         return; 
       }
 
-      await store.dispatch('project/saveProjectName', this.myProjectName)
-      this.$router.replace({ name: 'create' })
-    },
-    onGoPage: async function(event) {
+      this.isLoading = true
+      await store.dispatch('project/createProject', this.myProjectName)
+      this.isLoading = false
 
+      this.$router.replace({ name: 'fastplan' })
+    },
+    onOpenPage: async function(event) {
+      if (this.existProject==null)
+      {
+        var modal = document.getElementById("issueModal");
+        this.description = "Please choose existing project's name"
+        modal.style.display = "block";
+        return; 
+      }
+
+      this.isLoading = true
+      await store.dispatch('project/openProject', this.existProject.name)
+      this.isLoading = false
+      
+      this.$router.replace({ name: 'fastplan' })
     }
   },
-  mounted() {
-
-    this.myProjectName = this.projectName
+  async mounted() {
+    this.isLoading = true
+    await store.dispatch('project/listProjects')
+    this.isLoading = false
     mountErrorDialog();
   }
 }
@@ -154,3 +179,4 @@ function mountErrorDialog() {
 }
 
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

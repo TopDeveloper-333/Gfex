@@ -13,7 +13,7 @@ export default [
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
   { path: '/home', name: 'home', component: page('projects/home.vue') },
-  { path: '/create', name: 'create', component: page('projects/create.vue') },
+  { path: '/fastplan', name: 'fastplan', component: page('projects/fastplan.vue') },
   { path: '/condensate', name: 'condensate', component: page('projects/condensate.vue') },
   { path: '/drygas', name: 'drygas', component: page('projects/drygas.vue') },
   { path: '/separator', name: 'separator', component: page('projects/separator.vue') },

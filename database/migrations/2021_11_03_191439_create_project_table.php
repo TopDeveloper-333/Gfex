@@ -17,8 +17,8 @@ class CreateProjectTable extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('project_name');
-            $table->string('content');
-            $table->string('result');
+            $table->mediumText('content');
+            $table->mediumText('result');
             $table->timestamps();
         });
     }

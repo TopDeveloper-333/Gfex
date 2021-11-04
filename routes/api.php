@@ -11,6 +11,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Project\CoreyController;
 use App\Http\Controllers\Project\SepController;
 
@@ -32,6 +33,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+
+    Route::post('listProjects', [ProjectController::class, 'listProjects']);
+    Route::post('createProject', [ProjectController::class, 'createProject']);
+    Route::post('openProject', [ProjectController::class, 'openProject']);
+    Route::post('saveProject', [ProjectController::class, 'saveProject']);
+    Route::post('launchProject', [ProjectController::class, 'launchProject']);
 
     Route::post('requestKGKO', [CoreyController::class, 'requestKGKO']);
     Route::post('requestOPT', [SepController::class, 'requestOPT']);

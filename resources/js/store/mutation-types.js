@@ -10,7 +10,8 @@ export const UPDATE_USER = 'UPDATE_USER'
 export const SET_LOCALE = 'SET_LOCALE'
 
 // project.js
-export const SAVE_PROJECT_NAME = "SAVE_PROJECT_NAME"
+export const SAVE_PROJECT_LIST = "SAVE_PROJECT_LIST"
+export const LOAD_PROJECT = "LOAD_PROJECT"
 export const SAVE_PROJECT_TYPE = "SAVE_PROJECT_TYPE"
 export const SAVE_SEP = "SAVE_SEP"
 export const SAVE_DRY_GAS = "SAVE_DRY_GAS"

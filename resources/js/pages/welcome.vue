@@ -27,7 +27,7 @@
         <img class="titleImage" src="/assets/image/LOGO_GFEX.png" width="450" height="450">
 
         <p style="font-size:1.5rem !important;font-weight:600;color:#4172c4">GFeX, LLC<br/>
-        73 Timberlake Dr<br/>
+        7302 Timberlake Dr<br/>
         Suga Land, Texas 77479<br/>
         USA<br/>
         +1 (713) 997-0356<br/>

@@ -172,6 +172,7 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
+      this.onSavePage()
       // go to home vue
       this.$router.replace('home')
     },
@@ -183,11 +184,8 @@ export default {
       // go to home vue
       this.$router.replace('home')
     },
-    onPrevPage: function(event) {
-      this.$router.replace('home')
-    },
-    onNextPage: async function(event) {
-
+    onSavePage: async function() {
+      
       if (this.bFDP != '1')
         this.bEconomics = false
 
@@ -196,7 +194,14 @@ export default {
       payload.isCondensate = this.bCondensate
       payload.isEconomics = this.bEconomics
       payload.isSeparatorOptimizer = this.bSeparatorOptimizer
-      await store.dispatch('project/saveProjectType', payload)
+      await store.dispatch('project/saveFastPlan', payload)
+
+    },
+    onPrevPage: function(event) {    
+      this.onExitPage();
+    },
+    onNextPage: async function(event) {
+      this.onSavePage()
 
       if (this.isSeparatorOptimizer == true) {
         this.$router.replace({ name: 'separator' })
@@ -217,7 +222,7 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     this.bFDP = this.isFDP
     this.bCondensate = this.isCondensate
     this.bEconomics = this.isEconomics
