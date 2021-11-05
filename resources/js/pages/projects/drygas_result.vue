@@ -27,7 +27,7 @@
               </div>
 
               <div style="display:flex;margin-bottom:6px;margin-left:12px;text-align:left" class="row" v-show="bShowPlot == false">
-                <textarea v-model="dataContent" ></textarea>
+                <textarea v-model.lazy="dataContent" ></textarea>
               </div>
 
               <div style="height:50px" v-show="bShowPlot == true">
@@ -227,5 +227,6 @@ textarea{
     white-space: nowrap;
     overflow-x: auto;
     resize: none;
+    background-color: green;
 }
 </style>
