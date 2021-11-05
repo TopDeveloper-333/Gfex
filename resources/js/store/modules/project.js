@@ -240,7 +240,14 @@ export const actions = {
     }
     else {
       commit(types.SAVE_RES_KGKO, data)
-    }
-    
+    }    
+  },
+  async runDryGasProject({commit}, payload) {
+    const { data } = await axios.post('/api/runDryGas', payload)
+    console.log(data)
+  },
+  async runGasCondensateProject({commit}, payload) {
+
   }
+
 }

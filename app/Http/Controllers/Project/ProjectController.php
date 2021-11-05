@@ -149,13 +149,219 @@ class ProjectController extends Controller
         $project->content = json_encode($content);
         $project->save();
 
-        error_log(json_encode($content));
+        // error_log(json_encode($content));
 
         return response()->json([]);
     }
 
-    public function launchProject(Request $request)
+    private function createFastPlan($filePath, $fastplan)
     {
+        Storage::disk('executables')->delete($filePath);
+
+        $content = '';
+
+        if (intval($fastplan->isFDP) == 1)
+            $content = $content . '0' . PHP_EOL;
+        else 
+            $content = $content . '1' . PHP_EOL;
+            
+        $content = $content . $fastplan->isCondensate . PHP_EOL;
+
+        if ($fastplan->isEconomics == true)
+            $content = $content . '1' . PHP_EOL;
+        else 
+            $content = $content . '0' . PHP_EOL;
+
+        if ($fastplan->isSeparatorOptimizer == true)
+            $content = $content . '1' . PHP_EOL;
+        else 
+            $content = $content . '0' . PHP_EOL;
+
+        $content = $content . '1' . PHP_EOL;
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write FASTPLAN.in');
+    }
+
+    private function createGasPVT($filePath, $drygas) 
+    {
+        Storage::disk('executables')->delete($filePath);
+
+        $content = '';
+        $content = $content . $drygas['standardConditions']['Psc'] . '  ';
+        $content = $content . $drygas['standardConditions']['Tsc'] . PHP_EOL;
+
+        $content = $content . $drygas['gasProperties']['gasCompressibility'] . '  ';
+        $content = $content . $drygas['gasProperties']['gasViscosity'] . '  ';
+        $content = $content . $drygas['gasProperties']['specificGravity'] . '  ';
+        $content = $content . $drygas['gasProperties']['resTemp'] . '  ';
+        $content = $content . $drygas['gasProperties']['N2'] . '  ';
+        $content = $content . $drygas['gasProperties']['CO2'] . '  ';
+        $content = $content . $drygas['gasProperties']['H2S'] . '  ';
+        $content = $content . '0' . PHP_EOL;
+
+        $content = $content . $drygas['rockProperties']['conateWaterSaturation'] . '  ';
+        $content = $content . $drygas['rockProperties']['waterCompressibility'] . '  ';
+        $content = $content . $drygas['rockProperties']['rockCompressibility'] . PHP_EOL;
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write GAS_PVT.in');
+    }
+
+    private function createSurface($filePath, $surface)
+    {
+        Storage::disk('executables')->delete($filePath);
+        $content = '';
+
+        $content = $content . $surface['tubingProperties']['Length'] . '  ';
+        $content = $content . $surface['tubingProperties']['Size'] . '  ';
+        $content = $content . $surface['tubingProperties']['Perfs'] . '  ';
+        $content = $content . $surface['tubingProperties']['SSSV_ID'] . '  ';
+        $content = $content . $surface['tubingProperties']['SSSV_Depth'] . '  ';
+        $content = $content . $surface['tubingProperties']['Temperature'] . '  ';
+        $content = $content . $surface['tubingProperties']['GasZFactor'] . PHP_EOL;
+
+        $content = $content . $surface['wellaheadToManifold']['Length'] . '  ';
+        $content = $content . $surface['wellaheadToManifold']['Size'] . '  ';
+        $content = $content . $surface['wellaheadToManifold']['Temperature'] . '  ';
+        $content = $content . $surface['wellaheadToManifold']['GasZFactor'] . PHP_EOL;
+
+        $content = $content . $surface['manifoldToCompression']['Length'] . '  ';
+        $content = $content . $surface['manifoldToCompression']['Size'] . '  ';
+        $content = $content . $surface['manifoldToCompression']['Temperature'] . '  ';
+        $content = $content . $surface['manifoldToCompression']['GasZFactor'] . PHP_EOL;
+
+        $content = $content . $surface['compressionToSales']['Length'] . '  ';
+        $content = $content . $surface['compressionToSales']['Size'] . '  ';
+        $content = $content . $surface['compressionToSales']['Temperature'] . '  ';
+        $content = $content . $surface['compressionToSales']['GasZFactor'] . PHP_EOL;
+
+        $content = $content . $surface['compressionToStart']['CompressionDischargeRatio'] . '  ';
+        $content = $content . $surface['compressionToStart']['DELTA_P_MIN'] . PHP_EOL;
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write SURFACE.in');
+    }
+
+    private function createReservoir($filePath, $reservoir)
+    {
+        Storage::disk('executables')->delete($filePath);
+        $content = '';
+
+        $content = $content . $reservoir['reservoirPVT']['Viscosity'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['GasZFactor'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['SpecificGravity'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['ReservoirTemperature'] . PHP_EOL;
+
+        $content = $content . $reservoir['reservoirParameters']['GIIP'] . '  ';
+        $content = $content . $reservoir['reservoirParameters']['ReservoirPressure'] . PHP_EOL;
+
+        $content = $content . $reservoir['hasDualPorosity'] . PHP_EOL;
+
+        if (intval($reservoir['hasDualPorosity']) == 1) {
+            $content = $content . $reservoir['dualPorosity']['km'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['hm'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['ShapeFactorSigma'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
+        }
+
+        $content = $content . $reservoir['wellTestData'] . PHP_EOL;
+
+        if (intval($reservoir['wellTestData']) == 1) {
+            $content = $content . $reservoir['cnModel']['C'] . '  ';
+            $content = $content . $reservoir['cnModel']['n'] . PHP_EOL;    
+        }
+        else if (intval($reservoir['wellTestData']) == 2) {
+            $content = $content . $reservoir['verticalModel']['k'] . '  ';
+            $content = $content . $reservoir['verticalModel']['Porosity'] . '  ';
+            $content = $content . $reservoir['verticalModel']['NetPay'] . '  ';
+            $content = $content . $reservoir['verticalModel']['DrainageArea'] . '  ';
+            $content = $content . $reservoir['verticalModel']['WellboreID'] . '  ';
+            $content = $content . $reservoir['verticalModel']['Skin'] . PHP_EOL;    
+        }
+        else if (intval($reservoir['wellTestData']) == 3) {
+            $content = $content . $reservoir['horizontalModel']['k'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['Porosity'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['NetPay'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['DrainageArea'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['WellboreID'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['Skin'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['WellLength'] . '  ';
+            $content = $content . $reservoir['horizontalModel']['KvKh'] . PHP_EOL;    
+        }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write RESERVOIR.in');
+    }
+
+    public function runDryGas(Request $request)
+    {
+        // determine workspace dir
+        $workspace_dir = $request->user()->id;
+        $id = $request->get('projectId');
+
+        error_log('runDryGas: id = '. $id. ' Dir = ' . $workspace_dir);
+
+        //
+        // Get content
+        //
+        $content = json_decode(json_encode($this->defaultProjectContent()));
+        $content->fastplan->isFDP = $request->get('isFDP');
+        $content->fastplan->isCondensate = $request->get('isCondensate');
+        $content->fastplan->isEconomics = $request->get('isEconomics');
+        $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
+        $content->sep = $request->get('sep');
+        $content->drygas = $request->get('drygas');
+        $content->surface = $request->get('surface');
+        $content->reservoir = $request->get('reservoir');
+        $content->wellhistory = $request->get('wellhistory');
+        $content->economics = $request->get('economics');
+        $content->operations = $request->get('operations');
+        $content->relPerm = $request->get('relPerm');
+        $content->gascondensate = $request->get('gascondensate');
+
+        //
+        // create workspace directory with user_id
+        //
+        $cmd_create_dir = 'mkdir ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_create_dir);
+
+        //
+        // copy RUN_DRYGAS.exe into workspace directory
+        //
+        $cmd_copy_corey = 'copy RUN_DRYGAS.exe ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_corey);
+        if ($output->successful() == false)  {
+            error_log('Error happened to copy RUN_DRYGAS.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+        
+        //
+        // create FASTPLAN.in file inside workspace 
+        //
+        $fastplan_file_path = $workspace_dir . '/FASTPLAN.in';
+        $this->createFastPlan($fastplan_file_path, $content->fastplan);
+
+        //
+        // create GAS_PVT.in file inside workspace 
+        //
+        $gaspvt_file_path = $workspace_dir . '/GAS_PVT.in';
+        $this->createGasPVT($gaspvt_file_path, $content->drygas);
+
+        //
+        // create SURFACE.in file inside workspace 
+        //
+        $surface_file_path = $workspace_dir . '/SURFACE.in';
+        $this->createSurface($surface_file_path, $content->surface);
+
+        //
+        // create RESERVOIR.in file inside workspace 
+        //
+        $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
+        $this->createReservoir($reservoir_file_path, $content->reservoir);
+
         return response()->json([]);
     }
 }

@@ -45,6 +45,7 @@ class CoreyController extends Controller
         $content = $content . $request->get('sor') . '  ';
         $content = $content . $request->get('lambda') . PHP_EOL ;
 
+        Storage::disk('executables')->delete($cmd_corey_in_file);
         Storage::disk('executables')->put($cmd_corey_in_file, $content);
         error_log('Finished to call COREY_FUNCTION');
 

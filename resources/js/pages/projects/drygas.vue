@@ -316,7 +316,7 @@ export default {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
-
+      this.runDryGasProject()
       this.isLoading = false
     }
   },
