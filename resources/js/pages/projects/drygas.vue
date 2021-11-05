@@ -168,37 +168,38 @@ export default {
     }),
     pvtButtonClass: function() {
       if (this.isPVTValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      // else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === PVT_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     surfaceButtonClass: function () {
       if (this.isSurfaceValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === SURFACE_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     reservoirButtonClass: function () {
       if (this.isReservoirValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === RESERVOIR_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     wellHistoryButtonClass: function () {
       if (this.isWellHistoryValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === WELLHISTORY_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     economicsButtonClass: function () {
       if (this.isEconomicsValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === ECONOMICS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     operationButtonClass: function () {
       if (this.isOperationValidate == false) return {'btn-danger': true}
-      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
       else if (this.screenType === OPERATIONS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },

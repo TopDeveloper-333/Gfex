@@ -464,7 +464,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validateCompressionToSales
+        updateTable: this.validateCompressionAndPressure
     });
     this.compressionToStartSheet.hideIndex();
 
