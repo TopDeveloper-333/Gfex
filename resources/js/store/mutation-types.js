@@ -25,3 +25,4 @@ export const SAVE_REL_PERM = "SAVE_REL_PERM"
 
 export const SAVE_RES_KGKO = "SAVE_RES_KGKO"
 export const SAVE_RES_OPTIMIZER = "SAVE_RES_OPTIMIZER"
+export const SAVE_RES_DRYGAS = "SAVE_RES_DRYGAS"

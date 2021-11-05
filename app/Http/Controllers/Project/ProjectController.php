@@ -376,12 +376,12 @@ class ProjectController extends Controller
         $output = Terminal::in(storage_path('executables'))->run($cmd_create_dir);
 
         //
-        // copy RUN_DRYGAS.exe into workspace directory
+        // copy ConsoleApplicationFDPHIST.exe into workspace directory
         //
-        $cmd_copy_corey = 'copy RUN_DRYGAS.exe ' . $workspace_dir;
+        $cmd_copy_corey = 'copy ConsoleApplicationFDPHIST.exe ' . $workspace_dir;
         $output = Terminal::in(storage_path('executables'))->run($cmd_copy_corey);
         if ($output->successful() == false)  {
-            error_log('Error happened to copy RUN_DRYGAS.exe');
+            error_log('Error happened to copy ConsoleApplicationFDPHIST.exe');
             return response()->json([
                 []
             ]);    
@@ -426,22 +426,37 @@ class ProjectController extends Controller
         $this->createOperations($operations_file_path, $content->operations);
 
         //
-        // launch RUN_DRYGAS.exe
+        // launch ConsoleApplicationFDPHIST.exe
         //
         $workspace_path = 'executables/' . $workspace_dir;
-        $output = Terminal::in(storage_path($workspace_path))->run('RUN_DRYGAS.exe');
+        $output = Terminal::in(storage_path($workspace_path))->run('ConsoleApplicationFDPHIST.exe');
         if ($output->successful() == false)  {
-            error_log('Error happened to launch RUN_DRYGAS.exe');
-            // return response()->json([
-            //     []
-            // ]);    
+            error_log('Error happened to launch ConsoleApplicationFDPHIST.exe');
+            return response()->json([
+                []
+            ]);    
         }
 
         //
         // Read Output Files: PLOT_OF.OUT, RESULTS_OF.OUT, ECONOMICS.OUT 
         // 
+        $res = [];
 
-        
-        return response()->json([]);
+        if (Storage::disk('executables')->exists($workspace_dir . '/PLOT_OF.OUT')) {
+            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');            
+            $res['PLOT_OF'] = htmlspecialchars($plotof_content);
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/ECONOMICS.OUT')) {
+            $economics_content = Storage::disk('executables')->get($workspace_dir . '/ECONOMICS.OUT');            
+            $res['ECONOMICS'] = htmlspecialchars($economics_content);
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/RESULTS_OF.OUT')) {
+            $resultof_content = Storage::disk('executables')->get($workspace_dir . '/RESULTS_OF.OUT');            
+            $res['RESULT_OF'] = htmlspecialchars($resultof_content);
+        }
+
+        return response()->json($res);
     }
 }

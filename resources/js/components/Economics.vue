@@ -48,7 +48,6 @@ export default {
       economics : state => state.project.economics,
     }),
     isDataValidate: function() {
-      debugger
       if (this.isHidden == true)
         return true
 

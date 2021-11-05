@@ -123,7 +123,6 @@ export default {
     onSavePage: async function(event) {
       console.log("Reservoir's onSavePage() is called")
       
-      debugger
       this.myReservoir = {
         reservoirPVT: {
           Viscosity: 0, GasZFactor:0, SpecificGravity: 0, ReservoirTemperature: 0,

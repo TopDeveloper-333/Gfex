@@ -16,6 +16,7 @@ export default [
   { path: '/fastplan', name: 'fastplan', component: page('projects/fastplan.vue') },
   { path: '/condensate', name: 'condensate', component: page('projects/condensate.vue') },
   { path: '/drygas', name: 'drygas', component: page('projects/drygas.vue') },
+  { path: '/drygasresult', name: 'drygasresult', component: page('projects/drygas_result.vue') },
   { path: '/separator', name: 'separator', component: page('projects/separator.vue') },
   { path: '/separatorresult', name: 'separatorresult', component: page('projects/separator_result.vue') },
   {

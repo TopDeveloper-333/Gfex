@@ -219,7 +219,6 @@ export default {
       else return {'btn-outline-primary': true, 'disabled': true}
     },
     isDataValidate: function() {
-      debugger
       return this.isPVTValidate & this.isSurfaceValidate & this.isReservoirValidate & 
             this.isWellHistoryValidate & this.isEconomicsValidate & this.isOperationValidate
     }
@@ -318,6 +317,7 @@ export default {
       this.onSaveProject()
       this.runDryGasProject()
       this.isLoading = false
+      this.$router.replace('drygasresult');
     }
   },
   mounted() {
