@@ -172,28 +172,6 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
-    onSaveProject: async function() {
-      let payload = {}
-
-      if (this.newProjectName != "") {
-        payload.projectName = this.newProjectName
-        payload.isSaveAs = true
-      }
-      else {
-        payload.projectName = this.projectName
-        payload.isSaveAs = false
-      }
-
-      payload.projectId = this.projectId
-      payload.isFDP = this.bFDP
-      payload.isCondensate = this.bCondensate
-      payload.isEconomics = this.bEconomics
-      payload.isSeparatorOptimizer = this.bSeparatorOptimizer
-      payload.sep = this.sep
-      payload.drygas = this.drygas
-      payload.gascondensate = this.gascondensate
-      await store.dispatch('project/saveProject', payload)
-    },
     onYes: function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");

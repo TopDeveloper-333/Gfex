@@ -117,6 +117,10 @@ export default {
   },
 
   methods: {
+    onSavePage: async function(event) {
+      console.log("Reservoir's onSavePage() is called")
+
+    },
     validatePVT:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
 

@@ -1,0 +1,30 @@
+import Vue from 'vue'
+import store from '~/store'
+
+Vue.mixin({
+  methods: {
+    onSaveProject: async function() {
+      debugger
+      let payload = {}
+
+      if (this.newProjectName != "") {
+        payload.projectName = this.newProjectName
+        payload.isSaveAs = true
+      }
+      else {
+        payload.projectName = this.projectName
+        payload.isSaveAs = false
+      }
+
+      payload.projectId = this.projectId
+      payload.isFDP = this.isFDP
+      payload.isCondensate = this.isCondensate
+      payload.isEconomics = this.isEconomics
+      payload.isSeparatorOptimizer = this.isSeparatorOptimizer
+      payload.sep = this.sep
+      payload.drygas = this.drygas
+      payload.gascondensate = this.gascondensate
+      await store.dispatch('project/saveProject', payload)
+    },
+  }
+})

@@ -13,6 +13,11 @@ export const state = {
   isSeparatorOptimizer: getCookie('isSeparatorOptimizer', false),
   sep : getCookie('sep', {}),
   drygas : getCookie('drygas', {}),
+  surface: getCookie('surface', {}),
+  reservoir: getCookie('reservoir', {}),
+  wellhistory: getCookie('wellhistory', {}),
+  economics: getCookie('economics', {}),
+  operations: getCookie('operations', {}),
   gascondensate : getCookie('gascondensate', {}),
   relPerm: getCookie('relPerm', {}),
   resKGKO: getCookie('resKGKO', []),
@@ -40,6 +45,11 @@ export const getters = {
   isSeparatorOptimizer: state => state.isSeparatorOptimizer,
   sep : state => state.sep,
   drygas : state => state.drygas,
+  surface: state => state.surface,
+  reservoir: state => state.reservoir,
+  wellhistory: state => state.wellhistory,
+  economics: state => state.economics,
+  operations: state => state.operations,
   gascondensate : state => state.gascondensate,
   relPerm: state => state.relPerm,
   resKGKO: state => state.resKGKO,
@@ -61,6 +71,11 @@ export const mutations = {
     state.isSeparatorOptimizer = payload.fastplan.isSeparatorOptimizer
     state.sep = payload.sep
     state.drygas = payload.drygas
+    state.surface = payload.surface
+    state.reservoir = payload.reservoir
+    state.wellhistory = payload.wellhistory
+    state.economics = payload.economics
+    state.operations = payload.operations
     state.gascondensate = payload.gascondensate
     state.relPerm = payload.relPerm
     state.resKGKO = payload.resKGKO
@@ -73,6 +88,11 @@ export const mutations = {
     Cookies.set('isSeparatorOptimizer', payload.fastplan.isSeparatorOptimizer, { expires: 1 })
     Cookies.set('sep', payload.sep, { expires: 1 })
     Cookies.set('drygas', payload.drygas, { expires: 1 })
+    Cookies.set('surface', payload.surface, { expires: 1})
+    Cookies.set('reservoir', payload.reservoir, { expires: 1})
+    Cookies.set('wellhistory', payload.wellhistory, { expires: 1}) 
+    Cookies.set('economics', payload.economics, {expires: 1})
+    Cookies.set('operations', payload.operations, {expires: 1})
     Cookies.set('gascondensate', payload.gascondensate, { expires: 1 })
     Cookies.set('relPerm', payload.relPerm, {expires: 1})
     Cookies.set('resKGKO', payload.resKGKO, {expires: 1})
@@ -96,6 +116,26 @@ export const mutations = {
   [types.SAVE_DRY_GAS] (state, drygas) {
     state.drygas = drygas
     Cookies.set('drygas', drygas, { expires: 1 })
+  },
+  [types.SAVE_SURFACE] (state, surface) {
+    state.surface = surface
+    Cookies.set('surface', surface, { expires: 1 })
+  },
+  [types.SAVE_RESERVOIR] (state, reservoir) {
+    state.reservoir = reservoir
+    Cookies.set('reservoir', reservoir, { expires: 1}) 
+  },
+  [types.SAVE_WELLHISTORY] (state, wellhistory) {
+    state.wellhistory = wellhistory
+    Cookies.set('wellhistory', wellhistory, { expires: 1})
+  },
+  [types.SAVE_ECONOMICS] (state, economics) {
+    state.economics = economics
+    Cookies.set('economics', economics, {expires: 1})
+  },
+  [types.SAVE_OPERATIONS] (state, operations) {
+    state.operations = operations
+    Cookies.set('operations', operations, { expires: 1})
   },
   [types.SAVE_GAS_CONDENSATE] (state, gascondensate) {
     state.gascondensate = gascondensate
@@ -148,7 +188,6 @@ export const actions = {
 
   },
   async saveProject({commit}, payload) {
-    debugger
     const { data } = await axios.post('api/saveProject', payload)    
   },
   saveFastPlan ({commit}, payload) {
@@ -161,11 +200,28 @@ export const actions = {
   async saveDryGas({commit}, dryGas) {
     commit(types.SAVE_DRY_GAS, dryGas)
   },
+  async saveSurface({commit}, surface) {
+    commit(types.SAVE_SURFACE, surface)
+  },
+  async saveReservoir({commit}, reservoir) {
+    commit(types.SAVE_RESERVOIR, reservoir)
+  },
+  async saveWellHistory({commit}, wellhistory) {
+    commit(types.SAVE_WELLHISTORY, wellhistory)
+  },
+  async saveEconomics({commit}, economics) {
+    commit(types.SAVE_ECONOMICS, economics)
+  },
+  async saveOperations({commit}, operations) {
+    commit(types.SAVE_OPERATIONS, operations)
+  },
   async saveGasCondensate({commit}, gascondensate) {
     commit(types.SAVE_GAS_CONDENSATE, gascondensate)
   },
-  async fetchSEP ({commit}, sep) {
+  async SAVE_SEP({commit}, sep) {
     commit(types.SAVE_SEP, sep)
+  },
+  async fetchSEP ({commit}, sep) {
     const { data } = await axios.post('/api/requestOPT', sep)
 
     if (typeof (data) == 'string') {

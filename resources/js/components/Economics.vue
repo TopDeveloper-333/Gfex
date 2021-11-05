@@ -41,7 +41,9 @@ export default {
   },
 
   methods: {
-
+    onSavePage: async function(event) {
+      console.log("Economics's onSavePage() is called")
+    }
   },
 
   mounted() {

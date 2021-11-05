@@ -53,7 +53,9 @@ export default {
   },
 
   methods: {
-
+    onSavePage: async function(event) {
+      console.log("Operations's onSavePage() is called")
+    }
   },
 
   mounted() {

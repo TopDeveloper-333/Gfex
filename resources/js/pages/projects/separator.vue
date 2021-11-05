@@ -182,7 +182,14 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      sep : state => state.project.sep
+      projectId: state => state.project.projectId,
+      isFDP: state => state.project.isFDP,
+      isCondensate: state => state.project.isCondensate,
+      isEconomics: state => state.project.isEconomics,
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      gascondensate : state => state.project.gascondensate,
     }),
     isDataValidate: function() {
       return this.isOriginalStreamValidate & this.isOriginalStream1Validate & 
@@ -433,6 +440,11 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()
+      this.isLoading = false
+
       // go to home vue
       this.$router.replace('home')
     },
@@ -451,12 +463,7 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "block";
     },
-    onPrevPage: function(event) {
-      this.$router.replace('fastplan')
-    },
-    onNextPage: async function(event) {
-
-      this.isLoading = true;
+    onSavePage: async function() {
       this.mySEP = { 
         originalStreamComposition1: {
           N2:0, CO2:0, H2S:0, C1:0, C2:0, C3:0, iC4:0, nC4:0, iC5:0, nC5:0, C6:0, C7:0,
@@ -491,6 +498,7 @@ export default {
       this.mySEP.originalStreamComposition1.nC5 = this.originalStreamComposition1.getValue('J1');
       this.mySEP.originalStreamComposition1.C6 = this.originalStreamComposition1.getValue('K1');
       this.mySEP.originalStreamComposition1.C7 = this.originalStreamComposition1.getValue('L1');
+      this.mySEP.originalStreamComposition1.total = this.originalStreamComposition1.getValue('M1');
       this.mySEP.originalStreamComposition2.MolecularWeight = this.originalStreamComposition2.getValue('A1');
       this.mySEP.originalStreamComposition2.SpecificGravity = this.originalStreamComposition2.getValue('B1');
       this.mySEP.saturatedReservoirConditions.PSAT = this.saturatedReservoirConditions.getValue('A1');
@@ -550,7 +558,7 @@ export default {
       this.mySEP.separatorConditions.setNumber8[1][0] = this.setNumber8Sheet.getValue('A2');
       this.mySEP.separatorConditions.setNumber8[1][1] = this.setNumber8Sheet.getValue('B2');
       this.mySEP.separatorConditions.setNumber8[2][0] = this.setNumber8Sheet.getValue('A3');
-      this.mySEP.separatorConditions.setNumber7[2][1] = this.setNumber8Sheet.getValue('B3');
+      this.mySEP.separatorConditions.setNumber8[2][1] = this.setNumber8Sheet.getValue('B3');
 
       this.mySEP.separatorConditions.setNumber9[0][0] = this.setNumber9Sheet.getValue('A1');
       this.mySEP.separatorConditions.setNumber9[0][1] = this.setNumber9Sheet.getValue('B1');
@@ -558,6 +566,17 @@ export default {
       this.mySEP.separatorConditions.setNumber9[1][1] = this.setNumber9Sheet.getValue('B2');
       this.mySEP.separatorConditions.setNumber9[2][0] = this.setNumber9Sheet.getValue('A3');
       this.mySEP.separatorConditions.setNumber9[2][1] = this.setNumber9Sheet.getValue('B3');
+      await store.dispatch('project/SAVE_SEP', this.mySEP)
+
+    },
+    onPrevPage: function(event) {
+      this.onSavePage()
+      this.$router.replace('fastplan')
+    },
+    onNextPage: async function(event) {
+
+      this.isLoading = true;
+      this.onSavePage()
 
       await store.dispatch('project/fetchSEP', this.mySEP)
 
@@ -570,9 +589,15 @@ export default {
     this.mySEP = this.sep
 
     // Original Stream Composition
-    var originalStreamComposition1Data = [
-      [0.00875, 0.00211, 0.000, 0.36723, 0.03873, 0.02982, 0.01152, 0.01741, 0.01608, 0.01909, 0.03825, 0.420094, '=ROUND(SUM(A1:L1), 2)'],
-    ];
+    // var originalStreamComposition1Data = [
+    //   [0.00875, 0.00211, 0.000, 0.36723, 0.03873, 0.02982, 0.01152, 0.01741, 0.01608, 0.01909, 0.03825, 0.420094, '=ROUND(SUM(A1:L1), 2)'],
+    // ];
+
+    let originalStreamComposition1Data = []
+    if (this.mySEP != null && this.mySEP.originalStreamComposition1 != null)
+      originalStreamComposition1Data.push(this.mySEP.originalStreamComposition1)
+    else
+      originalStreamComposition1Data.push([,,,,,,,,,,,, '=ROUND(SUM(A1:L1), 2)'])
     
     this.originalStreamComposition1 = jspreadsheet(document.getElementById('originalStreamComposition1'), {
         allowInsertRow:false,
@@ -667,10 +692,16 @@ export default {
     this.originalStreamComposition1.hideIndex();
 
     // 
-    var originalStreamComposition2Data = [
-      [194.4143, 0.8277],
-      // [,],
-    ];
+    // var originalStreamComposition2Data = [
+    //   [194.4143, 0.8277],
+    //   // [,],
+    // ];
+
+    let originalStreamComposition2Data = []
+    if (this.mySEP != null && this.mySEP.originalStreamComposition2 != null)
+      originalStreamComposition2Data.push(this.mySEP.originalStreamComposition2)
+    else
+      originalStreamComposition2Data.push([])
     
     this.originalStreamComposition2 = jspreadsheet(document.getElementById('originalStreamComposition2'), {
         allowInsertRow:false,
@@ -698,10 +729,16 @@ export default {
     this.originalStreamComposition2.hideIndex();
 
     // Saturated Reservoir Conditions
-    var saturatedReservoirConditionsData = [
-      [2677, 244]
-      // [,],
-    ];
+    // var saturatedReservoirConditionsData = [
+    //   [2677, 244]
+    //   // [,],
+    // ];
+
+    let saturatedReservoirConditionsData = []
+    if (this.mySEP != null && this.mySEP.saturatedReservoirConditions != null)
+      saturatedReservoirConditionsData.push(this.mySEP.saturatedReservoirConditions)
+    else
+      saturatedReservoirConditionsData.push([])
 
     this.saturatedReservoirConditions = jspreadsheet(document.getElementById('saturatedReservoirConditions'), {
         allowInsertRow:false,
@@ -752,87 +789,169 @@ export default {
         // updateTable: this.validateNumberProps
     }
     
-    var setNumber1Data = [
-      [1000, 72],
-      [14.7, 60.0],
-      [,],
-      // [,],
-      // [,],
-    ];
+    // var setNumber1Data = [
+    //   [1000, 72],
+    //   [14.7, 60.0],
+    //   [,],
+    //   // [,],
+    //   // [,],
+    // ];
+    debugger
+    let setNumber1Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber1 != null) {
+      this.mySEP.separatorConditions.setNumber1.forEach(element => {
+        setNumber1Data.push(element)      
+      });
+    }
+    else
+      setNumber1Data.push([],[],[])
+
     setNumberProps.data = setNumber1Data;
     this.setNumber1Sheet = jspreadsheet(document.getElementById('setNumber1Sheet'), setNumberProps);
     this.setNumber1Sheet.hideIndex();
 
-    var setNumber2Data = [
-      [800, 72],
-      [14.7, 60.0],
-      [,],
-      // [,],
-      // [,]
-    ];
+    // var setNumber2Data = [
+    //   [800, 72],
+    //   [14.7, 60.0],
+    //   [,],
+    //   // [,],
+    //   // [,]
+    // ];
+    let setNumber2Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber2 != null){
+      this.mySEP.separatorConditions.setNumber2.forEach(element => {
+        setNumber2Data.push(element)
+      });
+    }
+    else
+      setNumber2Data.push([],[],[])
+
     setNumberProps.data = setNumber2Data;
     this.setNumber2Sheet = jspreadsheet(document.getElementById('setNumber2Sheet'), setNumberProps);
     this.setNumber2Sheet.hideIndex();
 
-    var setNumber3Data = [
-      [600, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber3Data = [
+    //   [600, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber3Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber3 != null) {
+      this.mySEP.separatorConditions.setNumber3.forEach(element => {
+        setNumber3Data.push(element)
+      });
+    }
+    else
+      setNumber3Data.push([],[],[])
+
     setNumberProps.data = setNumber3Data;
     this.setNumber3Sheet = jspreadsheet(document.getElementById('setNumber3Sheet'), setNumberProps);
     this.setNumber3Sheet.hideIndex();
 
-    var setNumber4Data = [
-      [400, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber4Data = [
+    //   [400, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber4Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber4 != null) {
+      this.mySEP.separatorConditions.setNumber4.forEach(element => {
+        setNumber4Data.push(element)
+      });
+    }
+    else
+      setNumber4Data.push([],[],[])
+
     setNumberProps.data = setNumber4Data;
     this.setNumber4Sheet = jspreadsheet(document.getElementById('setNumber4Sheet'), setNumberProps);
     this.setNumber4Sheet.hideIndex();
 
-    var setNumber5Data = [
-      [100, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber5Data = [
+    //   [100, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber5Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber5 != null){
+      this.mySEP.separatorConditions.setNumber5.forEach(element => {
+        setNumber5Data.push(element)
+      });
+    }
+    else
+      setNumber5Data.push([],[],[])
+
     setNumberProps.data = setNumber5Data;
     this.setNumber5Sheet = jspreadsheet(document.getElementById('setNumber5Sheet'), setNumberProps);
     this.setNumber5Sheet.hideIndex();
 
-    var setNumber6Data = [
-      [80, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber6Data = [
+    //   [80, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber6Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber6 != null){
+      this.mySEP.separatorConditions.setNumber6.forEach(element => {
+        setNumber6Data.push(element)
+      });
+    }
+    else
+      setNumber6Data.push([],[],[])
+
     setNumberProps.data = setNumber6Data;
     this.setNumber6Sheet = jspreadsheet(document.getElementById('setNumber6Sheet'), setNumberProps);
     this.setNumber6Sheet.hideIndex();
 
-    var setNumber7Data = [
-      [60, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber7Data = [
+    //   [60, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber7Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber7 != null){
+      this.mySEP.separatorConditions.setNumber7.forEach(element => {
+        setNumber7Data.push(element)
+      });
+    }
+    else
+      setNumber7Data.push([],[],[])
+    
     setNumberProps.data = setNumber7Data;
     this.setNumber7Sheet = jspreadsheet(document.getElementById('setNumber7Sheet'), setNumberProps);
     this.setNumber7Sheet.hideIndex();
 
-    var setNumber8Data = [
-      [50, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber8Data = [
+    //   [50, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber8Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber8 != null){
+      this.mySEP.separatorConditions.setNumber8.forEach(element => {
+        setNumber8Data.push(element)
+      });
+    }
+    else
+      setNumber8Data.push([],[],[])
+
     setNumberProps.data = setNumber8Data;
     this.setNumber8Sheet = jspreadsheet(document.getElementById('setNumber8Sheet'), setNumberProps);
     this.setNumber8Sheet.hideIndex();
 
-    var setNumber9Data = [
-      [20, 72],
-      [14.7, 60],
-      [, ],
-    ];
+    // var setNumber9Data = [
+    //   [20, 72],
+    //   [14.7, 60],
+    //   [, ],
+    // ];
+    let setNumber9Data = []
+    if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber9 != null) {
+      this.mySEP.separatorConditions.setNumber9.forEach(element => {
+        setNumber9Data.push(element)
+      });
+    }
+    else
+      setNumber9Data.push([],[],[])
+
     setNumberProps.data = setNumber9Data;
     this.setNumber9Sheet = jspreadsheet(document.getElementById('setNumber9Sheet'), setNumberProps);
     this.setNumber9Sheet.hideIndex();

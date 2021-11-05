@@ -2,6 +2,8 @@
   <div class="row">
     <div class="m-auto">
     <form>
+      <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
       <div class="card mb-3">
         <div class="card-header gf-header">
           <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:180px;margin-left:-7px;float:left">
@@ -17,17 +19,17 @@
               <h3 class="card-title gf-title"><{{projectName}}> Field Project
               </h3>
 
-              <drygas-pvt v-show="screenType==='PVT_SCREEN'">
+              <drygas-pvt v-show="screenType==='PVT_SCREEN'" ref="drygasControl">
               </drygas-pvt>
-              <surface v-show="screenType==='SURFACE_SCREEN'">
+              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl">
               </surface>
-              <reservoir v-show="screenType==='RESERVOIR_SCREEN'">
+              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl">
               </reservoir>
-              <well-history v-show="screenType==='WELLHISTORY_SCREEN'">
+              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl">
               </well-history>
-              <economics v-show="screenType==='ECONOMICS_SCREEN'">
+              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl">
               </economics>
-              <operations v-show="screenType==='OPERATIONS_SCREEN'">
+              <operations v-show="screenType==='OPERATIONS_SCREEN'" ref="operationsControl">
               </operations>
 
               <div class="d-flex justify-content-between">
@@ -91,6 +93,8 @@ import Reservoir from '~/components/Reservoir.vue'
 import WellHistory from '~/components/WellHistory.vue'
 import Economics from '~/components/Economics.vue'
 import Operations from '~/components/Operations.vue'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 const PVT_SCREEN = "PVT_SCREEN"
 const SURFACE_SCREEN = "SURFACE_SCREEN"
@@ -108,7 +112,8 @@ export default {
     Reservoir,
     WellHistory,
     Economics,
-    Operations
+    Operations,
+    Loading
   },
 
   middleware: 'auth',
@@ -131,7 +136,9 @@ export default {
       screenType: PVT_SCREEN,
       isSaveAs : false,
       hideSaveAsButton: false,
-      newProjectName: ""
+      newProjectName: "",
+      isLoading: false,
+      fullPage: true,
     }
   },
 
@@ -190,7 +197,6 @@ export default {
       this.$router.replace('home')
     },
     updateOptionButtonStatus: function(optionPage) {
-      // HERE I AM
     },
     onPVTPage: function(event) {
       this.screenType = PVT_SCREEN
@@ -217,11 +223,27 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "block";
     },
+    onSavePage: async function() {
+      this.$refs.drygasControl.onSavePage()
+      this.$refs.surfaceControl.onSavePage()
+      this.$refs.reservoirControl.onSavePage()
+      this.$refs.wellHistoryControl.onSavePage()
+      this.$refs.economicsControl.onSavePage()
+      this.$refs.operationsControl.onSavePage()
+    },
     onPrevPage: function(event) {
+      this.isLoading = true
+      this.onSavePage()
+      this.isLoading = false
+
       this.$router.replace('fastplan')
     },
     onNextPage: async function(event) {
-
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()
+      
+      this.isLoading = false
     }
   },
   mounted() {

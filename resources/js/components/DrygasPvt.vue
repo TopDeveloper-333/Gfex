@@ -46,6 +46,8 @@ export default {
 
   methods: {
     onSavePage: async function(event) {
+      console.log("DrygasPVT's onSavePage() is called")
+      
       this.myDryGas = {
         standardConditions: {
           Psc: 0, Tsc : 0
@@ -82,10 +84,16 @@ export default {
       this.selectedOptionPage = "PVT_PAGE"
 
     // Standard Conditions
-    var standardConditionsData = [
-      // [,],
-      [14.7, 60],
-    ];
+    // var standardConditionsData = [
+    //   // [,],
+    //   [14.7, 60],
+    // ];
+
+    let standardConditionsData = []
+    if (this.myDryGas != null && this.myDryGas.standardConditions != null)
+      standardConditionsData.push(this.myDryGas.standardConditions)
+    else
+      standardConditionsData.push([,])
     
     this.standardConditionSheet = jspreadsheet(document.getElementById('standardConditionSheet'), {
         allowInsertRow:false,
@@ -114,10 +122,16 @@ export default {
     this.standardConditionSheet.hideIndex();
 
     // GAS PVT
-    var gasPVTData = [
-      // [,,,,,,],
-      ["35.D-05", 0.025, 0.6, 300, 0.03, 0.06, 0.02]
-    ];
+    // var gasPVTData = [
+    //   // [,,,,,,],
+    //   ["35.D-05", 0.025, 0.6, 300, 0.03, 0.06, 0.02]
+    // ];
+
+    let gasPVTData = []
+    if (this.myDryGas != null && this.myDryGas.gasProperties != null)
+      gasPVTData.push(this.myDryGas.gasProperties)
+    else
+      gasPVTData.push([,,,,,,])
 
     this.gasPVTSheet = jspreadsheet(document.getElementById('gasPVTSheet'), {
         allowInsertRow:false,
@@ -176,10 +190,16 @@ export default {
     this.gasPVTSheet.hideIndex();
 
     // ROCK PROPERTIES
-    var rockPropertiesData = [
-      // [,,],
-      [0.30, "3.D-06", "3.D-06"],
-    ];
+    // var rockPropertiesData = [
+    //   // [,,],
+    //   [0.30, "3.D-06", "3.D-06"],
+    // ];
+    debugger
+    let rockPropertiesData = []
+    if (this.myDryGas != null && this.myDryGas.rockProperties != null)
+      rockPropertiesData.push(this.myDryGas.rockProperties)
+    else
+      rockPropertiesData.push([,,])
     
     this.rockPropertiesSheet = jspreadsheet(document.getElementById('rockPropertiesSheet'), {
         allowInsertRow:false,

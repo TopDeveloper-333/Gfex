@@ -138,6 +138,9 @@ export default {
   },
 
   methods: {
+    onSavePage: async function(event) {
+
+    },
     onChangedOption: function(selectedOption, id) {
 
       var index = id.replace('option-','');

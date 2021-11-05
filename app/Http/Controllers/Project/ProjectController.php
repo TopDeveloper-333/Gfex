@@ -27,6 +27,21 @@ class ProjectController extends Controller
             'drygas' => [
 
             ],
+            'surface' => [
+
+            ],
+            'reservoir' => [
+
+            ],
+            'wellhistory' => [
+
+            ],
+            'economics' => [
+
+            ],
+            'operations' => [
+
+            ],
             'gascondensate' => [
 
             ],
