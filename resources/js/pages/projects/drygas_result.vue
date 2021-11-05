@@ -18,7 +18,7 @@
               <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Result</u></p>
 
               <div>
-                <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlot">{{plotLabel}}</label>
+                <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-show="false" v-on:click="onPlot">{{plotLabel}}</label>
               </div>
 
               <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
@@ -26,8 +26,11 @@
                 <multiselect v-model="outputFile" @input="onChange" :options="outputFileOptions" track-by="name" label="name" placeholder="Select OUTPUT files"></multiselect>
               </div>
 
-              <div style="display:flex;margin-bottom:6px;margin-left:12px;text-align:left" class="row" v-show="bShowPlot == false">
-                <textarea v-model.lazy="dataContent" ></textarea>
+              <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
+                <textarea v-model.lazy="dataContent" v-show="false" ></textarea>
+                <graph v-bind:options="options"
+                      v-bind:data="graphData"
+                      v-bind:labels="labels"></graph>
               </div>
 
               <div style="height:50px" v-show="bShowPlot == true">
@@ -35,10 +38,6 @@
 
               <hr class="gf-line" v-show="bShowPlot == true">
 
-              <!-- <graph v-show="bShowPlot == true" 
-                     v-bind:options="options"
-                     v-bind:data="resRawDryGas"
-                     v-bind:labels="labels"></graph> -->
 
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
@@ -117,7 +116,9 @@ export default {
         { name: 'ECONOMICS'},
         { name: 'RESULT_OF'},
       ],
-      dataContent: ''
+      dataContent: '',
+      options: [],
+      graphData: []
     }
   },
 
@@ -131,12 +132,70 @@ export default {
   methods: {
     onChange: function(event) {
       debugger
-      if (this.outputFile != null && this.outputFile.name == 'PLOT_OF')
-        this.dataContent = this.resRawDryGas.PLOT_OF
-      else if (this.outputFile != null && this.outputFile.name == 'ECONOMICS')
-        this.dataContent = this.resRawDryGas.ECONOMICS
-      else if (this.outputFile != null && this.outputFile.name == 'RESULT_OF')
-        this.dataContent = this.resRawDryGas.RESULT_OF
+      if (this.outputFile != null && this.outputFile.name == 'PLOT_OF') {
+        // this.dataContent = this.resRawDryGas.PLOT_OF
+        debugger
+        this.options = [
+          { name: "Time (Year)", index: 0}, 
+          { name: "Gas Rate (MMSCF/D)", index: 1}, 
+          { name: "Cond Rate (STB/D)", index: 2}, 
+          { name: "Gas TOT (MMSCF/D)", index: 3}, 
+          { name: "Cond TOT (MSTB/D)", index: 4}, 
+          { name: "CGR (STB/MMSCF)", index: 5}, 
+          { name: "GOR (SCF/STB)", index: 6}, 
+          { name: "CUM.GAS (BCF)", index: 7}, 
+          { name: "CUM.COND (MMSTB)", index: 8}, 
+          { name: "# of WELLS", index: 9}, 
+          { name: "Rate/AOF", index: 10}, 
+          { name: "DP CHOKE (psia)", index: 11}, 
+          { name: "Gas Recovery (%)", index: 12}, 
+          { name: "Oil Recovery (%)", index: 13}, 
+          { name: "Matrix-Fracture Transfer (MSCF/D)", index: 14}, 
+          { name: "Matrix Contribution (BCF)", index: 15}, 
+          { name: "Pr (psia)", index:16 }, 
+          { name: "PWF (psia)", index: 17}, 
+          { name: "PWH (psia)", index: 18}, 
+          { name: "PMAN (psia)", index: 19}, 
+          { name: "P_in (psia)", index: 20}, 
+          { name: "P_out (psia)", index: 21}, 
+          { name: "Sales_P (psia)", index: 22}, 
+          { name: "Yearly Revenue Gas (MM $)", index: 23}, 
+          { name: "CUM.Income Gas (MM $)", index: 24}, 
+          { name: "Yearly Revenue Cond (M $)", index: 25}, 
+          { name: "CUM.Income Cond (M $)", index: 26}, 
+          { name: "Compression Cost (M $)", index: 27}, 
+          { name: "P/Z", index:28 }, 
+          { name: "Condensate Saturation (SO)", index: 29}, 
+        ]
+        this.graphData = this.resRawDryGas.RES_PLOT_OF
+      }
+      else if (this.outputFile != null && this.outputFile.name == 'ECONOMICS') {
+        // this.dataContent = this.resRawDryGas.ECONOMICS
+        this.options = [
+          { name: "Year", index: 0}, 
+          { name: "Gas Production (mmscf/d)", index: 1}, 
+          { name: "Condensate Rate (mstb/d)", index: 2}, 
+          { name: "Revenue Gas ($MM)", index: 3}, 
+          { name: "CUM.Revene Gass ($MM)", index: 4}, 
+          { name: "Revenue Condensate ($MM)", index: 5}, 
+          { name: "CUM.Revenue Condensate ($MM)", index: 6}, 
+          { name: "CAPEX ($MM)", index: 7}, 
+          { name: "OPEX ($MM)", index: 8}, 
+          { name: "Tax ($MM)", index: 9}, 
+          { name: "Royalty ($MM)", index: 10}, 
+          { name: "Depreciation ($MM)", index: 11}, 
+          { name: "CashFlow ($MM)", index: 12}, 
+          { name: "Total Revenues ($MM)", index: 13}, 
+          { name: "NPV ($ Billion)", index: 14}, 
+
+        ]
+        this.graphData = this.resRawDryGas.RES_ECONOMICS
+      }
+      else if (this.outputFile != null && this.outputFile.name == 'RESULT_OF') {
+        // this.dataContent = this.resRawDryGas.RESULT_OF
+        this.options = []
+        this.graphData = []
+      }
     },
     onPlot: function(event) {
       if(this.bShowPlot == false) {

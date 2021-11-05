@@ -343,6 +343,83 @@ class ProjectController extends Controller
         error_log('Finished to write OPERATIONS.in');
     }
 
+    private function parsePlotOf($filePath)
+    {
+        $res = array();
+        $content = fopen(storage_path($filePath),'r');
+        $i = 0;
+
+        while(!feof($content)){
+            try {
+                $line = fgets($content);
+                $i++;
+                if ($i < 4)
+                    continue;
+
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+                if (count($pieces) == 32) {
+                    //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
+                    {
+                        array_push($res, 
+                            array($pieces[1], $pieces[2], $pieces[3], $pieces[4],
+                                  $pieces[5], $pieces[6], $pieces[7], $pieces[8],
+                                  $pieces[9], $pieces[10], $pieces[11], $pieces[12],
+                                  $pieces[13], $pieces[14], $pieces[15], $pieces[16],
+                                  $pieces[17], $pieces[18], $pieces[19], $pieces[20],
+                                  $pieces[21], $pieces[22], $pieces[23], $pieces[24],
+                                  $pieces[25], $pieces[26], $pieces[27], $pieces[28],
+                                  $pieces[29], $pieces[30], 
+                            )
+                        );
+                    }
+                }
+            } 
+            catch (Exception $e) {
+                continue;
+            }
+        }
+        fclose($content);
+        return $res;
+    }
+
+    private function parseEconomics($filePath)
+    {
+        $res = array();
+        $content = fopen(storage_path($filePath),'r');
+        $i = 0;
+
+        while(!feof($content)){
+            try {
+                $line = fgets($content);
+                $i++;
+                if ($i < 3)
+                    continue;
+
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+                error_log(count($pieces));
+                if (count($pieces) == 17) {
+                    //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
+                    {
+                        array_push($res, 
+                            array($pieces[1], $pieces[2], $pieces[3], $pieces[4],
+                                  $pieces[5], $pieces[6], $pieces[7], $pieces[8],
+                                  $pieces[9], $pieces[10], $pieces[11], $pieces[12],
+                                  $pieces[13], $pieces[14], $pieces[15]
+                            )
+                        );
+                    }
+                }
+            } 
+            catch (Exception $e) {
+                continue;
+            }
+        }
+        fclose($content);
+        return $res;
+    }
+
     public function runDryGas(Request $request)
     {
         // determine workspace dir
@@ -443,13 +520,15 @@ class ProjectController extends Controller
         $res = [];
 
         if (Storage::disk('executables')->exists($workspace_dir . '/PLOT_OF.OUT')) {
-            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');            
+            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');
             $res['PLOT_OF'] = htmlspecialchars($plotof_content);
+            $res['RES_PLOT_OF'] = $this->parsePlotOf($workspace_path.'/PLOT_OF.OUT');
         }
 
         if (Storage::disk('executables')->exists($workspace_dir . '/ECONOMICS.OUT')) {
             $economics_content = Storage::disk('executables')->get($workspace_dir . '/ECONOMICS.OUT');            
             $res['ECONOMICS'] = htmlspecialchars($economics_content);
+            $res['RES_ECONOMICS'] = $this->parseEconomics($workspace_path.'/ECONOMICS.OUT');
         }
 
         if (Storage::disk('executables')->exists($workspace_dir . '/RESULTS_OF.OUT')) {

@@ -22,7 +22,7 @@ export const state = {
   relPerm: getCookie('relPerm', {}),
   resKGKO: getCookie('resKGKO', []),
   resOPT: getCookie('resOPT', []),
-  resRawDryGas: getCookie('resRawDryGas', {})
+  resRawDryGas: {}
 }
 
 function getCookie(name, defaultValue) {
@@ -157,7 +157,6 @@ export const mutations = {
   },
   [types.SAVE_RES_DRYGAS] (state, resRawDryGas) {
     state.resRawDryGas = resRawDryGas
-    Cookies.set('resRawDryGas', resRawDryGas, {expires:1})
   }
 }
 
