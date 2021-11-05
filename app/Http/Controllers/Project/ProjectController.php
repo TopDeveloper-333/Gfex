@@ -294,6 +294,35 @@ class ProjectController extends Controller
         error_log('Finished to write RESERVOIR.in');
     }
 
+    private function createEconomics($filePath, $economics)
+    {
+        Storage::disk('executables')->delete($filePath);
+        $content = '';
+
+        $content = $content . $economics['economics1']['PriceOfGas'] . '  ';
+        $content = $content . $economics['economics1']['PriceOfCondensate'] . '  ';
+        $content = $content . $economics['economics1']['PriceOfCompression'] . '  ';
+        $content = $content . $economics['economics1']['Life'] . '  ';
+        $content = $content . $economics['economics1']['SalvageRateOfCAPEX'] . PHP_EOL;
+
+        $content = $content . $economics['economics2']['Investment'] . '  ';
+        $content = $content . $economics['economics2']['ROR'] . '  ';
+        $content = $content . $economics['economics2']['Royalty'] . '  ';
+        $content = $content . $economics['economics2']['Tax'] . PHP_EOL;
+
+        $content = $content . $economics['economics3']['FirstYearOfProject'] . '  ';
+        $content = $content . $economics['economics3']['FirstYearOfProduction'] . PHP_EOL;
+
+        foreach ($economics['economics'] as $value) {
+            $content = $content . $value[0] . '  ';
+            $content = $content . $value[1] . '  ';
+            $content = $content . $value[2] . PHP_EOL;
+        }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write ECONOMICS.in');
+    }
+
     public function runDryGas(Request $request)
     {
         // determine workspace dir
@@ -361,6 +390,15 @@ class ProjectController extends Controller
         //
         $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
         $this->createReservoir($reservoir_file_path, $content->reservoir);
+
+
+        //
+        // create ECONOMICS.in file inside workspace
+        //
+        if ($content->fastplan->isEconomics == true) {
+            $economics_file_path = $workspace_dir . '/ECONOMICS.in';
+            $this->createEconomics($economics_file_path, $content->economics);
+        }
 
         return response()->json([]);
     }
