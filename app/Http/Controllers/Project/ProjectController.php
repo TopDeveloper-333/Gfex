@@ -197,8 +197,8 @@ class ProjectController extends Controller
         $content = $content . $drygas['gasProperties']['resTemp'] . '  ';
         $content = $content . $drygas['gasProperties']['N2'] . '  ';
         $content = $content . $drygas['gasProperties']['CO2'] . '  ';
-        $content = $content . $drygas['gasProperties']['H2S'] . '  ';
-        $content = $content . '0' . PHP_EOL;
+        $content = $content . $drygas['gasProperties']['H2S'] . PHP_EOL;
+        // $content = $content . '0' . PHP_EOL;
 
         $content = $content . $drygas['rockProperties']['conateWaterSaturation'] . '  ';
         $content = $content . $drygas['rockProperties']['waterCompressibility'] . '  ';
@@ -323,6 +323,26 @@ class ProjectController extends Controller
         error_log('Finished to write ECONOMICS.in');
     }
 
+    private function createOperations($filePath, $operations)
+    {
+        Storage::disk('executables')->delete($filePath);
+        $content = '';
+
+        $content = $content . $operations['operationalConstraints']['StartOfOperations'] . '  ';
+        $content = $content . $operations['operationalConstraints']['EndOfContract'] . '  ';
+        $content = $content . $operations['operationalConstraints']['MaximumNumberOfWells'] . '  ';
+        $content = $content . $operations['operationalConstraints']['RigSchedule'] . PHP_EOL;
+
+        $content = $content . $operations['gasDeliveryRequirements']['SalesPressuire'] . '  ';
+        $content = $content . $operations['gasDeliveryRequirements']['TargetRate'] . '  ';
+        $content = $content . $operations['gasDeliveryRequirements']['PressureLimit'] . '  ';
+        $content = $content . $operations['gasDeliveryRequirements']['EconomicsRate'] . '  ';
+        $content = $content . $operations['gasDeliveryRequirements']['MaxFieldRecovery'] . PHP_EOL;
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write OPERATIONS.in');
+    }
+
     public function runDryGas(Request $request)
     {
         // determine workspace dir
@@ -391,7 +411,6 @@ class ProjectController extends Controller
         $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
         $this->createReservoir($reservoir_file_path, $content->reservoir);
 
-
         //
         // create ECONOMICS.in file inside workspace
         //
@@ -400,6 +419,29 @@ class ProjectController extends Controller
             $this->createEconomics($economics_file_path, $content->economics);
         }
 
+        //
+        // create OPERATIONS.in file inside workspace 
+        //
+        $operations_file_path = $workspace_dir . '/OPERATIONS.in';
+        $this->createOperations($operations_file_path, $content->operations);
+
+        //
+        // launch RUN_DRYGAS.exe
+        //
+        $workspace_path = 'executables/' . $workspace_dir;
+        $output = Terminal::in(storage_path($workspace_path))->run('RUN_DRYGAS.exe');
+        if ($output->successful() == false)  {
+            error_log('Error happened to launch RUN_DRYGAS.exe');
+            // return response()->json([
+            //     []
+            // ]);    
+        }
+
+        //
+        // Read Output Files: PLOT_OF.OUT, RESULTS_OF.OUT, ECONOMICS.OUT 
+        // 
+
+        
         return response()->json([]);
     }
 }
