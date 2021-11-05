@@ -80,9 +80,7 @@ export default {
   name: 'RelativePermeability',
   middleware: 'auth',
 
-  props: {
-    title: { type: String, default: null }
-  },
+  props: ['isHidden'],
   
   components: {
     Multiselect,
@@ -116,7 +114,10 @@ export default {
 
   watch: {
     isRelPermValidate: function(val, oldVal) {
-      this.$emit('changedValidate', val)
+      if (this.isHidden == true)
+        this.$emit('changedValidate', true)
+      else  
+        this.$emit('changedValidate', val)
     }
   },
 

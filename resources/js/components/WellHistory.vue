@@ -71,9 +71,7 @@ export default {
   
   middleware: 'auth',
   
-  props: {
-    title: {type: String, default: null}
-  },
+  props: ['isHidden'],
 
   components: {
     Multiselect

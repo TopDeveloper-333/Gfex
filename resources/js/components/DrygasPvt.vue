@@ -40,6 +40,8 @@ export default {
     }
   },
 
+  props: ['isHidden'],
+
   watch: {
     isDataValidate: function(val, oldVal) {
       this.$emit('changedValidate', val)
@@ -51,6 +53,9 @@ export default {
       drygas : state => state.project.drygas,
     }),
     isDataValidate: function() {
+      if (this.isHidden == true)
+        return true;
+
       return this.isStandardConditionValidate & this.isGasPropertiesValidate & this.isRockPropertiesValidate
     }
   },

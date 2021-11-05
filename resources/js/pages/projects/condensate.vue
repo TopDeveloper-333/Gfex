@@ -13,19 +13,32 @@
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
 
-              <condensate-pvt v-show="screenType==='PVT_SCREEN'" ref="condensateControl" @changedValidate="updatePVTValidate($event)">
+              <condensate-pvt v-show="screenType==='PVT_SCREEN'" ref="condensateControl"
+                              v-bind:isHidden="false"
+                              @changedValidate="updatePVTValidate($event)">
               </condensate-pvt>
-              <relative-permeability v-show="screenType==='RELPERM_SCREEN'" @changedValidate="updateRelPermValidate($event)">
+              <relative-permeability v-show="screenType==='RELPERM_SCREEN'" 
+                              v-bind:isHidden="false"
+                              @changedValidate="updateRelPermValidate($event)">
               </relative-permeability>
-              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl" @changedValidate="updateSurfaceValidate($event)">
+              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl" 
+                              v-bind:isHidden="false"
+                              @changedValidate="updateSurfaceValidate($event)">
               </surface>
-              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl" @changedValidate="updateReservoirValidate($event)">
+              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl" 
+                              v-bind:isHidden="!(isFDP=='1')"
+                              @changedValidate="updateReservoirValidate($event)">
               </reservoir>
-              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" @changedValidate="updateWellHistoryValidate($event)">
+              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" 
+                              @changedValidate="updateWellHistoryValidate($event)">
               </well-history>
-              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl" @changedValidate="updateEconomicsValidate($event)">
+              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl" 
+                              v-bind:isHidden="!(isEconomics == true && isFDP =='1')"
+                              @changedValidate="updateEconomicsValidate($event)">
               </economics>
-              <operations v-show="screenType === 'OPERATIONS_SCREEN'" ref="operationsControl" @changedValidate="updateOperationsValidate($event)">
+              <operations v-show="screenType === 'OPERATIONS_SCREEN'" ref="operationsControl" 
+                              v-bind:isHidden="!(isFDP=='1')"
+                              @changedValidate="updateOperationsValidate($event)">
               </operations>
 
               <div class="d-flex justify-content-between" style="margin-top:20px">

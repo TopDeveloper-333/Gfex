@@ -55,6 +55,8 @@ export default {
     }
   },
 
+  props: ['isHidden'],
+
   watch: {
     isDataValidate: function(val, oldVal) {
       this.$emit('changedValidate', val)
@@ -66,6 +68,9 @@ export default {
       surface : state => state.project.surface,
     }),
     isDataValidate: function() {
+      if (this.isHidden == true)
+        return true
+        
       return this.isTubingPropertiesValidate & this.isWellHeadToTieValidate &
           this.isTieToCompressionValidate & this.isCompressionToSalesValidate &
           this.isCompressionAndPressureValidate

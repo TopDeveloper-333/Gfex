@@ -80,9 +80,7 @@ export default {
     Loading
   },
 
-  props: {
-    title: { type: String, default: null }
-  },
+  props: ['isHidden'],
   
   data() {
     return {
@@ -128,6 +126,9 @@ export default {
       isFDP: state => state.project.isFDP,
     }),
     isDataValidate: function() {
+      if (this.isHidden == true)
+        return true
+        
       return this.isGasCondensate1Validate & this.isGasCondensate2Validate
     }
   },

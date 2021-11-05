@@ -63,9 +63,7 @@ export default {
     Multiselect
   },
   
-  props: {
-    title: {type: String, default: null}
-  },
+  props: ['isHidden'],
 
   data() {
     return {
@@ -76,8 +74,8 @@ export default {
       cnModelSheet: null,
       verticalModelSheet: null,
       horizontalModelSheet: null,
-      dualPorosity : { name: "No", value : 0},
-      testWellData : { name: "C & n Model", value : 1 },
+      dualPorosity : null,
+      testWellData : null,
       dualPorosityOptions: [
         { name: "Yes", value : 1 },
         { name: "No", value : 0} 
@@ -108,6 +106,9 @@ export default {
       reservoir : state => state.project.reservoir,
     }),
     isDataValidate: function() {
+      if (this.isHidden == true)
+        return true
+
       var dualState = (this.dualPorosity == null || this.dualPorosity.value == 0) ? true : this.isDualPorosityValidate
       var wellTestState = (this.testWellData == null || this.testWellData.value == 0) ? true :
         (this.testWellData.value == 1 ? this.isCnModelValidate : 
@@ -121,7 +122,8 @@ export default {
   methods: {
     onSavePage: async function(event) {
       console.log("Reservoir's onSavePage() is called")
-
+      
+      debugger
       this.myReservoir = {
         reservoirPVT: {
           Viscosity: 0, GasZFactor:0, SpecificGravity: 0, ReservoirTemperature: 0,
@@ -291,7 +293,26 @@ export default {
 
   mounted() {
      
-     this.myReservoir = this.reservoir 
+    this.myReservoir = this.reservoir 
+
+    if (this.myReservoir.hasDualPorosity == 0)
+      this.dualPorosity = { name: "No", value : 0}
+    else if (this.myReservoir.hasDualPorosity == 1)
+      this.dualPorosity = { name: "Yes", value : 1 }
+    else 
+      this.dualPorosity = null
+
+    if (this.myReservoir.wellTestData == 1) {
+      this.testWellData = { name: "C & n Model", value : 1 }
+    }
+    else if (this.myReservoir.wellTestData == 2) {
+      this.testWellData = { name: "Vertical Model", value: 2 }
+    }
+    else if (this.myReservoir.wellTestData == 3) {
+      this.testWellData = { name: "Horizontal Model", value: 3 }
+    }
+    else 
+      this.testWellData = null
 
     // ----------------------------------------------------
     // Reservoir PVT sheet

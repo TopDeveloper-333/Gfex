@@ -21,9 +21,7 @@ export default {
   
   middleware: 'auth',
   
-  props: {
-    title: {type: String, default: null}
-  },
+  props: ['isHidden'],
 
   data() {
     return {
@@ -50,6 +48,10 @@ export default {
       economics : state => state.project.economics,
     }),
     isDataValidate: function() {
+      debugger
+      if (this.isHidden == true)
+        return true
+
       return this.isEconomics1Validate & this.isEconomics2Validate & 
              this.isEconomics3Validate & this.isEconomicsDataValidate
     }

@@ -25,9 +25,7 @@ export default {
   
   middleware: 'auth',
   
-  props: {
-    title: {type: String, default: null}
-  },
+  props: ['isHidden'],
 
   data() {
     return {
@@ -50,6 +48,9 @@ export default {
       operations : state => state.project.operations,
     }),
     isDataValidate: function() {
+      if (this.isHidden == true)
+        return true
+        
       return this.isOperationalValidate & this.isGasDeliveryValidate
     }
   },
