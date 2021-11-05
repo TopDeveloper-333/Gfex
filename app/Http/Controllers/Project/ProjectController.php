@@ -138,6 +138,12 @@ class ProjectController extends Controller
         $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
         $content->sep = $request->get('sep');
         $content->drygas = $request->get('drygas');
+        $content->surface = $request->get('surface');
+        $content->reservoir = $request->get('reservoir');
+        $content->wellhistory = $request->get('wellhistory');
+        $content->economics = $request->get('economics');
+        $content->operations = $request->get('operations');
+        $content->relPerm = $request->get('relPerm');
         $content->gascondensate = $request->get('gascondensate');
 
         $project->content = json_encode($content);

@@ -218,7 +218,7 @@ export const actions = {
   async saveGasCondensate({commit}, gascondensate) {
     commit(types.SAVE_GAS_CONDENSATE, gascondensate)
   },
-  async SAVE_SEP({commit}, sep) {
+  async saveSEP({commit}, sep) {
     commit(types.SAVE_SEP, sep)
   },
   async fetchSEP ({commit}, sep) {

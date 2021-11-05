@@ -19,17 +19,17 @@
               <h3 class="card-title gf-title"><{{projectName}}> Field Project
               </h3>
 
-              <drygas-pvt v-show="screenType==='PVT_SCREEN'" ref="drygasControl">
+              <drygas-pvt v-show="screenType==='PVT_SCREEN'" ref="drygasControl" @changedValidate="updatePVTValidate($event)">
               </drygas-pvt>
-              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl">
+              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl" @changedValidate="updateSurfaceValidate($event)">
               </surface>
-              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl">
+              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl" @changedValidate="updateReservoirValidate($event)">
               </reservoir>
-              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl">
+              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" @changedValidate="updateWellHistoryValidate($event)">
               </well-history>
-              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl">
+              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl" @changedValidate="updateEconomicsValidate($event)">
               </economics>
-              <operations v-show="screenType==='OPERATIONS_SCREEN'" ref="operationsControl">
+              <operations v-show="screenType==='OPERATIONS_SCREEN'" ref="operationsControl" @changedValidate="updateOperationsValidate($event)">
               </operations>
 
               <div class="d-flex justify-content-between">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div>
-                  <label class="btn btn-outline-primary gf-button disabled" v-on:click="onNextPage">Execute</label>
+                  <label class="btn btn-outline-primary gf-button" v-bind:class="executeButtonClass" v-on:click="onNextPage">Execute</label>
                   <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
                 </div>
 
@@ -139,43 +139,98 @@ export default {
       newProjectName: "",
       isLoading: false,
       fullPage: true,
+      isPVTValidate: true,
+      isSurfaceValidate: true,
+      isReservoirValidate: true,
+      isWellHistoryValidate: true,
+      isEconomicsValidate: true,
+      isOperationValidate: true,
     }
   },
 
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      isEconomics : state => state.project.isEconomics,
+      projectId: state => state.project.projectId,
       isFDP: state => state.project.isFDP,
       isCondensate: state => state.project.isCondensate,
+      isEconomics: state => state.project.isEconomics,
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      surface: state => state.project.surface,
+      reservoir: state => state.project.reservoir,
+      wellhistory: state => state.project.wellhistory,
+      economics: state => state.project.economics,
+      operations: state => state.project.operations,
+      relPerm: state => state.project.relPerm,
+      gascondensate : state => state.project.gascondensate,
     }),
     pvtButtonClass: function() {
-      if (this.screenType === PVT_SCREEN) return {'btn-primary': true}
+      if (this.isPVTValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === PVT_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     surfaceButtonClass: function () {
-      if (this.screenType === SURFACE_SCREEN) return {'btn-primary': true}
+      if (this.isSurfaceValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === SURFACE_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     reservoirButtonClass: function () {
-      if (this.screenType === RESERVOIR_SCREEN) return {'btn-primary': true}
+      if (this.isReservoirValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === RESERVOIR_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     wellHistoryButtonClass: function () {
-      if (this.screenType === WELLHISTORY_SCREEN) return {'btn-primary': true}
+      if (this.isWellHistoryValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === WELLHISTORY_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     economicsButtonClass: function () {
-      if (this.screenType === ECONOMICS_SCREEN) return {'btn-primary': true}
+      if (this.isEconomicsValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === ECONOMICS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
     },
     operationButtonClass: function () {
-      if (this.screenType === OPERATIONS_SCREEN) return {'btn-primary': true}
+      if (this.isOperationValidate == false) return {'btn-danger': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.screenType === OPERATIONS_SCREEN) return {'btn-primary': true}
       else return {'btn-outline-primary': true}
+    },
+    executeButtonClass: function() {
+      if (this.isDataValidate == true) return {'btn-outline-primary': true}
+      else return {'btn-outline-primary': true, 'disabled': true}
+    },
+    isDataValidate: function() {
+      return this.isPVTValidate & this.isSurfaceValidate & this.isReservoirValidate & 
+            this.isWellHistoryValidate & this.isEconomicsValidate & this.isOperationValidate
     }
   },
 
   methods: {
+    updatePVTValidate (pvt) {
+      this.isPVTValidate = pvt
+    },
+    updateSurfaceValidate(surface) {
+      this.isSurfaceValidate = surface
+    },
+    updateReservoirValidate(reservoir) {
+      this.isReservoirValidate = reservoir
+    },
+    updateWellHistoryValidate(wellHistory) {
+      this.isWellHistoryValidate = wellHistory
+    },
+    updateEconomicsValidate(economics) {
+      this.isEconomicsValidate = economics
+    },
+    updateOperationsValidate(operations) {
+      this.isOperationValidate = operations
+    },
     onSaveAs: function(event) {
       this.isSaveAs = true
       this.hideSaveAsButton = true
@@ -184,6 +239,11 @@ export default {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
+
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()      
+      this.isLoading = false
 
       // go to home vue
       this.$router.replace('home')
@@ -242,7 +302,7 @@ export default {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
-      
+
       this.isLoading = false
     }
   },

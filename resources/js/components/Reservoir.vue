@@ -9,7 +9,7 @@
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Reservoir Parameters</p>
-      <div id="reservoirDataSheet"></div>
+      <div id="reservoirParametersSheet"></div>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
@@ -25,7 +25,7 @@
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 1">
       <p class="gf-item">C & n Model</p>
-      <div id="cnMethodSheet"></div>
+      <div id="cnModelSheet"></div>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 2">
@@ -70,10 +70,10 @@ export default {
   data() {
     return {
       reservoirPVTSheet: null,
-      reservoirDataSheet : null,
+      reservoirParametersSheet : null,
       dualPorositySheet: null,
       testWellDataSheet: null,
-      cnMethodSheet: null,
+      cnModelSheet: null,
       verticalModelSheet: null,
       horizontalModelSheet: null,
       dualPorosity : { name: "No", value : 0},
@@ -92,7 +92,8 @@ export default {
       isDualPorosityValidate: true,
       isCnModelValidate: true,
       isVerticalModelValidate: true,
-      isHorizontalModelValidate: true    
+      isHorizontalModelValidate: true,
+      myReservoir: {}
     }
   },
 
@@ -104,6 +105,7 @@ export default {
 
   computed: {
     ...mapState({
+      reservoir : state => state.project.reservoir,
     }),
     isDataValidate: function() {
       var dualState = (this.dualPorosity == null || this.dualPorosity.value == 0) ? true : this.isDualPorosityValidate
@@ -120,6 +122,66 @@ export default {
     onSavePage: async function(event) {
       console.log("Reservoir's onSavePage() is called")
 
+      this.myReservoir = {
+        reservoirPVT: {
+          Viscosity: 0, GasZFactor:0, SpecificGravity: 0, ReservoirTemperature: 0,
+        },
+        reservoirParameters: {
+          GIIP: 0, ReservoirPressure:0,
+        },
+        hasDualPorosity: 0,
+        dualPorosity: {
+          km: 0, hm: 0, ShapeFactorSigma: 0, MatrixGIIP: 0,
+        },
+        wellTestData: 1,
+        cnModel: {
+          C: '', n : ''
+        },
+        verticalModel: {
+          k: 0, Porosity: 0, NetPay: 0, DrainageArea: 0, WellboreID: 0, Skin: 0
+        },
+        horizontalModel: {
+          k: 0, Porosity: 0, NetPay: 0, DrainageArea: 0, WellboreID: 0, Skin: 0, WellLength:0, KvKh: 0
+        }
+      }
+
+      this.myReservoir.reservoirPVT.Viscosity = this.reservoirPVTSheet.getValue('A1')
+      this.myReservoir.reservoirPVT.GasZFactor = this.reservoirPVTSheet.getValue('B1')
+      this.myReservoir.reservoirPVT.SpecificGravity = this.reservoirPVTSheet.getValue('C1')
+      this.myReservoir.reservoirPVT.ReservoirTemperature = this.reservoirPVTSheet.getValue('D1')
+
+      this.myReservoir.reservoirParameters.GIIP = this.reservoirParametersSheet.getValue('A1')
+      this.myReservoir.reservoirParameters.ReservoirPressure = this.reservoirParametersSheet.getValue('B1')
+
+      this.myReservoir.hasDualPorosity = this.dualPorosity.value
+
+      this.myReservoir.dualPorosity.km = this.dualPorositySheet.getValue('A1')
+      this.myReservoir.dualPorosity.hm = this.dualPorositySheet.getValue('B1')
+      this.myReservoir.dualPorosity.ShapeFactorSigma = this.dualPorositySheet.getValue('C1')
+      this.myReservoir.dualPorosity.MatrixGIIP = this.dualPorositySheet.getValue('D1')
+
+      this.myReservoir.wellTestData = this.testWellData.value
+
+      this.myReservoir.cnModel.C = this.cnModelSheet.getValue('A1')
+      this.myReservoir.cnModel.n = this.cnModelSheet.getValue('B1')
+
+      this.myReservoir.verticalModel.k = this.verticalModelSheet.getValue('A1')
+      this.myReservoir.verticalModel.Porosity = this.verticalModelSheet.getValue('B1')
+      this.myReservoir.verticalModel.NetPay = this.verticalModelSheet.getValue('C1')
+      this.myReservoir.verticalModel.DrainageArea = this.verticalModelSheet.getValue('D1')
+      this.myReservoir.verticalModel.WellboreID = this.verticalModelSheet.getValue('E1')
+      this.myReservoir.verticalModel.Skin = this.verticalModelSheet.getValue('F1')
+
+      this.myReservoir.horizontalModel.k = this.horizontalModelSheet.getValue('A1')
+      this.myReservoir.horizontalModel.Porosity = this.horizontalModelSheet.getValue('B1')
+      this.myReservoir.horizontalModel.NetPay = this.horizontalModelSheet.getValue('C1')
+      this.myReservoir.horizontalModel.DrainageArea = this.horizontalModelSheet.getValue('D1')
+      this.myReservoir.horizontalModel.WellboreID = this.horizontalModelSheet.getValue('E1')
+      this.myReservoir.horizontalModel.Skin = this.horizontalModelSheet.getValue('F1')
+      this.myReservoir.horizontalModel.WellLength = this.horizontalModelSheet.getValue('G1')
+      this.myReservoir.horizontalModel.KvKh = this.horizontalModelSheet.getValue('H1')
+
+      await store.dispatch('project/saveReservoir', this.myReservoir)
     },
     validatePVT:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
@@ -229,11 +291,20 @@ export default {
 
   mounted() {
      
+     this.myReservoir = this.reservoir 
+
     // ----------------------------------------------------
     // Reservoir PVT sheet
-    var reservoirPVTData = [
-      [0.019, 0.95, 0.6, 250]
-    ];
+    // var reservoirPVTData = [
+    //   [0.019, 0.95, 0.6, 250]
+    // ];
+
+    let reservoirPVTData = []
+    if (this.myReservoir != null && this.myReservoir.reservoirPVT != null)
+      reservoirPVTData.push(this.myReservoir.reservoirPVT)
+    else
+      reservoirPVTData.push([,,,])
+
 
     this.reservoirPVTSheet = jspreadsheet(document.getElementById('reservoirPVTSheet'), {
         data:reservoirPVTData,
@@ -275,12 +346,18 @@ export default {
 
     // ----------------------------------------------------
     // Reservoir Data sheet
-    var reservoirData = [
-      [15000, 5114]
-    ];
+    // var reservoirData = [
+    //   [15000, 5114]
+    // ];
 
-    this.reservoirDataSheet = jspreadsheet(document.getElementById('reservoirDataSheet'), {
-        data:reservoirData,
+    let reservoirParametersData = []
+    if (this.myReservoir != null && this.myReservoir.reservoirParameters != null)
+      reservoirParametersData.push(this.myReservoir.reservoirParameters)
+    else
+      reservoirParametersData.push([,])
+
+    this.reservoirParametersSheet = jspreadsheet(document.getElementById('reservoirParametersSheet'), {
+        data:reservoirParametersData,
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -303,13 +380,19 @@ export default {
         ],
         updateTable: this.validateParam
     });
-    this.reservoirDataSheet.hideIndex();
+    this.reservoirParametersSheet.hideIndex();
 
     // ----------------------------------------------------
     // Dual Porosity Data sheet
-    var dualPorosityData = [
-      [100, 300, 1.0, 5000]
-    ];
+    // var dualPorosityData = [
+    //   [100, 300, 1.0, 5000]
+    // ];
+
+    let dualPorosityData = []
+    if (this.myReservoir != null && this.myReservoir.dualPorosity != null)
+      dualPorosityData.push(this.myReservoir.dualPorosity)
+    else
+      dualPorosityData.push([,,,])
 
     this.dualPorositySheet = jspreadsheet(document.getElementById('dualPorositySheet'), {
         data:dualPorosityData,
@@ -351,12 +434,17 @@ export default {
 
     // ----------------------------------------------------
     // C & n Model
-    var cnMethodData = [
-      [26.9, 0.537]
-    ];
+    // var cnMethodData = [
+    //   [26.9, 0.537]
+    // ];
+    let cnModelData = []
+    if (this.myReservoir != null && this.myReservoir.cnModel != null)
+      cnModelData.push(this.myReservoir.cnModel)
+    else
+      cnModelData.push([,])    
 
-    this.cnMethodSheet = jspreadsheet(document.getElementById('cnMethodSheet'), {
-        data:cnMethodData,
+    this.cnModelSheet = jspreadsheet(document.getElementById('cnModelSheet'), {
+        data:cnModelData,
         allowInsertRow:false,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -379,13 +467,19 @@ export default {
         ],
         updateTable: this.validateCnModel
     });
-    this.cnMethodSheet.hideIndex();
+    this.cnModelSheet.hideIndex();
 
     // ----------------------------------------------------
     // Vertical Model
-    var verticalModelData = [
-      [1, 0.2, 100, 72, 6, 0]
-    ];
+    // var verticalModelData = [
+    //   [1, 0.2, 100, 72, 6, 0]
+    // ];
+
+    let verticalModelData = []
+    if (this.myReservoir != null && this.myReservoir.verticalModel != null)
+      verticalModelData.push(this.myReservoir.verticalModel)
+    else
+      verticalModelData.push([,,,,,])
 
     this.verticalModelSheet = jspreadsheet(document.getElementById('verticalModelSheet'), {
         data:verticalModelData,
@@ -439,9 +533,15 @@ export default {
 
     // ----------------------------------------------------
     // Horizontal Model
-    var horizontalModelData = [
-      [1, 0.2, 100, 72, 6, 0, 2000, 0.01]
-    ];
+    // var horizontalModelData = [
+    //   [1, 0.2, 100, 72, 6, 0, 2000, 0.01]
+    // ];
+
+    let horizontalModelData = []
+    if (this.myReservoir != null && this.myReservoir.horizontalModel != null)
+      horizontalModelData.push(this.myReservoir.horizontalModel)
+    else
+      horizontalModelData.push([,,,,,,,])    
 
     this.horizontalModelSheet = jspreadsheet(document.getElementById('horizontalModelSheet'), {
         data:horizontalModelData,

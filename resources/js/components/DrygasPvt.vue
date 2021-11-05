@@ -34,6 +34,15 @@ export default {
       rockPropertiesSheet: null,
       gasPVTSheet: null,
       selectedOptionPage : null,
+      isStandardConditionValidate: true,
+      isGasPropertiesValidate: true,
+      isRockPropertiesValidate: true
+    }
+  },
+
+  watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
     }
   },
 
@@ -41,10 +50,63 @@ export default {
     ...mapState({
       drygas : state => state.project.drygas,
     }),
-
+    isDataValidate: function() {
+      return this.isStandardConditionValidate & this.isGasPropertiesValidate & this.isRockPropertiesValidate
+    }
   },
 
   methods: {
+    validateStandardConditions:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isStandardConditionValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isStandardConditionValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateGasProperties:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isGasPropertiesValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isGasPropertiesValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateRockProperties:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isRockPropertiesValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isRockPropertiesValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
     onSavePage: async function(event) {
       console.log("DrygasPVT's onSavePage() is called")
       
@@ -117,7 +179,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateStandardConditions
     });
     this.standardConditionSheet.hideIndex();
 
@@ -185,7 +247,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateGasProperties
     });
     this.gasPVTSheet.hideIndex();
 
@@ -194,7 +256,6 @@ export default {
     //   // [,,],
     //   [0.30, "3.D-06", "3.D-06"],
     // ];
-    debugger
     let rockPropertiesData = []
     if (this.myDryGas != null && this.myDryGas.rockProperties != null)
       rockPropertiesData.push(this.myDryGas.rockProperties)
@@ -227,7 +288,7 @@ export default {
                 width: 360,
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateRockProperties
     });
     this.rockPropertiesSheet.hideIndex();    
   }

@@ -13,19 +13,19 @@
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
 
-              <condensate-pvt v-show="screenType==='PVT_SCREEN'" @changedValidate="updatePVTValidate($event)">
+              <condensate-pvt v-show="screenType==='PVT_SCREEN'" ref="condensateControl" @changedValidate="updatePVTValidate($event)">
               </condensate-pvt>
               <relative-permeability v-show="screenType==='RELPERM_SCREEN'" @changedValidate="updateRelPermValidate($event)">
               </relative-permeability>
-              <surface v-show="screenType==='SURFACE_SCREEN'" @changedValidate="updateSurfaceValidate($event)">
+              <surface v-show="screenType==='SURFACE_SCREEN'" ref="surfaceControl" @changedValidate="updateSurfaceValidate($event)">
               </surface>
-              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" @changedValidate="updateReservoirValidate($event)">
+              <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl" @changedValidate="updateReservoirValidate($event)">
               </reservoir>
-              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" @changedValidate="updateWellHistoryValidate($event)">
+              <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" @changedValidate="updateWellHistoryValidate($event)">
               </well-history>
-              <economics v-show="screenType==='ECONOMICS_SCREEN'" @changedValidate="updateEconomicsValidate($event)">
+              <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl" @changedValidate="updateEconomicsValidate($event)">
               </economics>
-              <operations v-show="screenType === 'OPERATIONS_SCREEN'" @changedValidate="updateOperationsValidate($event)">
+              <operations v-show="screenType === 'OPERATIONS_SCREEN'" ref="operationsControl" @changedValidate="updateOperationsValidate($event)">
               </operations>
 
               <div class="d-flex justify-content-between" style="margin-top:20px">
@@ -144,10 +144,21 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      isEconomics : state => state.project.isEconomics,
+      projectId: state => state.project.projectId,
       isFDP: state => state.project.isFDP,
       isCondensate: state => state.project.isCondensate,
-    }),    
+      isEconomics: state => state.project.isEconomics,
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      surface: state => state.project.surface,
+      reservoir: state => state.project.reservoir,
+      wellhistory: state => state.project.wellhistory,
+      economics: state => state.project.economics,
+      operations: state => state.project.operations,
+      relPerm: state => state.project.relPerm,
+      gascondensate : state => state.project.gascondensate,
+    }),
     pvtButtonClass: function() {
       if (this.isPVTValidate == false) return {'btn-danger' : true}
       else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}

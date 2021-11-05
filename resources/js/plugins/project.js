@@ -23,6 +23,12 @@ Vue.mixin({
       payload.isSeparatorOptimizer = this.isSeparatorOptimizer
       payload.sep = this.sep
       payload.drygas = this.drygas
+      payload.surface = this.surface
+      payload.reservoir = this.reservoir
+      payload.wellhistory = this.wellhistory
+      payload.economics = this.economics
+      payload.operations = this.operations
+      payload.relPerm = this.relPerm 
       payload.gascondensate = this.gascondensate
       await store.dispatch('project/saveProject', payload)
     },

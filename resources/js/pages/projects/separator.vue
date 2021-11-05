@@ -189,6 +189,12 @@ export default {
       isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
       sep : state => state.project.sep,
       drygas : state => state.project.drygas,
+      surface: state => state.project.surface,
+      reservoir: state => state.project.reservoir,
+      wellhistory: state => state.project.wellhistory,
+      economics: state => state.project.economics,
+      operations: state => state.project.operations,
+      relPerm: state => state.project.relPerm,
       gascondensate : state => state.project.gascondensate,
     }),
     isDataValidate: function() {
@@ -566,7 +572,7 @@ export default {
       this.mySEP.separatorConditions.setNumber9[1][1] = this.setNumber9Sheet.getValue('B2');
       this.mySEP.separatorConditions.setNumber9[2][0] = this.setNumber9Sheet.getValue('A3');
       this.mySEP.separatorConditions.setNumber9[2][1] = this.setNumber9Sheet.getValue('B3');
-      await store.dispatch('project/SAVE_SEP', this.mySEP)
+      await store.dispatch('project/saveSEP', this.mySEP)
 
     },
     onPrevPage: function(event) {
