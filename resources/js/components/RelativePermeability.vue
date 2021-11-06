@@ -154,6 +154,7 @@ export default {
         this.myResKGKO[i][2] = this.responseKGKOSheet.getValue('C' + (i+1));
       }
 
+      debugger
       await store.dispatch('project/saveRelPerm', this.myRelPerm)
       await store.dispatch('project/saveResKGKO', this.myResKGKO)
 

@@ -173,7 +173,6 @@ export default {
         this.myGasCondensate.gasCondensate2[i][7] = this.gasCondensate2Sheet.getValue('H' + (i+1));
       }
 
-      debugger
       await store.dispatch('project/saveGasCondensate', this.myGasCondensate)
     },
     onPrintGraph: async function(event) {
@@ -436,7 +435,6 @@ export default {
     //   [1000.0, 1.219, 596.4,  2.636, 25.8,  1.0295, 0.0148, 0.0]
     // ];
 
-    debugger
     let gasCondensate2Data = []
     if (this.myGasCondensate != null && this.myGasCondensate.gasCondensate2 != null) {
       this.myGasCondensate.gasCondensate2.forEach(element => {
