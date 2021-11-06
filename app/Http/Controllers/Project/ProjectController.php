@@ -395,10 +395,13 @@ class ProjectController extends Controller
                 $i++;
                 if ($i < 4)
                     continue;
+                
+                if ($i == 6)
+                    error_log('PlotOf.out: ' . count($pieces));
 
                 $string = preg_replace('/\s+/', ',', $line);
                 $pieces = explode(',', $string);
-                if (count($pieces) == 32) {
+                if (count($pieces) == 31) {
                     //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
                     {
                         array_push($res, 
@@ -438,7 +441,10 @@ class ProjectController extends Controller
 
                 $string = preg_replace('/\s+/', ',', $line);
                 $pieces = explode(',', $string);
-                error_log(count($pieces));
+                
+                if ($i == 4)
+                    error_log('PlotOf.out: ' . count($pieces));
+
                 if (count($pieces) == 17) {
                     //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
                     {
