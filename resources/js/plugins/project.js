@@ -4,6 +4,8 @@ import store from '~/store'
 Vue.mixin({
   methods: {
     onSaveProject: async function() {
+      debugger
+      
       let payload = {}
 
       if (this.newProjectName != "") {
@@ -29,6 +31,7 @@ Vue.mixin({
       payload.operations = this.operations
       payload.relPerm = this.relPerm 
       payload.gascondensate = this.gascondensate
+      payload.resKGKO = this.resKGKO
       await store.dispatch('project/saveProject', payload)
     },
     runDryGasProject: async function() {
@@ -45,11 +48,12 @@ Vue.mixin({
       payload.drygas = this.drygas
       payload.surface = this.surface
       payload.reservoir = this.reservoir
-      payload.wellhistory = this.wellhistory
+      // payload.wellhistory = this.wellhistory
       payload.economics = this.economics
       payload.operations = this.operations
-      payload.relPerm = this.relPerm 
-      payload.gascondensate = this.gascondensate
+      // payload.relPerm = this.relPerm 
+      // payload.resKGKO = this.resKGKO
+      // payload.gascondensate = this.gascondensate
       await store.dispatch('project/runDryGasProject', payload)
     },
     runGasCondensateProject: async function() {
@@ -63,13 +67,14 @@ Vue.mixin({
       payload.isEconomics = this.isEconomics
       payload.isSeparatorOptimizer = this.isSeparatorOptimizer
       payload.sep = this.sep
-      payload.drygas = this.drygas
+      // payload.drygas = this.drygas
       payload.surface = this.surface
       payload.reservoir = this.reservoir
-      payload.wellhistory = this.wellhistory
+      // payload.wellhistory = this.wellhistory
       payload.economics = this.economics
       payload.operations = this.operations
       payload.relPerm = this.relPerm 
+      payload.resKGKO = this.resKGKO
       payload.gascondensate = this.gascondensate
       await store.dispatch('project/runGasCondensateProject', payload)
     },

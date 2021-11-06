@@ -144,6 +144,7 @@ class ProjectController extends Controller
         $content->economics = $request->get('economics');
         $content->operations = $request->get('operations');
         $content->relPerm = $request->get('relPerm');
+        $content->resKGKO = $request->get('resKGKO');
         $content->gascondensate = $request->get('gascondensate');
 
         $project->content = json_encode($content);

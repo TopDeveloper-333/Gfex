@@ -196,6 +196,7 @@ export default {
       operations: state => state.project.operations,
       relPerm: state => state.project.relPerm,
       gascondensate : state => state.project.gascondensate,
+      resKGKO: state => state.project.resKGKO,      
     }),
     isDataValidate: function() {
       return this.isOriginalStreamValidate & this.isOriginalStream1Validate & 

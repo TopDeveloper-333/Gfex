@@ -11,7 +11,8 @@
 
     <div style="display:flex;margin-bottom:6px;text-align:center" class="row" v-show="bShowPlot == false">
       <div id="relativePermeabilitySheet"></div>
-      <div id="responseKGKOSheet" v-show="bCalculate == true"></div>
+      <!-- <div id="responseKGKOSheet" v-show="bCalculate == true"></div> -->
+      <div id="responseKGKOSheet" v-show="resKGKO!=null && resKGKO.length != 0"></div>
     </div>
 
     <div style="height:50px" v-show="bShowPlot == true">
@@ -154,7 +155,6 @@ export default {
         this.myResKGKO[i][2] = this.responseKGKOSheet.getValue('C' + (i+1));
       }
 
-      debugger
       await store.dispatch('project/saveRelPerm', this.myRelPerm)
       await store.dispatch('project/saveResKGKO', this.myResKGKO)
 

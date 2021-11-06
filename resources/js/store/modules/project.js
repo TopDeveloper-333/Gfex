@@ -63,6 +63,7 @@ export const mutations = {
     state.projectList = projectList
   },
   [types.LOAD_PROJECT] (state, {projectName, payload}) {
+    debugger
     console.log('LOAD_PROJECT')
     state.projectName = projectName
     state.projectId = payload.id

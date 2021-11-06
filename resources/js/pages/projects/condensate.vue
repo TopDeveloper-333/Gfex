@@ -178,6 +178,7 @@ export default {
       operations: state => state.project.operations,
       relPerm: state => state.project.relPerm,
       gascondensate : state => state.project.gascondensate,
+      resKGKO: state => state.project.resKGKO
     }),
     pvtButtonClass: function() {
       if (this.isPVTValidate == false) return {'btn-danger' : true}
@@ -272,6 +273,11 @@ export default {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
+
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()      
+      this.isLoading = false
 
       // go to home vue
       this.$router.replace('home')
