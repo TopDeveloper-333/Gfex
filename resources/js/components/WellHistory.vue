@@ -100,12 +100,13 @@ export default {
 
   computed: {
     ...mapState({
-
+      wellhistory: state => state.project.wellhistory,
     })
   },
 
   watch: {
     numberOfWells: function(val, oldVal) {
+      debugger
       if (val < 0)
         val = 0;
       if (oldVal < 0)
@@ -356,7 +357,8 @@ export default {
   },
 
   mounted() {
-    
+    debugger
+
     // Reservoir Data (Well History)
     var reservoirHData = [
       [10000, 5114]

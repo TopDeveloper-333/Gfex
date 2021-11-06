@@ -128,6 +128,21 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
+      projectId: state => state.project.projectId,
+      isFDP: state => state.project.isFDP,
+      isCondensate: state => state.project.isCondensate,
+      isEconomics: state => state.project.isEconomics,
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      surface: state => state.project.surface,
+      reservoir: state => state.project.reservoir,
+      wellhistory: state => state.project.wellhistory,
+      economics: state => state.project.economics,
+      operations: state => state.project.operations,
+      relPerm: state => state.project.relPerm,
+      gascondensate : state => state.project.gascondensate,
+      resKGKO: state => state.project.resKGKO,
       resOPT : state => state.project.resOPT
     }),
   },
@@ -151,6 +166,11 @@ export default {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
+
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()      
+      this.isLoading = false
 
       // go to home vue
       this.$router.replace('home')

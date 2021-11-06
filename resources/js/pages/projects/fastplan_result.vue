@@ -17,26 +17,26 @@
               </h3>
               <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Result</u></p>
 
-              <div>
-                <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-show="false" v-on:click="onPlot">{{plotLabel}}</label>
+              <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+                <div class="col-3">
+                  <p class="gf-item">Output Files</p>
+                  <multiselect v-model="outputFile" @input="onChange" :options="outputFileOptions" track-by="name" label="name" placeholder="Select OUTPUT files"></multiselect>
+                </div>
+                <div class="col-2" style="display:flex">
+                  <label class="btn btn-primary gf-button" style="margin:auto auto 0 auto" v-on:click="onPlot">{{plotLabel}}</label>
+                </div>
               </div>
 
-              <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
-                <p class="gf-item">Output Files</p>
-                <multiselect v-model="outputFile" @input="onChange" :options="outputFileOptions" track-by="name" label="name" placeholder="Select OUTPUT files"></multiselect>
-              </div>
+              <hr class="gf-line">
 
-              <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
-                <textarea v-model.lazy="dataContent" v-show="false" ></textarea>
+              <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == true">
                 <graph v-bind:options="options"
-                      v-bind:data="graphData"
-                      v-bind:labels="labels"></graph>
+                      v-bind:data="graphData"></graph>
               </div>
 
-              <div style="height:50px" v-show="bShowPlot == true">
+              <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
+                <textarea v-model.lazy="dataContent" style="margin-left:10px"></textarea>
               </div>
-
-              <hr class="gf-line" v-show="bShowPlot == true">
 
 
               <div class="d-flex justify-content-between">
@@ -88,11 +88,11 @@ import Graph from '~/components/Graph.vue';
 
 // import axios from 'axios'
 export default {
-  name: 'DrygasResult',
+  name: 'FastplanResult',
   middleware: 'auth',
 
   metaInfo () {
-    return { title: this.$t('Drygas Result') }
+    return { title: this.$t('Fastplan Result') }
   },
 
   components: {
@@ -108,8 +108,8 @@ export default {
       isSaveAs : false,
       hideSaveAsButton: false,
       newProjectName: "",
-      plotLabel: "Plot",
-      bShowPlot : false,
+      plotLabel: "Data",
+      bShowPlot : true,
       outputFile: null,
       outputFileOptions: [
         { name: 'PLOT_OF'},
@@ -125,7 +125,21 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      resRawDryGas : state => state.project.resRawDryGas
+      projectId: state => state.project.projectId,
+      isFDP: state => state.project.isFDP,
+      isCondensate: state => state.project.isCondensate,
+      isEconomics: state => state.project.isEconomics,
+      isSeparatorOptimizer: state => state.project.isSeparatorOptimizer,
+      sep : state => state.project.sep,
+      drygas : state => state.project.drygas,
+      surface: state => state.project.surface,
+      reservoir: state => state.project.reservoir,
+      wellhistory: state => state.project.wellhistory,
+      economics: state => state.project.economics,
+      operations: state => state.project.operations,
+      relPerm: state => state.project.relPerm,
+      gascondensate : state => state.project.gascondensate,
+      resFastPlan : state => state.project.resFastPlan
     }),
   },
 
@@ -133,8 +147,7 @@ export default {
     onChange: function(event) {
       debugger
       if (this.outputFile != null && this.outputFile.name == 'PLOT_OF') {
-        // this.dataContent = this.resRawDryGas.PLOT_OF
-        debugger
+        this.dataContent = this.resFastPlan.PLOT_OF
         this.options = [
           { name: "Time (Year)", index: 0}, 
           { name: "Gas Rate (MMSCF/D)", index: 1}, 
@@ -167,10 +180,10 @@ export default {
           { name: "P/Z", index:28 }, 
           { name: "Condensate Saturation (SO)", index: 29}, 
         ]
-        this.graphData = this.resRawDryGas.RES_PLOT_OF
+        this.graphData = this.resFastPlan.RES_PLOT_OF
       }
       else if (this.outputFile != null && this.outputFile.name == 'ECONOMICS') {
-        // this.dataContent = this.resRawDryGas.ECONOMICS
+        this.dataContent = this.resFastPlan.ECONOMICS
         this.options = [
           { name: "Year", index: 0}, 
           { name: "Gas Production (mmscf/d)", index: 1}, 
@@ -189,10 +202,10 @@ export default {
           { name: "NPV ($ Billion)", index: 14}, 
 
         ]
-        this.graphData = this.resRawDryGas.RES_ECONOMICS
+        this.graphData = this.resFastPlan.RES_ECONOMICS
       }
       else if (this.outputFile != null && this.outputFile.name == 'RESULT_OF') {
-        // this.dataContent = this.resRawDryGas.RESULT_OF
+        this.dataContent = this.resFastPlan.RESULT_OF
         this.options = []
         this.graphData = []
       }
@@ -215,6 +228,11 @@ export default {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
+
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()      
+      this.isLoading = false
 
       // go to home vue
       this.$router.replace('home')

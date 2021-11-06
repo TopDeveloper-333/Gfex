@@ -330,10 +330,10 @@ export default {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
-      debugger
       this.runGasCondensateProject()
       this.isLoading = false
 
+      this.$router.replace('fastplanresult');
     }
   },
   mounted() {

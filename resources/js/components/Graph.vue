@@ -84,6 +84,15 @@ export default {
     }
   },
 
+  watch: {
+    options: function(val, oldVal) {
+      debugger
+      this.axisX = null
+      this.axisY = null
+      this.axisY2 = null
+    }
+  },
+
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,

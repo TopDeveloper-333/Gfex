@@ -209,6 +209,45 @@ class ProjectController extends Controller
         error_log('Finished to write GAS_PVT.in');
     }
 
+    private function createGasCondensate($filePath, $gascondensate) 
+    {
+        Storage::disk('executables')->delete($filePath);
+
+        $content = '';
+        $content = $content . $gascondensate['gasCondensate1']['Psat'] . '  ';
+        $content = $content . $gascondensate['gasCondensate1']['Swi'] . PHP_EOL;
+
+        foreach ($gascondensate['gasCondensate2'] as $value) {
+            $content = $content . $value[0] . '  ';
+            $content = $content . $value[1] . '  ';
+            $content = $content . $value[2] . '  ';
+            $content = $content . $value[3] . '  ';
+            $content = $content . $value[4] . '  ';
+            $content = $content . $value[5] . '  ';
+            $content = $content . $value[6] . '  ';
+            $content = $content . $value[7] . PHP_EOL;
+        }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write PINE.in');
+    }
+
+    private function createKRSG($filePath, $krsg) 
+    {
+        Storage::disk('executables')->delete($filePath);
+
+        $content = '';
+
+        foreach ($krsg as $value) {
+            $content = $content . $value[0] . '  ';
+            $content = $content . $value[1] . '  ';
+            $content = $content . $value[2] . PHP_EOL;
+        }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write KRSG.in');
+    }
+
     private function createSurface($filePath, $surface)
     {
         Storage::disk('executables')->delete($filePath);
@@ -437,15 +476,16 @@ class ProjectController extends Controller
         $content->fastplan->isCondensate = $request->get('isCondensate');
         $content->fastplan->isEconomics = $request->get('isEconomics');
         $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
-        $content->sep = $request->get('sep');
+        // $content->sep = $request->get('sep');
         $content->drygas = $request->get('drygas');
         $content->surface = $request->get('surface');
         $content->reservoir = $request->get('reservoir');
-        $content->wellhistory = $request->get('wellhistory');
+        // $content->wellhistory = $request->get('wellhistory');
         $content->economics = $request->get('economics');
         $content->operations = $request->get('operations');
-        $content->relPerm = $request->get('relPerm');
-        $content->gascondensate = $request->get('gascondensate');
+        // $content->relPerm = $request->get('relPerm');
+        // $content->gascondensate = $request->get('gascondensate');
+        // $content->resKGKO = $request->get('resKGKO');
 
         //
         // create workspace directory with user_id
@@ -456,8 +496,8 @@ class ProjectController extends Controller
         //
         // copy ConsoleApplicationFDPHIST.exe into workspace directory
         //
-        $cmd_copy_corey = 'copy ConsoleApplicationFDPHIST.exe ' . $workspace_dir;
-        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_corey);
+        $cmd_copy_app = 'copy ConsoleApplicationFDPHIST.exe ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_app);
         if ($output->successful() == false)  {
             error_log('Error happened to copy ConsoleApplicationFDPHIST.exe');
             return response()->json([
@@ -539,4 +579,131 @@ class ProjectController extends Controller
 
         return response()->json($res);
     }
+
+    public function runGasCondensate(Request $request)
+    {
+        // determine workspace dir
+        $workspace_dir = $request->user()->id;
+        $id = $request->get('projectId');
+
+        error_log('runGasCondensate: id = '. $id. ' Dir = ' . $workspace_dir);
+
+        //
+        // Get content
+        //
+        $content = json_decode(json_encode($this->defaultProjectContent()));
+        $content->fastplan->isFDP = $request->get('isFDP');
+        $content->fastplan->isCondensate = $request->get('isCondensate');
+        $content->fastplan->isEconomics = $request->get('isEconomics');
+        $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
+        // $content->sep = $request->get('sep');
+        // $content->drygas = $request->get('drygas');
+        $content->surface = $request->get('surface');
+        $content->reservoir = $request->get('reservoir');
+        // $content->wellhistory = $request->get('wellhistory');
+        $content->economics = $request->get('economics');
+        $content->operations = $request->get('operations');
+        // $content->relPerm = $request->get('relPerm');
+        $content->gascondensate = $request->get('gascondensate');
+        $content->resKGKO = $request->get('resKGKO');
+
+        //
+        // create workspace directory with user_id
+        //
+        $cmd_create_dir = 'mkdir ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_create_dir);
+
+        //
+        // copy ConsoleApplicationFDPHIST.exe into workspace directory
+        //
+        $cmd_copy_app = 'copy ConsoleApplicationFDPHIST.exe ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_app);
+        if ($output->successful() == false)  {
+            error_log('Error happened to copy ConsoleApplicationFDPHIST.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+        
+        //
+        // create FASTPLAN.in file inside workspace 
+        //
+        $fastplan_file_path = $workspace_dir . '/FASTPLAN.in';
+        $this->createFastPlan($fastplan_file_path, $content->fastplan);
+
+        //
+        // create PINE.in file inside workspace 
+        //
+        $pine_file_path = $workspace_dir . '/PINE.in';
+        $this->createGasCondensate($pine_file_path, $content->gascondensate);
+
+        //
+        // create KRSG.in file inside workspace 
+        //
+        $krsg_file_path = $workspace_dir . '/KRSG.in';
+        $this->createKRSG($krsg_file_path, $content->resKGKO);
+        //
+        // create SURFACE.in file inside workspace 
+        //
+        $surface_file_path = $workspace_dir . '/SURFACE.in';
+        $this->createSurface($surface_file_path, $content->surface);
+
+        //
+        // create RESERVOIR.in file inside workspace 
+        //
+        $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
+        $this->createReservoir($reservoir_file_path, $content->reservoir);
+
+        //
+        // create ECONOMICS.in file inside workspace
+        //
+        if ($content->fastplan->isEconomics == true) {
+            $economics_file_path = $workspace_dir . '/ECONOMICS.in';
+            $this->createEconomics($economics_file_path, $content->economics);
+        }
+
+        //
+        // create OPERATIONS.in file inside workspace 
+        //
+        $operations_file_path = $workspace_dir . '/OPERATIONS.in';
+        $this->createOperations($operations_file_path, $content->operations);
+
+        //
+        // launch ConsoleApplicationFDPHIST.exe
+        //
+        $workspace_path = 'executables/' . $workspace_dir;
+        $output = Terminal::in(storage_path($workspace_path))->run('ConsoleApplicationFDPHIST.exe');
+        if ($output->successful() == false)  {
+            error_log('Error happened to launch ConsoleApplicationFDPHIST.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+
+        //
+        // Read Output Files: PLOT_OF.OUT, RESULTS_OF.OUT, ECONOMICS.OUT 
+        // 
+        $res = [];
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/PLOT_OF.OUT')) {
+            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');
+            $res['PLOT_OF'] = htmlspecialchars($plotof_content);
+            $res['RES_PLOT_OF'] = $this->parsePlotOf($workspace_path.'/PLOT_OF.OUT');
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/ECONOMICS.OUT')) {
+            $economics_content = Storage::disk('executables')->get($workspace_dir . '/ECONOMICS.OUT');            
+            $res['ECONOMICS'] = htmlspecialchars($economics_content);
+            $res['RES_ECONOMICS'] = $this->parseEconomics($workspace_path.'/ECONOMICS.OUT');
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/RESULTS_OF.OUT')) {
+            $resultof_content = Storage::disk('executables')->get($workspace_dir . '/RESULTS_OF.OUT');            
+            $res['RESULT_OF'] = htmlspecialchars($resultof_content);
+        }
+
+        return response()->json($res);
+    }
+
+
 }

@@ -584,6 +584,7 @@ export default {
 
       this.isLoading = true;
       this.onSavePage()
+      this.onSaveProject()
 
       await store.dispatch('project/fetchSEP', this.mySEP)
 

@@ -22,7 +22,7 @@ export const state = {
   relPerm: {},
   resKGKO: [],
   resOPT: [],
-  resRawDryGas: {}
+  resFastPlan: {},
 }
 
 function getCookie(name, defaultValue) {
@@ -55,7 +55,7 @@ export const getters = {
   relPerm: state => state.relPerm,
   resKGKO: state => state.resKGKO,
   resOPT: state => state.resOPT,
-  resRawDryGas: state => state.resRawDryGas
+  resFastPlan: state => state.resFastPlan,
 }
 
 export const mutations = {
@@ -125,9 +125,9 @@ export const mutations = {
   [types.SAVE_RES_OPTIMIZER] (state, resOPT) {
     state.resOPT = resOPT
   },
-  [types.SAVE_RES_DRYGAS] (state, resRawDryGas) {
-    state.resRawDryGas = resRawDryGas
-  }
+  [types.SAVE_RES_FASTPLAN] (state, resFastPlan) {
+    state.resFastPlan = resFastPlan
+  },
 }
 
 export const actions = {
@@ -226,14 +226,20 @@ export const actions = {
   async runDryGasProject({commit}, payload) {
     const { data } = await axios.post('/api/runDryGas', payload)
     if (typeof (data) == 'string') {
-      commit(types.SAVE_RES_DRYGAS, JSON.parse(data))      
+      commit(types.SAVE_RES_FASTPLAN, JSON.parse(data))      
     }
     else {
-      commit(types.SAVE_RES_DRYGAS, data)
+      commit(types.SAVE_RES_FASTPLAN, data)
     }
   },
   async runGasCondensateProject({commit}, payload) {
-
+    const { data } = await axios.post('/api/runGasCondensate', payload)
+    if (typeof (data) == 'string') {
+      commit(types.SAVE_RES_FASTPLAN, JSON.parse(data))      
+    }
+    else {
+      commit(types.SAVE_RES_FASTPLAN, data)
+    }
   }
 
 }
