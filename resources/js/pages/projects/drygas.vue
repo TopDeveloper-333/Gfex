@@ -318,7 +318,7 @@ export default {
       this.onSaveProject()
       this.runDryGasProject()
       this.isLoading = false
-      this.$router.replace('fastplanresult');
+      this.$router.replace({ name: 'fastplanresult', params: { previous: 'drygas' } });
     }
   },
   mounted() {

@@ -118,7 +118,8 @@ export default {
       ],
       dataContent: '',
       options: [],
-      graphData: []
+      graphData: [],
+      previousPage: ''
     }
   },
 
@@ -253,11 +254,11 @@ export default {
       modal.style.display = "block";
     },
     onPrevPage: function(event) {
-      this.$router.replace('drygas')
+      this.$router.replace(this.previousPage)
     },
   },
   mounted() {
-    
+    this.previousPage = this.$route.params.previous
     mountExitDialog();
   }
 

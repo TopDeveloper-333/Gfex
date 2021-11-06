@@ -333,8 +333,8 @@ export default {
       this.runGasCondensateProject()
       this.isLoading = false
 
-      this.$router.replace('fastplanresult');
-    }
+      this.$router.replace({ name: 'fastplanresult', params: { previous: 'condensate' } });
+   }
   },
   mounted() {
     mountExitDialog();
