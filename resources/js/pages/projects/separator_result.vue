@@ -168,7 +168,6 @@ export default {
       modal.style.display = "none";
 
       this.isLoading = true
-      this.onSavePage()
       this.onSaveProject()      
       this.isLoading = false
 
