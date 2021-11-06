@@ -1,7 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersist from 'vuex-persist';
 
 Vue.use(Vuex)
+
+const vuexLocalStorage = new VuexPersist({
+  key: 'vuex',
+  storage: window.localStorage, 
+});
 
 // Load store modules dynamically.
 const requireContext = require.context('./modules', false, /.*\.js$/)
@@ -19,5 +25,6 @@ const modules = requireContext.keys()
   }, {})
 
 export default new Vuex.Store({
-  modules
+  modules,
+  plugins: [vuexLocalStorage.plugin]
 })

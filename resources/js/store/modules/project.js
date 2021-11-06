@@ -4,24 +4,24 @@ import * as types from '../mutation-types'
 import Cookies from 'js-cookie'
 
 export const state = {
-  projectList: getCookie('projectList', []),
-  projectName: getCookie('projectName', ""),
-  projectId : getCookie('projectId', -1),
-  isFDP : getCookie('isFDP', "1"),
-  isCondensate: getCookie('isCondensate', "1"),
-  isEconomics: getCookie('isEconomics', true),
-  isSeparatorOptimizer: getCookie('isSeparatorOptimizer', false),
-  sep : getCookie('sep', {}),
-  drygas : getCookie('drygas', {}),
-  surface: getCookie('surface', {}),
-  reservoir: getCookie('reservoir', {}),
-  wellhistory: getCookie('wellhistory', {}),
-  economics: getCookie('economics', {}),
-  operations: getCookie('operations', {}),
-  gascondensate : getCookie('gascondensate', {}),
-  relPerm: getCookie('relPerm', {}),
-  resKGKO: getCookie('resKGKO', []),
-  resOPT: getCookie('resOPT', []),
+  projectList: [],
+  projectName: "",
+  projectId : -1,
+  isFDP : "1",
+  isCondensate: "1",
+  isEconomics: true,
+  isSeparatorOptimizer: false,
+  sep : {},
+  drygas : {},
+  surface: {},
+  reservoir: {},
+  wellhistory: {},
+  economics: {},
+  operations: {},
+  gascondensate : {},
+  relPerm: {},
+  resKGKO: [],
+  resOPT: [],
   resRawDryGas: {}
 }
 
@@ -61,7 +61,6 @@ export const getters = {
 export const mutations = {
   [types.SAVE_PROJECT_LIST] (state, projectList) {
     state.projectList = projectList
-    Cookies.set('projectList', projectList, { expires: 1 })
   },
   [types.LOAD_PROJECT] (state, {projectName, payload}) {
     console.log('LOAD_PROJECT')
@@ -82,78 +81,45 @@ export const mutations = {
     state.relPerm = payload.relPerm
     state.resKGKO = payload.resKGKO
     state.resOPT = payload.resOPT
-
-    Cookies.set('projectName', projectName, { expires: 1 })
-    Cookies.set('isFDP', payload.fastplan.isFDP, { expires: 1 })
-    Cookies.set('isCondensate', payload.fastplan.isCondensate, { expires: 1 })
-    Cookies.set('isEconomics', payload.fastplan.isEconomics, { expires: 1 })
-    Cookies.set('isSeparatorOptimizer', payload.fastplan.isSeparatorOptimizer, { expires: 1 })
-    Cookies.set('sep', payload.sep, { expires: 1 })
-    Cookies.set('drygas', payload.drygas, { expires: 1 })
-    Cookies.set('surface', payload.surface, { expires: 1})
-    Cookies.set('reservoir', payload.reservoir, { expires: 1})
-    Cookies.set('wellhistory', payload.wellhistory, { expires: 1}) 
-    Cookies.set('economics', payload.economics, {expires: 1})
-    Cookies.set('operations', payload.operations, {expires: 1})
-    Cookies.set('gascondensate', payload.gascondensate, { expires: 1 })
-    Cookies.set('relPerm', payload.relPerm, {expires: 1})
-    Cookies.set('resKGKO', payload.resKGKO, {expires: 1})
-    Cookies.set('resOPT', payload.resOPT, {expires: 1})
   },
   [types.SAVE_PROJECT_TYPE] (state, {isFDP, isCondensate, isEconomics, isSeparatorOptimizer}) {
     state.isFDP = isFDP
     state.isCondensate = isCondensate
     state.isEconomics = isEconomics
     state.isSeparatorOptimizer = isSeparatorOptimizer
-
-    Cookies.set('isFDP', isFDP, { expires: 1 })
-    Cookies.set('isCondensate', isCondensate, { expires: 1 })
-    Cookies.set('isEconomics', isEconomics, { expires: 1 })
-    Cookies.set('isSeparatorOptimizer', isSeparatorOptimizer, { expires: 1 })
   },
   [types.SAVE_SEP] (state, sep) {
     state.sep = sep
-    Cookies.set('sep', sep, { expires: 1 })
   },
   [types.SAVE_DRY_GAS] (state, drygas) {
     state.drygas = drygas
-    Cookies.set('drygas', drygas, { expires: 1 })
   },
   [types.SAVE_SURFACE] (state, surface) {
     state.surface = surface
-    Cookies.set('surface', surface, { expires: 1 })
   },
   [types.SAVE_RESERVOIR] (state, reservoir) {
     state.reservoir = reservoir
-    Cookies.set('reservoir', reservoir, { expires: 1}) 
   },
   [types.SAVE_WELLHISTORY] (state, wellhistory) {
     state.wellhistory = wellhistory
-    Cookies.set('wellhistory', wellhistory, { expires: 1})
   },
   [types.SAVE_ECONOMICS] (state, economics) {
     state.economics = economics
-    Cookies.set('economics', economics, {expires: 1})
   },
   [types.SAVE_OPERATIONS] (state, operations) {
     state.operations = operations
-    Cookies.set('operations', operations, { expires: 1})
   },
   [types.SAVE_GAS_CONDENSATE] (state, gascondensate) {
     state.gascondensate = gascondensate
-    Cookies.set('gascondensate', gascondensate, { expires: 1 })
   },
   [types.SAVE_REL_PERM] (state, relPerm) {
     state.relPerm = relPerm
-    Cookies.set('relPerm', relPerm, {expires: 1})
   },
   [types.SAVE_RES_KGKO] (state, resKGKO) {
     state.resKGKO = resKGKO
-    Cookies.set('resKGKO', resKGKO, {expires: 1})
   },
   [types.SAVE_RES_OPTIMIZER] (state, resOPT) {
     state.resOPT = resOPT
-    Cookies.set('resOPT', resOPT, {expires: 1})
   },
   [types.SAVE_RES_DRYGAS] (state, resRawDryGas) {
     state.resRawDryGas = resRawDryGas
