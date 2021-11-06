@@ -15,7 +15,7 @@
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project
               </h3>
-              <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Result</u></p>
+              <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Results</u></p>
 
               <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
                 <div class="col-3">
@@ -35,7 +35,7 @@
               </div>
 
               <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
-                <textarea v-model.lazy="dataContent" style="margin-left:10px"></textarea>
+                <textarea v-model.lazy="dataContent" style="margin-left:10px;color:white;font-weight: 400;"></textarea>
               </div>
 
 
