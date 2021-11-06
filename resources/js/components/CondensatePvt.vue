@@ -121,7 +121,7 @@ export default {
   computed: {
     ...mapState({
       projectName : state => state.project.projectName,
-      gasCondensate : state => state.project.gascondensate,
+      gascondensate : state => state.project.gascondensate,
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
     }),
@@ -173,6 +173,7 @@ export default {
         this.myGasCondensate.gasCondensate2[i][7] = this.gasCondensate2Sheet.getValue('H' + (i+1));
       }
 
+      debugger
       await store.dispatch('project/saveGasCondensate', this.myGasCondensate)
     },
     onPrintGraph: async function(event) {
@@ -385,10 +386,16 @@ export default {
     document.documentElement.style.setProperty('--axis-color', '#ffffff');
     document.documentElement.style.setProperty('--graph-color', '#ffbb78');
 
-    var gasCondensate1Data = [
-      // [,],
-      [5114.0, 0.1]
-    ];
+    // var gasCondensate1Data = [
+    //   // [,],
+    //   [5114.0, 0.1]
+    // ];
+
+    let gasCondensate1Data = []
+    if (this.myGasCondensate != null && this.myGasCondensate.gasCondensate1 != null)
+      gasCondensate1Data.push(this.myGasCondensate.gasCondensate1)
+    else
+      gasCondensate1Data.push([,])
 
     this.gasCondensate1Sheet = jspreadsheet(document.getElementById('gasCondensate1Sheet'), {
         allowInsertRow:false,
@@ -416,18 +423,29 @@ export default {
     });
     this.gasCondensate1Sheet.hideIndex();
 
-    var gasCondensate2Data = [
-      // [,,,,,,,],
-      // [,,,,,,,],
-      // [,,,,,,,],
-      // [,,,,,,,],
-      // [,,,,,,,]
-      [5114.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
-      [4000.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
-      [3000.0, 1.660, 1778.9, 0.958, 57.1,  0.4781, 0.0222, 0.0],
-      [2000.0, 1.409, 1075.8, 1.376, 31.2,  0.7746, 0.0166, 0.0],
-      [1000.0, 1.219, 596.4,  2.636, 25.8,  1.0295, 0.0148, 0.0]
-    ];
+    // var gasCondensate2Data = [
+    //   // [,,,,,,,],
+    //   // [,,,,,,,],
+    //   // [,,,,,,,],
+    //   // [,,,,,,,],
+    //   // [,,,,,,,]
+    //   [5114.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
+    //   [4000.0, 5.094, 7479.4, 0.681, 133.7, 0.0620, 0.0620, 0.0],
+    //   [3000.0, 1.660, 1778.9, 0.958, 57.1,  0.4781, 0.0222, 0.0],
+    //   [2000.0, 1.409, 1075.8, 1.376, 31.2,  0.7746, 0.0166, 0.0],
+    //   [1000.0, 1.219, 596.4,  2.636, 25.8,  1.0295, 0.0148, 0.0]
+    // ];
+
+    debugger
+    let gasCondensate2Data = []
+    if (this.myGasCondensate != null && this.myGasCondensate.gasCondensate2 != null) {
+      this.myGasCondensate.gasCondensate2.forEach(element => {
+        gasCondensate2Data.push(element)      
+      });
+    }
+    else
+      gasCondensate2Data.push([],[],[])
+
 
     this.gasCondensate2Sheet = jspreadsheet(document.getElementById('gasCondensate2Sheet'), {
         allowInsertRow:true,

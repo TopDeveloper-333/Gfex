@@ -115,6 +115,9 @@ export const mutations = {
   [types.SAVE_REL_PERM] (state, relPerm) {
     state.relPerm = relPerm
   },
+  [types.UPDATE_RES_KGKO] (state, resKGKO) {
+    state.resKGKO = resKGKO
+  },
   [types.SAVE_RES_KGKO] (state, resKGKO) {
     state.resKGKO = resKGKO
   },
@@ -191,6 +194,12 @@ export const actions = {
   },
   async saveSEP({commit}, sep) {
     commit(types.SAVE_SEP, sep)
+  },
+  async saveRelPerm({commit}, relPerm) {
+    commit(types.SAVE_REL_PERM, relPerm)
+  },
+  async saveResKGKO({commit}, resKGKO) {
+    commit(types.UPDATE_RES_KGKO, resKGKO)
   },
   async fetchSEP ({commit}, sep) {
     const { data } = await axios.post('/api/requestOPT', sep)

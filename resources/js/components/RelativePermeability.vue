@@ -109,6 +109,8 @@ export default {
       ],
       isLoading: false,
       fullPage: true,
+      myRelPerm: {},
+      myResKGKO: {}
     }
   },
 
@@ -125,10 +127,37 @@ export default {
     ...mapState({
       projectName : state => state.project.projectName,
       resKGKO : state => state.project.resKGKO,
+      relPerm: state => state.project.relPerm,
     }),
   },
 
   methods: {
+    onSavePage: async function(event) {
+      console.log("RelPerm's onSavePage() is called")
+
+      this.myRelPerm = {
+        Sgi: 0, Krgl: 0, Kroi: 0, Sor : 0, Lambda: 2
+      }
+
+      this.myRelPerm.Sgi = this.relativePermeabilitySheet.getValue('A1')
+      this.myRelPerm.Krgl = this.relativePermeabilitySheet.getValue('B1')
+      this.myRelPerm.Kroi = this.relativePermeabilitySheet.getValue('C1')
+      this.myRelPerm.Sor = this.relativePermeabilitySheet.getValue('D1')
+      this.myRelPerm.Lambda = this.relativePermeabilitySheet.getValue('E1')
+
+      this.myResKGKO = []
+      var numRows = this.responseKGKOSheet.options.data.length;
+      for (var i =0; i < numRows; i++) {
+        this.myResKGKO[i] = [0, 0, 0];
+        this.myResKGKO[i][0] = this.responseKGKOSheet.getValue('A' + (i+1));
+        this.myResKGKO[i][1] = this.responseKGKOSheet.getValue('B' + (i+1));
+        this.myResKGKO[i][2] = this.responseKGKOSheet.getValue('C' + (i+1));
+      }
+
+      await store.dispatch('project/saveRelPerm', this.myRelPerm)
+      await store.dispatch('project/saveResKGKO', this.myResKGKO)
+
+    },
     onOK: function(event) {
         var modal = document.getElementById("plotModal2");
         modal.style.display = "none";
@@ -332,10 +361,19 @@ export default {
   },
 
   mounted() {
-    var relativePermeabilityData = [
-      // [,],
-      [0, 0.0, 1.0, 0.35, 2.0]
-    ];
+    this.myRelPerm = this.relPerm
+    this.myResKGKO = this.resKGKO
+
+    // var relativePermeabilityData = [
+    //   // [,],
+    //   [0, 0.0, 1.0, 0.35, 2.0]
+    // ];
+
+    let relativePermeabilityData = []
+    if (this.myRelPerm != null)
+      relativePermeabilityData.push(this.myRelPerm)
+    else
+      relativePermeabilityData.push([,,,,])
 
     this.relativePermeabilitySheet = jspreadsheet(document.getElementById('relativePermeabilitySheet'), {
         data:relativePermeabilityData,
@@ -381,8 +419,17 @@ export default {
     });
     this.relativePermeabilitySheet.hideIndex();
 
+    let resKGKOData = []
+    if (this.myResKGKO != null) {
+      this.myResKGKO.forEach(element => {
+        resKGKOData.push(element)      
+      });
+    }
+    else
+      resKGKOData.push([],[],[])
+
     this.responseKGKOSheet = jspreadsheet(document.getElementById('responseKGKOSheet'), {
-        data:this.resKGKO,
+        data:resKGKOData,
         allowInsertRow:true,
         allowManualInsertRow:false,
         allowInsertColumn:false,
@@ -412,6 +459,8 @@ export default {
         ],
     });
     this.responseKGKOSheet.hideIndex();
+
+
 
     mountPlotDialog();
   }

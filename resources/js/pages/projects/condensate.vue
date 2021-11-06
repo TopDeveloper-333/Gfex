@@ -2,6 +2,8 @@
   <div class="row">
     <div class="m-auto">
     <form>
+      <loading :active.sync="isLoading" 
+             :is-full-page="fullPage"></loading>
       <div class="card mb-3">
         <div class="card-header gf-header">
           <img src="/assets/image/LOGO_GFEX.png" style="max-width:150px;max-height:180px;margin-left:-7px;float:left">
@@ -17,7 +19,7 @@
                               v-bind:isHidden="false"
                               @changedValidate="updatePVTValidate($event)">
               </condensate-pvt>
-              <relative-permeability v-show="screenType==='RELPERM_SCREEN'" 
+              <relative-permeability v-show="screenType==='RELPERM_SCREEN'" ref="relPermControl"
                               v-bind:isHidden="false"
                               @changedValidate="updateRelPermValidate($event)">
               </relative-permeability>
@@ -103,6 +105,8 @@ import WellHistory from '~/components/WellHistory.vue';
 import Economics from '~/components/Economics.vue';
 import Operations from '~/components/Operations.vue';
 import RelativePermeability from '~/components/RelativePermeability.vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 const PVT_SCREEN = "PVT_SCREEN"
 const RELPERM_SCREEN = "RELPERM_SCREEN"
@@ -135,7 +139,8 @@ export default {
     Surface,
     Economics,
     Operations,
-    RelativePermeability
+    RelativePermeability,
+    Loading
   },
 
   data() {
@@ -150,7 +155,9 @@ export default {
       isReservoirValidate: true,
       isWellHistoryValidate: true,
       isEconomicsValidate: true,
-      isOperationValidate: true
+      isOperationValidate: true,
+      isLoading: false,
+      fullPage: true,
     }
   },
 
@@ -248,6 +255,15 @@ export default {
     updateOperationsValidate(operations) {
       this.isOperationValidate = operations
     },
+    onSavePage: async function() {
+      this.$refs.condensateControl.onSavePage()
+      this.$refs.relPermControl.onSavePage()
+      this.$refs.surfaceControl.onSavePage()
+      this.$refs.reservoirControl.onSavePage()
+      this.$refs.wellHistoryControl.onSavePage()
+      this.$refs.economicsControl.onSavePage()
+      this.$refs.operationsControl.onSavePage()
+    },
     onSaveAs: function(event) {
       this.isSaveAs = true
       this.hideSaveAsButton = true
@@ -297,9 +313,19 @@ export default {
       modal.style.display = "block";
     },
     onPrevPage: function(event) {
+     
+      this.isLoading = true
+      this.onSavePage()
+      this.isLoading = false
+
       this.$router.replace('fastplan')
     },
     onNextPage: function(event) {
+      this.isLoading = true
+      this.onSavePage()
+      this.onSaveProject()
+      this.runGasCondensateProject()
+      this.isLoading = false
 
     }
   },
