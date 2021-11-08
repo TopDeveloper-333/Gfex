@@ -357,8 +357,7 @@ export default {
   },
 
   mounted() {
-    debugger
-
+    
     // Reservoir Data (Well History)
     var reservoirHData = [
       [10000, 5114]

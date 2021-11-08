@@ -401,7 +401,7 @@ class ProjectController extends Controller
 
                 $string = preg_replace('/\s+/', ',', $line);
                 $pieces = explode(',', $string);
-                if (count($pieces) == 31) {
+                if (count($pieces) == 32) {
                     //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
                     {
                         array_push($res, 
@@ -468,11 +468,15 @@ class ProjectController extends Controller
 
     public function runDryGas(Request $request)
     {
+
         // determine workspace dir
         $workspace_dir = $request->user()->id;
         $id = $request->get('projectId');
 
         error_log('runDryGas: id = '. $id. ' Dir = ' . $workspace_dir);
+        Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
 
         //
         // Get content
@@ -593,6 +597,9 @@ class ProjectController extends Controller
         $id = $request->get('projectId');
 
         error_log('runGasCondensate: id = '. $id. ' Dir = ' . $workspace_dir);
+        Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
 
         //
         // Get content

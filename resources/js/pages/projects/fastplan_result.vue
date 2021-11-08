@@ -305,5 +305,7 @@ textarea{
     overflow-x: auto;
     resize: none;
     background-color: green;
+    font-family: monospace !important;
+    font-size: 1.25rem !important;
 }
 </style>
