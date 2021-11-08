@@ -552,7 +552,7 @@ class ProjectController extends Controller
         //
         // create GAS_PVT.in file inside workspace 
         //
-        $this->createDryGas($gaspvt_file_path, $content->drygas);
+        $this->createDryGas($workspace_dir, $content->drygas);
 
         //
         // create SURFACE.in file inside workspace 
