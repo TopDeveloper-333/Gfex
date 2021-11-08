@@ -35,7 +35,7 @@
 
       <div class="row" style="margin-bottom:24px">
         <span class="gf-item" style="width:200px">Well #{{entry.id + 1}} :</span>
-        <input class="form-control gf-control" style="width:300px;background:yellow" type="text">
+        <input class="form-control gf-control" style="width:300px;background:yellow;border-color:black" type="text">
       </div>
 
       <multiselect v-model="entry.option" :options="testWellDataOptions" @select="onChangedOption" style="width:460px"
@@ -79,6 +79,7 @@ export default {
 
   data() {
     return {
+      myWellHistory: {},
       reservoirDataHSheet: null,
       dualPorosityHSheet: null,
       historyForecastSheet: null,
@@ -138,6 +139,7 @@ export default {
 
   methods: {
     onSavePage: async function(event) {
+      console.log("WellHistory's onSavePage() is called ")
 
     },
     onChangedOption: function(selectedOption, id) {
@@ -357,7 +359,8 @@ export default {
   },
 
   mounted() {
-    
+    this.myWellHistory = this.wellhistory
+
     // Reservoir Data (Well History)
     var reservoirHData = [
       [10000, 5114]

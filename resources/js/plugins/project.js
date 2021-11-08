@@ -67,7 +67,7 @@ Vue.mixin({
       payload.isEconomics = this.isEconomics
       payload.isSeparatorOptimizer = this.isSeparatorOptimizer
       payload.sep = this.sep
-      // payload.drygas = this.drygas
+      payload.drygas = this.drygas
       payload.surface = this.surface
       payload.reservoir = this.reservoir
       // payload.wellhistory = this.wellhistory

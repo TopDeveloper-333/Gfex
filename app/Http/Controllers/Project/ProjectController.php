@@ -155,9 +155,13 @@ class ProjectController extends Controller
         return response()->json([]);
     }
 
-    private function createFastPlan($filePath, $fastplan)
+    private function createFastPlan($workspace_dir, $fastplan)
     {
+        $filePath = $workspace_dir . '/FASTPLAN.in';
         Storage::disk('executables')->delete($filePath);
+
+        $backupPath = $workspace_dir . '/FASTPLAN.bak';
+        Storage::disk('executables')->delete($backupPath);
 
         $content = '';
 
@@ -184,9 +188,12 @@ class ProjectController extends Controller
         error_log('Finished to write FASTPLAN.in');
     }
 
-    private function createGasPVT($filePath, $drygas) 
+    private function createDryGas($workspace_dir, $drygas) 
     {
+        $filePath = $workspace_dir . '/GAS_PVT.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/GAS_PVT.bak';
+        Storage::disk('executables')->delete($backupPath);
 
         $content = '';
         $content = $content . $drygas['standardConditions']['Psc'] . '  ';
@@ -209,9 +216,12 @@ class ProjectController extends Controller
         error_log('Finished to write GAS_PVT.in');
     }
 
-    private function createGasCondensate($filePath, $gascondensate) 
+    private function createGasCondensate($workspace_dir, $gascondensate) 
     {
+        $filePath = $workspace_dir . '/PINE.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/PINE.bak';
+        Storage::disk('executables')->delete($backupPath);
 
         $content = '';
         $content = $content . $gascondensate['gasCondensate1']['Psat'] . '  ';
@@ -232,9 +242,12 @@ class ProjectController extends Controller
         error_log('Finished to write PINE.in');
     }
 
-    private function createKRSG($filePath, $krsg) 
+    private function createKRSG($workspace_dir, $krsg) 
     {
+        $filePath = $workspace_dir . '/KRSG.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/KRSG.bak';
+        Storage::disk('executables')->delete($backupPath);
 
         $content = '';
 
@@ -248,9 +261,13 @@ class ProjectController extends Controller
         error_log('Finished to write KRSG.in');
     }
 
-    private function createSurface($filePath, $surface)
+    private function createSurface($workspace_dir, $surface)
     {
+        $filePath = $workspace_dir . '/SURFACE.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/SURFACE.bak';
+        Storage::disk('executables')->delete($backupPath);
+
         $content = '';
 
         $content = $content . $surface['tubingProperties']['Length'] . '  ';
@@ -283,9 +300,13 @@ class ProjectController extends Controller
         error_log('Finished to write SURFACE.in');
     }
 
-    private function createReservoir($filePath, $reservoir)
+    private function createReservoir($workspace_dir, $reservoir)
     {
+        $filePath = $workspace_dir . '/RESERVOIR.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/RESERVOIR.bak';
+        Storage::disk('executables')->delete($backupPath);
+
         $content = '';
 
         $content = $content . $reservoir['reservoirPVT']['Viscosity'] . '  ';
@@ -334,9 +355,13 @@ class ProjectController extends Controller
         error_log('Finished to write RESERVOIR.in');
     }
 
-    private function createEconomics($filePath, $economics)
+    private function createEconomics($workspace_dir, $economics)
     {
+        $filePath = $workspace_dir . '/ECONOMICS.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/ECONOMICS.bak';
+        Storage::disk('executables')->delete($backupPath);
+
         $content = '';
 
         $content = $content . $economics['economics1']['PriceOfGas'] . '  ';
@@ -363,9 +388,13 @@ class ProjectController extends Controller
         error_log('Finished to write ECONOMICS.in');
     }
 
-    private function createOperations($filePath, $operations)
+    private function createOperations($workspace_dir, $operations)
     {
+        $filePath = $workspace_dir . '/OPERATIONS.in';
         Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/OPERATIONS.bak';
+        Storage::disk('executables')->delete($backupPath);
+
         $content = '';
 
         $content = $content . $operations['operationalConstraints']['StartOfOperations'] . '  ';
@@ -517,41 +546,35 @@ class ProjectController extends Controller
         
         //
         // create FASTPLAN.in file inside workspace 
-        //
-        $fastplan_file_path = $workspace_dir . '/FASTPLAN.in';
-        $this->createFastPlan($fastplan_file_path, $content->fastplan);
+        //        
+        $this->createFastPlan($workspace_dir, $content->fastplan);
 
         //
         // create GAS_PVT.in file inside workspace 
         //
-        $gaspvt_file_path = $workspace_dir . '/GAS_PVT.in';
-        $this->createGasPVT($gaspvt_file_path, $content->drygas);
+        $this->createDryGas($gaspvt_file_path, $content->drygas);
 
         //
         // create SURFACE.in file inside workspace 
         //
-        $surface_file_path = $workspace_dir . '/SURFACE.in';
-        $this->createSurface($surface_file_path, $content->surface);
+        $this->createSurface($workspace_dir, $content->surface);
 
         //
         // create RESERVOIR.in file inside workspace 
         //
-        $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
-        $this->createReservoir($reservoir_file_path, $content->reservoir);
+        $this->createReservoir($workspace_dir, $content->reservoir);
 
         //
         // create ECONOMICS.in file inside workspace
         //
         if ($content->fastplan->isEconomics == true) {
-            $economics_file_path = $workspace_dir . '/ECONOMICS.in';
-            $this->createEconomics($economics_file_path, $content->economics);
+            $this->createEconomics($workspace_dir, $content->economics);
         }
 
         //
         // create OPERATIONS.in file inside workspace 
         //
-        $operations_file_path = $workspace_dir . '/OPERATIONS.in';
-        $this->createOperations($operations_file_path, $content->operations);
+        $this->createOperations($workspace_dir, $content->operations);
 
         //
         // launch ConsoleApplicationFDPHIST.exe
@@ -610,7 +633,7 @@ class ProjectController extends Controller
         $content->fastplan->isEconomics = $request->get('isEconomics');
         $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
         // $content->sep = $request->get('sep');
-        // $content->drygas = $request->get('drygas');
+        $content->drygas = $request->get('drygas');
         $content->surface = $request->get('surface');
         $content->reservoir = $request->get('reservoir');
         // $content->wellhistory = $request->get('wellhistory');
@@ -641,45 +664,44 @@ class ProjectController extends Controller
         //
         // create FASTPLAN.in file inside workspace 
         //
-        $fastplan_file_path = $workspace_dir . '/FASTPLAN.in';
-        $this->createFastPlan($fastplan_file_path, $content->fastplan);
+        $this->createFastPlan($workspace_dir, $content->fastplan);
+
+        //
+        // create DRY_GAS.in file inside workspace
+        //
+        $this->createDryGas($workspace_dir, $content->drygas);
 
         //
         // create PINE.in file inside workspace 
         //
-        $pine_file_path = $workspace_dir . '/PINE.in';
-        $this->createGasCondensate($pine_file_path, $content->gascondensate);
+        $this->createGasCondensate($workspace_dir, $content->gascondensate);
 
         //
         // create KRSG.in file inside workspace 
         //
-        $krsg_file_path = $workspace_dir . '/KRSG.in';
-        $this->createKRSG($krsg_file_path, $content->resKGKO);
+        $this->createKRSG($workspace_dir, $content->resKGKO);
+
         //
         // create SURFACE.in file inside workspace 
         //
-        $surface_file_path = $workspace_dir . '/SURFACE.in';
-        $this->createSurface($surface_file_path, $content->surface);
+        $this->createSurface($workspace_dir, $content->surface);
 
         //
         // create RESERVOIR.in file inside workspace 
         //
-        $reservoir_file_path = $workspace_dir . '/RESERVOIR.in';
-        $this->createReservoir($reservoir_file_path, $content->reservoir);
+        $this->createReservoir($workspace_dir, $content->reservoir);
 
         //
         // create ECONOMICS.in file inside workspace
         //
         if ($content->fastplan->isEconomics == true) {
-            $economics_file_path = $workspace_dir . '/ECONOMICS.in';
-            $this->createEconomics($economics_file_path, $content->economics);
+            $this->createEconomics($workspace_dir, $content->economics);
         }
 
         //
         // create OPERATIONS.in file inside workspace 
-        //
-        $operations_file_path = $workspace_dir . '/OPERATIONS.in';
-        $this->createOperations($operations_file_path, $content->operations);
+        //        
+        $this->createOperations($workspace_dir, $content->operations);
 
         //
         // launch ConsoleApplicationFDPHIST.exe
