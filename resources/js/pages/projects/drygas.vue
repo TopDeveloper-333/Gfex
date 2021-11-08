@@ -316,7 +316,13 @@ export default {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
-      this.runDryGasProject()
+
+      debugger
+      if (this.isFDP == '1')
+        this.runDryGasProject()
+      else 
+        this.runMonitoringProject()
+        
       this.isLoading = false
       this.$router.replace({ name: 'fastplanresult', params: { previous: 'drygas' } });
     }

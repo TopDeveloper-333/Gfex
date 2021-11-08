@@ -232,6 +232,15 @@ export const actions = {
       commit(types.SAVE_RES_FASTPLAN, data)
     }
   },
+  async runMonitoringProject({commit}, payload) {
+    const { data } = await axios.post('/api/runMonitoring', payload)
+    if (typeof (data) == 'string') {
+      commit(types.SAVE_RES_FASTPLAN, JSON.parse(data))      
+    }
+    else {
+      commit(types.SAVE_RES_FASTPLAN, data)
+    }
+  },
   async runGasCondensateProject({commit}, payload) {
     const { data } = await axios.post('/api/runGasCondensate', payload)
     if (typeof (data) == 'string') {

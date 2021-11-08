@@ -116,7 +116,6 @@ export default {
 
       if (val > oldVal) {
         // add new entry to wellsNetwork
-        debugger        
         for (let index = 0; index < (val - oldVal); index++) {          
           let name = null
           let option = null
@@ -241,7 +240,6 @@ export default {
 
     },
     onRemovedOption: function(selectedOption, id) {
-      debugger
       var index = id.replace('option-','');
 
       if (index >= this.wellsNetwork.length) {
@@ -253,7 +251,6 @@ export default {
     },
     onChangedOption: function(selectedOption, id) {
 
-      debugger
       var index = id.replace('option-','');
 
       if (index >= this.wellsNetwork.length) {
@@ -438,7 +435,6 @@ export default {
         ]
       }
 
-      debugger
       let data = []
       let data1 = []
       if (optionValue == 1 && this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].cnModel != null) {
@@ -679,7 +675,6 @@ export default {
 
     // update wellNetwork in Watched function more....
     this.$nextTick(function () {
-      debugger
       for (let index = 0; index < this.numberOfWells; index++) {
         this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
       }

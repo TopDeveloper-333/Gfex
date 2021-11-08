@@ -412,6 +412,79 @@ class ProjectController extends Controller
         error_log('Finished to write OPERATIONS.in');
     }
 
+    private function createWellHistory($workspace_dir, $wellhistory)
+    {
+        $filePath = $workspace_dir . '/WELL_HISTORY.in';
+        Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/WELL_HISTORY.bak';
+        Storage::disk('executables')->delete($backupPath);
+
+        $content = '';
+
+        $content = $content . $wellhistory['historyForecastRun']['FirstYearOfProduction'] . '  ';
+        $content = $content . $wellhistory['historyForecastRun']['LifeOfTheField'] . PHP_EOL;
+
+        $content = $content . $wellhistory['operationsData']['SalesPressure'] . '  ';
+        $content = $content . $wellhistory['operationsData']['PressureLimit'] . '  ';
+        $content = $content . $wellhistory['operationsData']['EconomicsRate'] . '  ';
+        $content = $content . $wellhistory['operationsData']['QgtotInitial'] . PHP_EOL;
+
+        $content = $content . $wellhistory['reservoirParameters']['GIIP'] . '  ';
+        $content = $content . $wellhistory['reservoirParameters']['Pr'] . PHP_EOL;
+
+        $content = $content . $wellhistory['hasDualPorosity'] . PHP_EOL;
+
+        if (intval($wellhistory['hasDualPorosity']) == 1) {
+            $content = $content . $wellhistory['dualPorosity']['km'] . '  ';
+            $content = $content . $wellhistory['dualPorosity']['hm'] . '  ';
+            $content = $content . $wellhistory['dualPorosity']['ShapeFactorSigma'] . '  ';
+            $content = $content . $wellhistory['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
+        }
+
+        $content = $content . $wellhistory['numberOfWells'] . PHP_EOL;
+        foreach ($wellhistory['wellsNetwork'] as $value) {
+            $content = $content . $value['wellTestData'] . PHP_EOL;
+
+            if ($value['wellTestData'] == 1) {
+                $content = $content . $value['cnModel']['C'] . '  ';
+                $content = $content . $value['cnModel']['n'] . '  ';
+                $content = $content . $value['cnModel']['WellToTiePoint'] . PHP_EOL;    
+
+                $content = $content . $value['cnModel1']['PressureAtShutIn'] . '  ';
+                $content = $content . $value['cnModel1']['PressureAtReOpening'] . PHP_EOL;    
+            }
+            else if ($value['wellTestData'] == 2) {
+                $content = $content . $value['verticalModel']['k'] . '  ';
+                $content = $content . $value['verticalModel']['Porosity'] . '  ';
+                $content = $content . $value['verticalModel']['NetPay'] . '  ';
+                $content = $content . $value['verticalModel']['DrainageArea'] . '  ';
+                $content = $content . $value['verticalModel']['WellboreID'] . '  ';
+                $content = $content . $value['verticalModel']['Skin'] . '  ';
+                $content = $content . $value['verticalModel']['WellToTiePoint'] . PHP_EOL;    
+
+                $content = $content . $value['verticalModel1']['PressureAtShutIn'] . '  ';
+                $content = $content . $value['verticalModel1']['PressureAtReOpening'] . PHP_EOL;    
+            }
+            else if ($value['wellTestData'] == 3) {
+                $content = $content . $value['horizontalModel']['k'] . '  ';
+                $content = $content . $value['horizontalModel']['Porosity'] . '  ';
+                $content = $content . $value['horizontalModel']['NetPay'] . '  ';
+                $content = $content . $value['horizontalModel']['DrainageArea'] . '  ';
+                $content = $content . $value['horizontalModel']['WellboreID'] . '  ';
+                $content = $content . $value['horizontalModel']['Skin'] . '  ';
+                $content = $content . $value['horizontalModel']['WellLength'] . '  ';
+                $content = $content . $value['horizontalModel']['KvKh'] . '  ';
+                $content = $content . $value['horizontalModel']['WellToTiePoint'] . PHP_EOL;    
+
+                $content = $content . $value['horizontalModel1']['PressureAtShutIn'] . '  ';
+                $content = $content . $value['horizontalModel1']['PressureAtReOpening'] . PHP_EOL;    
+            }
+        }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write WELL_HISTORY.in');
+    }
+
     private function parsePlotOf($filePath)
     {
         $res = array();
@@ -590,6 +663,109 @@ class ProjectController extends Controller
 
         //
         // Read Output Files: PLOT_OF.OUT, RESULTS_OF.OUT, ECONOMICS.OUT 
+        // 
+        $res = [];
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/PLOT_OF.OUT')) {
+            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');
+            $res['PLOT_OF'] = htmlspecialchars($plotof_content);
+            $res['RES_PLOT_OF'] = $this->parsePlotOf($workspace_path.'/PLOT_OF.OUT');
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/ECONOMICS.OUT')) {
+            $economics_content = Storage::disk('executables')->get($workspace_dir . '/ECONOMICS.OUT');            
+            $res['ECONOMICS'] = htmlspecialchars($economics_content);
+            $res['RES_ECONOMICS'] = $this->parseEconomics($workspace_path.'/ECONOMICS.OUT');
+        }
+
+        if (Storage::disk('executables')->exists($workspace_dir . '/RESULTS_OF.OUT')) {
+            $resultof_content = Storage::disk('executables')->get($workspace_dir . '/RESULTS_OF.OUT');            
+            $res['RESULT_OF'] = htmlspecialchars($resultof_content);
+        }
+
+        return response()->json($res);
+    }
+
+    public function runMonitoring(Request $request)
+    {
+        // determine workspace dir
+        $workspace_dir = $request->user()->id;
+        $id = $request->get('projectId');
+
+        error_log('runDryGas: id = '. $id. ' Dir = ' . $workspace_dir);
+        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
+
+        //
+        // Get content
+        //
+        $content = json_decode(json_encode($this->defaultProjectContent()));
+        $content->fastplan->isFDP = $request->get('isFDP');
+        $content->fastplan->isCondensate = $request->get('isCondensate');
+        $content->fastplan->isEconomics = $request->get('isEconomics');
+        $content->fastplan->isSeparatorOptimizer = $request->get('isSeparatorOptimizer');
+        // $content->sep = $request->get('sep');
+        $content->drygas = $request->get('drygas');
+        $content->surface = $request->get('surface');
+        // $content->reservoir = $request->get('reservoir');
+        $content->wellhistory = $request->get('wellhistory');
+        // $content->economics = $request->get('economics');
+        // $content->operations = $request->get('operations');
+        // $content->relPerm = $request->get('relPerm');
+        // $content->gascondensate = $request->get('gascondensate');
+        // $content->resKGKO = $request->get('resKGKO');
+
+        //
+        // create workspace directory with user_id
+        //
+        $cmd_create_dir = 'mkdir ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_create_dir);
+
+        //
+        // copy ConsoleApplicationFDPHIST.exe into workspace directory
+        //
+        $cmd_copy_app = 'copy ConsoleApplicationFDPHIST.exe ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_app);
+        if ($output->successful() == false)  {
+            error_log('Error happened to copy ConsoleApplicationFDPHIST.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+        
+        //
+        // create FASTPLAN.in file inside workspace 
+        //        
+        $this->createFastPlan($workspace_dir, $content->fastplan);
+
+        //
+        // create GAS_PVT.in file inside workspace 
+        //
+        $this->createDryGas($workspace_dir, $content->drygas);
+
+        //
+        // create SURFACE.in file inside workspace 
+        //
+        $this->createSurface($workspace_dir, $content->surface);
+
+        //
+        // create OPERATIONS.in file inside workspace 
+        //
+        $this->createWellHistory($workspace_dir, $content->wellhistory);
+
+        //
+        // launch ConsoleApplicationFDPHIST.exe
+        //
+        $workspace_path = 'executables/' . $workspace_dir;
+        $output = Terminal::in(storage_path($workspace_path))->run('ConsoleApplicationFDPHIST.exe');
+        if ($output->successful() == false)  {
+            error_log('Error happened to launch ConsoleApplicationFDPHIST.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+
+        //
+        // Read Output Files: WELL1.out, WELL2.out .....
         // 
         $res = [];
 

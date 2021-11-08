@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('saveProject', [ProjectController::class, 'saveProject']);
     Route::post('runDryGas', [ProjectController::class, 'runDryGas']);
     Route::post('runGasCondensate', [ProjectController::class, 'runGasCondensate']);
+    Route::post('runMonitoring', [ProjectController::class, 'runMonitoring']);
 
     Route::post('requestKGKO', [CoreyController::class, 'requestKGKO']);
     Route::post('requestOPT', [SepController::class, 'requestOPT']);
