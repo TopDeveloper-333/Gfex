@@ -11,7 +11,7 @@
       <div id="operationsDataSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+    <!-- <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Reservoir Data</p>
       <div id="reservoirDataHSheet"></div>
     </div>
@@ -20,7 +20,7 @@
       <p class="gf-item">Dual-Porosity</p>
       <multiselect v-model="dualPorosity" :options="dualPorosityOptions" track-by="name" label="name" placeholder="Select option"></multiselect>
       <div id="dualPorosityHSheet" style="margin-top:1rem" v-show="dualPorosity != null && dualPorosity.value ==1"></div>
-    </div>
+    </div> -->
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Number of Wells in Network (Present & Futures)</p>
@@ -80,15 +80,15 @@ export default {
   data() {
     return {
       myWellHistory: {},
-      reservoirDataHSheet: null,
-      dualPorosityHSheet: null,
+      // reservoirDataHSheet: null,
+      // dualPorosityHSheet: null,
       historyForecastSheet: null,
       operationsDataSheet: null,
-      dualPorosity: {name: "No", value: 0},
-      dualPorosityOptions: [
-        {name: "Yes", value: 1},
-        {name: "No", value: 0}
-      ],
+      // dualPorosity: {name: "No", value: 0},
+      // dualPorosityOptions: [
+      //   {name: "Yes", value: 1},
+      //   {name: "No", value: 0}
+      // ],
       numberOfWells: 0,
       wellsNetwork: [],
       testWellDataOptions: [
@@ -159,13 +159,13 @@ export default {
       console.log("WellHistory's onSavePage() is called ")
     
       this.myWellHistory = {
-        reservoirParameters: {
-          GIIP: 0, Pr : 0,
-        },
-        hasDualPorosity: 0,
-        dualPorosity: {
-          km: 0, hm: 0, ShapeFactorSigma: 0, MatrixGIIP: 0,
-        },
+        // reservoirParameters: {
+        //   GIIP: 0, Pr : 0,
+        // },
+        // hasDualPorosity: 0,
+        // dualPorosity: {
+        //   km: 0, hm: 0, ShapeFactorSigma: 0, MatrixGIIP: 0,
+        // },
         historyForecastRun: {
           FirstYearOfProduction: 0, LifeOfTheField: 0,
         },
@@ -178,15 +178,15 @@ export default {
         ]
       }
 
-      this.myWellHistory.reservoirParameters.GIIP = this.reservoirDataHSheet.getValue('A1')
-      this.myWellHistory.reservoirParameters.Pr = this.reservoirDataHSheet.getValue('B1')
+      // this.myWellHistory.reservoirParameters.GIIP = this.reservoirDataHSheet.getValue('A1')
+      // this.myWellHistory.reservoirParameters.Pr = this.reservoirDataHSheet.getValue('B1')
 
-      this.myWellHistory.hasDualPorosity = this.dualPorosity.value
+      // this.myWellHistory.hasDualPorosity = this.dualPorosity.value
 
-      this.myWellHistory.dualPorosity.km = this.dualPorosityHSheet.getValue('A1')
-      this.myWellHistory.dualPorosity.hm = this.dualPorosityHSheet.getValue('B1')
-      this.myWellHistory.dualPorosity.ShapeFactorSigma = this.dualPorosityHSheet.getValue('C1')
-      this.myWellHistory.dualPorosity.MatrixGIIP = this.dualPorosityHSheet.getValue('D1')
+      // this.myWellHistory.dualPorosity.km = this.dualPorosityHSheet.getValue('A1')
+      // this.myWellHistory.dualPorosity.hm = this.dualPorosityHSheet.getValue('B1')
+      // this.myWellHistory.dualPorosity.ShapeFactorSigma = this.dualPorosityHSheet.getValue('C1')
+      // this.myWellHistory.dualPorosity.MatrixGIIP = this.dualPorosityHSheet.getValue('D1')
 
       this.myWellHistory.historyForecastRun.FirstYearOfProduction = this.historyForecastSheet.getValue('A1')
       this.myWellHistory.historyForecastRun.LifeOfTheField = this.historyForecastSheet.getValue('B1')
@@ -515,86 +515,86 @@ export default {
     // var reservoirHData = [
     //   [10000, 5114]
     // ];   
-    let reservoirHData = []
-    if (this.myWellHistory != null && this.myWellHistory.reservoirParameters != null)
-      reservoirHData.push(this.myWellHistory.reservoirParameters)
-    else
-      reservoirHData.push([,])
+    // let reservoirHData = []
+    // if (this.myWellHistory != null && this.myWellHistory.reservoirParameters != null)
+    //   reservoirHData.push(this.myWellHistory.reservoirParameters)
+    // else
+    //   reservoirHData.push([,])
 
-    this.reservoirDataHSheet = jspreadsheet(document.getElementById('reservoirDataHSheet'), {
-        data:reservoirHData,
-        allowInsertRow:false,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:false,
-        allowDeleteColumn:false,
-        columns: [
-            {
-                type: 'numeric',
-                title:'GIIP (Bcf)',
-                width: 140,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Pr (psia)',
-                width: 140,
-                decimal:','
-            },
-        ],
-        updateTable: this.validationTable
-    });
-    this.reservoirDataHSheet.hideIndex();
+    // this.reservoirDataHSheet = jspreadsheet(document.getElementById('reservoirDataHSheet'), {
+    //     data:reservoirHData,
+    //     allowInsertRow:false,
+    //     allowManualInsertRow:false,
+    //     allowInsertColumn:false,
+    //     allowManualInsertColumn:false,
+    //     allowDeleteRow:false,
+    //     allowDeleteColumn:false,
+    //     columns: [
+    //         {
+    //             type: 'numeric',
+    //             title:'GIIP (Bcf)',
+    //             width: 140,
+    //             decimal:','
+    //         },
+    //         {
+    //             type: 'numeric',
+    //             title:'Pr (psia)',
+    //             width: 140,
+    //             decimal:','
+    //         },
+    //     ],
+    //     updateTable: this.validationTable
+    // });
+    // this.reservoirDataHSheet.hideIndex();
 
     // dualPorosity data
     // var dualPorosityData = [
     //   [1, 300, 0.00001, 15000]
     // ];
 
-    let dualPorosityData = []
-    if (this.myWellHistory != null && this.myWellHistory.dualPorosity != null)
-      dualPorosityData.push(this.myWellHistory.dualPorosity)
-    else
-      dualPorosityData.push([,,,])
+    // let dualPorosityData = []
+    // if (this.myWellHistory != null && this.myWellHistory.dualPorosity != null)
+    //   dualPorosityData.push(this.myWellHistory.dualPorosity)
+    // else
+    //   dualPorosityData.push([,,,])
 
-    this.dualPorosityHSheet = jspreadsheet(document.getElementById('dualPorosityHSheet'), {
-        data:dualPorosityData,
-        allowInsertRow:false,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:false,
-        allowDeleteColumn:false,
-        columns: [
-            {
-                type: 'numeric',
-                title:'km (md)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'hm (ft)',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Sigma',
-                width: 120,
-                decimal:','
-            },
-            {
-                type: 'numeric',
-                title:'Matrix GIIP (bcf)',
-                width: 220,
-                decimal:','
-            },
-        ],
-        updateTable: this.validationTable
-    });
-    this.dualPorosityHSheet.hideIndex();
+    // this.dualPorosityHSheet = jspreadsheet(document.getElementById('dualPorosityHSheet'), {
+    //     data:dualPorosityData,
+    //     allowInsertRow:false,
+    //     allowManualInsertRow:false,
+    //     allowInsertColumn:false,
+    //     allowManualInsertColumn:false,
+    //     allowDeleteRow:false,
+    //     allowDeleteColumn:false,
+    //     columns: [
+    //         {
+    //             type: 'numeric',
+    //             title:'km (md)',
+    //             width: 120,
+    //             decimal:','
+    //         },
+    //         {
+    //             type: 'numeric',
+    //             title:'hm (ft)',
+    //             width: 120,
+    //             decimal:','
+    //         },
+    //         {
+    //             type: 'numeric',
+    //             title:'Sigma',
+    //             width: 120,
+    //             decimal:','
+    //         },
+    //         {
+    //             type: 'numeric',
+    //             title:'Matrix GIIP (bcf)',
+    //             width: 220,
+    //             decimal:','
+    //         },
+    //     ],
+    //     updateTable: this.validationTable
+    // });
+    // this.dualPorosityHSheet.hideIndex();
 
     // History & Broadcast data
     // var historyForecastData = [

@@ -18,22 +18,22 @@
       <div id="dualPorositySheet" style="margin-top:1rem"  v-show="dualPorosity != null && dualPorosity.value ==1"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+    <div style="display:flex;margin-bottom:6px;text-align:left" v-show="isFDP=='1'" class="row">
       <p class="gf-item">Well-Test Data</p>
       <multiselect v-model="testWellData" :options="testWellDataOptions" track-by="name" label="name" placeholder="Select option"></multiselect>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 1">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="isFDP == '1' && testWellData != null && testWellData.value == 1 ">
       <p class="gf-item">C & n Model</p>
       <div id="cnModelSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 2">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="isFDP == '1' && testWellData != null && testWellData.value == 2">
       <p class="gf-item">Vertical Model</p>
       <div id="verticalModelSheet"></div>
     </div>
 
-    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="testWellData != null && testWellData.value == 3">
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="isFDP == '1' && testWellData != null && testWellData.value == 3">
       <p class="gf-item">Horizontal Model</p>
       <div id="horizontalModelSheet"></div>
     </div>
@@ -103,6 +103,7 @@ export default {
 
   computed: {
     ...mapState({
+      isFDP: state => state.project.isFDP,
       reservoir : state => state.project.reservoir,
     }),
     isDataValidate: function() {
@@ -239,6 +240,11 @@ export default {
     validateCnModel:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
 
+      if (this.isFDP != '1') {
+        this.isCnModelValidate = true
+        return
+      }
+      
       if (cellName == 'A1') {
         // this means start to update table
         this.isCnModelValidate = true
@@ -256,6 +262,11 @@ export default {
     validateVerticalModel:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
 
+      if (this.isFDP != '1') {
+        this.isVerticalModelValidate = true
+        return
+      }
+
       if (cellName == 'A1') {
         // this means start to update table
         this.isVerticalModelValidate = true
@@ -272,6 +283,11 @@ export default {
     },
     validateHorizontalModel:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
+
+      if (this.isFDP != '1') {
+        this.isHorizontalModelValidate = true
+        return
+      }
 
       if (cellName == 'A1') {
         // this means start to update table

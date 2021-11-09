@@ -355,6 +355,61 @@ class ProjectController extends Controller
         error_log('Finished to write RESERVOIR.in');
     }
 
+    private function createReservoirMon($workspace_dir, $reservoir)
+    {
+        $filePath = $workspace_dir . '/RESERVOIR_MON.in';
+        Storage::disk('executables')->delete($filePath);
+        $backupPath = $workspace_dir . '/RESERVOIR_MON.bak';
+        Storage::disk('executables')->delete($backupPath);
+
+        $content = '';
+
+        $content = $content . $reservoir['reservoirPVT']['Viscosity'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['GasZFactor'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['SpecificGravity'] . '  ';
+        $content = $content . $reservoir['reservoirPVT']['ReservoirTemperature'] . PHP_EOL;
+
+        $content = $content . $reservoir['reservoirParameters']['GIIP'] . '  ';
+        $content = $content . $reservoir['reservoirParameters']['ReservoirPressure'] . PHP_EOL;
+
+        $content = $content . $reservoir['hasDualPorosity'] . PHP_EOL;
+
+        if (intval($reservoir['hasDualPorosity']) == 1) {
+            $content = $content . $reservoir['dualPorosity']['km'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['hm'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['ShapeFactorSigma'] . '  ';
+            $content = $content . $reservoir['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
+        }
+
+        // $content = $content . $reservoir['wellTestData'] . PHP_EOL;
+
+        // if (intval($reservoir['wellTestData']) == 1) {
+        //     $content = $content . $reservoir['cnModel']['C'] . '  ';
+        //     $content = $content . $reservoir['cnModel']['n'] . PHP_EOL;    
+        // }
+        // else if (intval($reservoir['wellTestData']) == 2) {
+        //     $content = $content . $reservoir['verticalModel']['k'] . '  ';
+        //     $content = $content . $reservoir['verticalModel']['Porosity'] . '  ';
+        //     $content = $content . $reservoir['verticalModel']['NetPay'] . '  ';
+        //     $content = $content . $reservoir['verticalModel']['DrainageArea'] . '  ';
+        //     $content = $content . $reservoir['verticalModel']['WellboreID'] . '  ';
+        //     $content = $content . $reservoir['verticalModel']['Skin'] . PHP_EOL;    
+        // }
+        // else if (intval($reservoir['wellTestData']) == 3) {
+        //     $content = $content . $reservoir['horizontalModel']['k'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['Porosity'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['NetPay'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['DrainageArea'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['WellboreID'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['Skin'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['WellLength'] . '  ';
+        //     $content = $content . $reservoir['horizontalModel']['KvKh'] . PHP_EOL;    
+        // }
+
+        Storage::disk('executables')->put($filePath, $content);
+        error_log('Finished to write RESERVOIR.in');
+    }
+
     private function createEconomics($workspace_dir, $economics)
     {
         $filePath = $workspace_dir . '/ECONOMICS.in';
@@ -429,17 +484,17 @@ class ProjectController extends Controller
         $content = $content . $wellhistory['operationsData']['EconomicsRate'] . '  ';
         $content = $content . $wellhistory['operationsData']['QgtotInitial'] . PHP_EOL;
 
-        $content = $content . $wellhistory['reservoirParameters']['GIIP'] . '  ';
-        $content = $content . $wellhistory['reservoirParameters']['Pr'] . PHP_EOL;
+        // $content = $content . $wellhistory['reservoirParameters']['GIIP'] . '  ';
+        // $content = $content . $wellhistory['reservoirParameters']['Pr'] . PHP_EOL;
 
-        $content = $content . $wellhistory['hasDualPorosity'] . PHP_EOL;
+        // $content = $content . $wellhistory['hasDualPorosity'] . PHP_EOL;
 
-        if (intval($wellhistory['hasDualPorosity']) == 1) {
-            $content = $content . $wellhistory['dualPorosity']['km'] . '  ';
-            $content = $content . $wellhistory['dualPorosity']['hm'] . '  ';
-            $content = $content . $wellhistory['dualPorosity']['ShapeFactorSigma'] . '  ';
-            $content = $content . $wellhistory['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
-        }
+        // if (intval($wellhistory['hasDualPorosity']) == 1) {
+        //     $content = $content . $wellhistory['dualPorosity']['km'] . '  ';
+        //     $content = $content . $wellhistory['dualPorosity']['hm'] . '  ';
+        //     $content = $content . $wellhistory['dualPorosity']['ShapeFactorSigma'] . '  ';
+        //     $content = $content . $wellhistory['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
+        // }
 
         $content = $content . $wellhistory['numberOfWells'] . PHP_EOL;
         foreach ($wellhistory['wellsNetwork'] as $value) {
@@ -792,7 +847,7 @@ class ProjectController extends Controller
         //
         // create RESERVOIR.in file inside workspace
         //
-        $this->createReservoir($workspace_dir, $content->reservoir);
+        $this->createReservoirMon($workspace_dir, $content->reservoir);
 
         //
         // create ECONOMICS.in file inside workspace
