@@ -28,7 +28,6 @@
                           @changedValidate="updateSurfaceValidate($event)">
               </surface>
               <reservoir v-show="screenType==='RESERVOIR_SCREEN'" ref="reservoirControl" 
-                          v-bind:isHidden="!(isFDP=='1')"
                          @changedValidate="updateReservoirValidate($event)">
               </reservoir>
               <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" 
@@ -50,7 +49,7 @@
                 <div style="text-align:center">
                   <label class="btn gf-button" v-on:click="onPVTPage" v-bind:class="pvtButtonClass">PVT</label>
                   <label class="btn gf-button" v-on:click="onSurfacePage" v-bind:class="surfaceButtonClass">Surface</label>
-                  <label class="btn gf-button" v-on:click="onReservoirPage" v-bind:class="reservoirButtonClass" v-show="isFDP=='1'">Reservoir</label>
+                  <label class="btn gf-button" v-on:click="onReservoirPage" v-bind:class="reservoirButtonClass">Reservoir</label>
                   <label class="btn gf-button" v-on:click="onWellHistoryPage" v-bind:class="wellHistoryButtonClass" v-show="isEconomics != true && isCondensate!='1' && isFDP =='0'">Well History</label>
                   <label class="btn gf-button" v-on:click="onEconomicsPage" v-bind:class="economicsButtonClass" v-show="isEconomics == true && isFDP =='1'">Economics</label>
                   <label class="btn gf-button" v-on:click="onOperationPage" v-bind:class="operationButtonClass" v-show="isFDP=='1'">Operations</label>

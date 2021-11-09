@@ -135,6 +135,15 @@ export default {
             }
           )
         }
+
+        // update wellNetwork in Watched function more....
+        this.$nextTick(function () {
+          debugger
+          for (let index = 0; index < this.numberOfWells; index++) {
+            this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
+          }
+        })
+
       }
       else if (val < oldVal) {
         // remove entry from wellsNetwork
@@ -675,6 +684,7 @@ export default {
 
     // update wellNetwork in Watched function more....
     this.$nextTick(function () {
+      debugger
       for (let index = 0; index < this.numberOfWells; index++) {
         this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
       }

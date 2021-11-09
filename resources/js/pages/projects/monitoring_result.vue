@@ -221,6 +221,7 @@ export default {
 
     this.outputFileOptions = []
 
+    debugger
     let wellCount = this.resMonitoring.NumberOfWells
     for (let index = 0; index < wellCount; index++) {
       this.outputFileOptions.push({name: 'WELL' + (index + 1)})
