@@ -330,7 +330,7 @@ export default {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
-      this.runGasCondensateProject()
+      await this.runGasCondensateProject()
       this.isLoading = false
 
       this.$router.replace({ name: 'fastplanresult', params: { previous: 'condensate' } });

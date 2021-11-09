@@ -318,12 +318,12 @@ export default {
 
       if (this.isFDP == '1') {
         this.isLoading = false
-        this.runDryGasProject()
+        await this.runDryGasProject()
         this.$router.replace({ name: 'fastplanresult', params: { previous: 'drygas' } });
       }
       else {
         this.isLoading = false
-        this.runMonitoringProject()
+        await this.runMonitoringProject()
         this.$router.replace('monitoringresult');
       }
         
