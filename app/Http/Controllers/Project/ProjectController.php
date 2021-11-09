@@ -485,6 +485,47 @@ class ProjectController extends Controller
         error_log('Finished to write WELL_HISTORY.in');
     }
 
+    private function parseWellOut($filePath)
+    {
+        error_log('parseWellOut: ' . $filePath);
+
+        $res = array();
+        $content = fopen(storage_path($filePath),'r');
+        $i = 0;
+
+        while(!feof($content)){
+            try {
+                $line = fgets($content);
+                $i++;
+                if ($i < 6)
+                    continue;
+                
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+                if ($i == 6)
+                    error_log('WELL.out: ' . count($pieces));
+
+                if (count($pieces) == 17) {
+                    //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
+                    {
+                        array_push($res, 
+                            array($pieces[1], $pieces[2], $pieces[3], $pieces[4],
+                                  $pieces[5], $pieces[6], $pieces[7], $pieces[8],
+                                  $pieces[9], $pieces[10], $pieces[11], $pieces[12],
+                                  $pieces[13], $pieces[14], $pieces[15]
+                            )
+                        );
+                    }
+                }
+            } 
+            catch (Exception $e) {
+                continue;
+            }
+        }
+        fclose($content);
+        return $res;
+    }
+
     private function parsePlotOf($filePath)
     {
         $res = array();
@@ -498,11 +539,12 @@ class ProjectController extends Controller
                 if ($i < 4)
                     continue;
                 
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+
                 if ($i == 6)
                     error_log('PlotOf.out: ' . count($pieces));
 
-                $string = preg_replace('/\s+/', ',', $line);
-                $pieces = explode(',', $string);
                 if (count($pieces) == 32) {
                     //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
                     {
@@ -706,10 +748,10 @@ class ProjectController extends Controller
         // $content->sep = $request->get('sep');
         $content->drygas = $request->get('drygas');
         $content->surface = $request->get('surface');
-        // $content->reservoir = $request->get('reservoir');
+        $content->reservoir = $request->get('reservoir');
         $content->wellhistory = $request->get('wellhistory');
-        // $content->economics = $request->get('economics');
-        // $content->operations = $request->get('operations');
+        $content->economics = $request->get('economics');
+        $content->operations = $request->get('operations');
         // $content->relPerm = $request->get('relPerm');
         // $content->gascondensate = $request->get('gascondensate');
         // $content->resKGKO = $request->get('resKGKO');
@@ -748,7 +790,22 @@ class ProjectController extends Controller
         $this->createSurface($workspace_dir, $content->surface);
 
         //
-        // create OPERATIONS.in file inside workspace 
+        // create RESERVOIR.in file inside workspace
+        //
+        $this->createReservoir($workspace_dir, $content->reservoir);
+
+        //
+        // create ECONOMICS.in file inside workspace
+        //
+        // $this->createEconomics($workspace_dir, $content->economics);
+
+        //
+        // create OPERATIONS.in file inside workspace
+        //
+        // $this->createOperations($workspace_dir, $content->operations);
+
+        //
+        // create WELLHISTORY.in file inside workspace 
         //
         $this->createWellHistory($workspace_dir, $content->wellhistory);
 
@@ -768,22 +825,15 @@ class ProjectController extends Controller
         // Read Output Files: WELL1.out, WELL2.out .....
         // 
         $res = [];
+        $res['NumberOfWells'] = $content->wellhistory['numberOfWells'];
+        error_log('NumberOfWells : ' . $content->wellhistory['numberOfWells']);
 
-        if (Storage::disk('executables')->exists($workspace_dir . '/PLOT_OF.OUT')) {
-            $plotof_content = Storage::disk('executables')->get($workspace_dir . '/PLOT_OF.OUT');
-            $res['PLOT_OF'] = htmlspecialchars($plotof_content);
-            $res['RES_PLOT_OF'] = $this->parsePlotOf($workspace_path.'/PLOT_OF.OUT');
-        }
-
-        if (Storage::disk('executables')->exists($workspace_dir . '/ECONOMICS.OUT')) {
-            $economics_content = Storage::disk('executables')->get($workspace_dir . '/ECONOMICS.OUT');            
-            $res['ECONOMICS'] = htmlspecialchars($economics_content);
-            $res['RES_ECONOMICS'] = $this->parseEconomics($workspace_path.'/ECONOMICS.OUT');
-        }
-
-        if (Storage::disk('executables')->exists($workspace_dir . '/RESULTS_OF.OUT')) {
-            $resultof_content = Storage::disk('executables')->get($workspace_dir . '/RESULTS_OF.OUT');            
-            $res['RESULT_OF'] = htmlspecialchars($resultof_content);
+        for ($index = 0; $index < $content->wellhistory['numberOfWells']; $index++) {
+            if (Storage::disk('executables')->exists($workspace_dir . '/WELL' . ($index + 1) .'.OUT')) {
+                $wells_content = Storage::disk('executables')->get($workspace_dir . '/WELL' . ($index + 1) .'.OUT');
+                $res['WELL'. ($index+1)] = htmlspecialchars($wells_content);
+                $res['RES_WELL'. ($index+1)] = $this->parseWellOut($workspace_path . '/WELL' . ($index + 1) .'.OUT');
+            }    
         }
 
         return response()->json($res);

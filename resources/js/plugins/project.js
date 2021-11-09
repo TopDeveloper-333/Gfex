@@ -69,10 +69,10 @@ Vue.mixin({
       // payload.sep = this.sep
       payload.drygas = this.drygas
       payload.surface = this.surface
-      // payload.reservoir = this.reservoir
+      payload.reservoir = this.reservoir
       payload.wellhistory = this.wellhistory
-      // payload.economics = this.economics
-      // payload.operations = this.operations
+      payload.economics = this.economics
+      payload.operations = this.operations
       // payload.relPerm = this.relPerm 
       // payload.resKGKO = this.resKGKO
       // payload.gascondensate = this.gascondensate

@@ -23,6 +23,7 @@ export const state = {
   resKGKO: [],
   resOPT: [],
   resFastPlan: {},
+  resMonitoring: {}
 }
 
 function getCookie(name, defaultValue) {
@@ -56,6 +57,7 @@ export const getters = {
   resKGKO: state => state.resKGKO,
   resOPT: state => state.resOPT,
   resFastPlan: state => state.resFastPlan,
+  resMonitoring: state => state.resMonitoring
 }
 
 export const mutations = {
@@ -127,6 +129,9 @@ export const mutations = {
   },
   [types.SAVE_RES_FASTPLAN] (state, resFastPlan) {
     state.resFastPlan = resFastPlan
+  },
+  [types.SAVE_RES_MONITORING] (state, resMonitoring) {
+    state.resMonitoring = resMonitoring
   },
 }
 
@@ -235,10 +240,10 @@ export const actions = {
   async runMonitoringProject({commit}, payload) {
     const { data } = await axios.post('/api/runMonitoring', payload)
     if (typeof (data) == 'string') {
-      commit(types.SAVE_RES_FASTPLAN, JSON.parse(data))      
+      commit(types.SAVE_RES_MONITORING, JSON.parse(data))      
     }
     else {
-      commit(types.SAVE_RES_FASTPLAN, data)
+      commit(types.SAVE_RES_MONITORING, data)
     }
   },
   async runGasCondensateProject({commit}, payload) {

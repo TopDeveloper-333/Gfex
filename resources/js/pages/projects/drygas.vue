@@ -317,14 +317,17 @@ export default {
       this.onSavePage()
       this.onSaveProject()
 
-      debugger
-      if (this.isFDP == '1')
+      if (this.isFDP == '1') {
+        this.isLoading = false
         this.runDryGasProject()
-      else 
+        this.$router.replace({ name: 'fastplanresult', params: { previous: 'drygas' } });
+      }
+      else {
+        this.isLoading = false
         this.runMonitoringProject()
+        this.$router.replace('monitoringresult');
+      }
         
-      this.isLoading = false
-      this.$router.replace({ name: 'fastplanresult', params: { previous: 'drygas' } });
     }
   },
   mounted() {

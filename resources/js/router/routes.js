@@ -15,9 +15,9 @@ export default [
   { path: '/home', name: 'home', component: page('projects/home.vue') },
   { path: '/fastplan', name: 'fastplan', component: page('projects/fastplan.vue') },
   { path: '/condensate', name: 'condensate', component: page('projects/condensate.vue') },
-  { path: '/condensateresult', name: 'condensateresult', component: page('projects/condensate_result.vue') },
   { path: '/drygas', name: 'drygas', component: page('projects/drygas.vue') },
   { path: '/fastplanresult', name: 'fastplanresult', component: page('projects/fastplan_result.vue') },
+  { path: '/monitoringresult', name: 'monitoringresult', component: page('projects/monitoring_result.vue') },
   { path: '/separator', name: 'separator', component: page('projects/separator.vue') },
   { path: '/separatorresult', name: 'separatorresult', component: page('projects/separator_result.vue') },
   {
