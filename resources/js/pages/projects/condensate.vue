@@ -326,7 +326,7 @@ export default {
 
       this.$router.replace('fastplan')
     },
-    onNextPage: function(event) {
+    onNextPage: async function(event) {
       this.isLoading = true
       this.onSavePage()
       this.onSaveProject()
