@@ -129,7 +129,6 @@ export default {
       if (this.isHidden == true)
         return true
 
-      debugger
       let c = true
       let d = true
       // for (let i = 0; i < this.isWellsNetworkSheetValidate.length; i++) {
