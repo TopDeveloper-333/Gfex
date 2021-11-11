@@ -23,6 +23,20 @@
     </div> -->
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
+      <hr class="gf-line">
+      <p class="gf-item">Matching</p>
+      <multiselect v-model="matching" :options="matchingOptions" track-by="name" label="name" placeholder="Select matching option"></multiselect>
+    </div>
+
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="matching != null && matching.value ==1">
+      <p class="gf-item">Number Of Rates to Match</p>
+      <input class="form-control gf-control" style="width:500px; margin-left:10px; margin-bottom:20px" type="number"
+          maxlength="20" v-model="numberOfRates" placeholder="Please input numbers of Rates">
+      <p class="gf-item">Gas Flow Rates (mmscf/day)</p>
+      <div id="gasFlowRatesSheet"></div>
+    </div>
+
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">Number of Wells in Network (Present & Futures)</p>
       <input class="form-control gf-control" style="width:500px; margin-left:10px; margin-bottom:20px" type="number"
           maxlength="20" v-model="numberOfWells" placeholder="Please input numbers of Wells">
@@ -40,10 +54,6 @@
 
       <multiselect v-model="entry.option" :options="testWellDataOptions"  style="width:460px" @select="onChangedOption"
         @remove="onRemovedOption" track-by="name" label="name" placeholder="Select option" :id="'option-' + entry.id"></multiselect>
-
-      <!-- <p class="gf-item" v-show="entry.option!=null&&entry.option.value==1">C & n Model #{{entry.id + 1}}</p>
-      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==2">Vertical Well Model #{{entry.id + 1}}</p>
-      <p class="gf-item" v-show="entry.option!=null&&entry.option.value==3">Horizontal Well Model #{{entry.id + 1}}</p> -->
 
       <div :id="'networkSheet-' + entry.id" style="margin-top:20px"></div>
       <div :id="'networkSheet1-' + entry.id" style="margin-top:20px"></div>
@@ -89,6 +99,13 @@ export default {
       //   {name: "Yes", value: 1},
       //   {name: "No", value: 0}
       // ],
+      matching: null,
+      matchingOptions: [
+        {name: "Yes", value: 1},
+        {name: "No", value: 0},
+      ],
+      numberOfRates: 1,
+      gasFlowRatesSheet: null,
       numberOfWells: 0,
       wellsNetwork: [],
       testWellDataOptions: [
@@ -96,16 +113,37 @@ export default {
         { name: "VERTICAL MODEL", value: 2 },
         { name: "HORIZONTAL MODEL", value: 3 }
       ],
+      isHistoryForecastValidate: true,
+      isOperationsDataValidate: true,
+      isGasFlowRatesValidate: true
     }
   },
 
   computed: {
     ...mapState({
       wellhistory: state => state.project.wellhistory,
-    })
+    }),
+    isDataValidate: function() {
+      if (this.isHidden == true)
+        return true
+
+      return this.isHistoryForecastValidate & this.isOperationsDataValidate & this.isGasFlowRatesValidate
+    }
   },
 
   watch: {
+    isDataValidate: function(val, oldVal) {
+      this.$emit('changedValidate', val)
+    },
+    numberOfRates: function(val, oldVal) {
+      if (val < 1)
+        val = 1;
+      if (oldVal < 0)
+        oldVal = 0;
+
+      this.numberOfRates = val
+      this.createGasFlowRateSheet(this.numberOfRates, this.myWellHistory.gasFlowRates)
+    },
     numberOfWells: function(val, oldVal) {
       if (val < 0)
         val = 0;
@@ -138,7 +176,6 @@ export default {
 
         // update wellNetwork in Watched function more....
         this.$nextTick(function () {
-          debugger
           for (let index = 0; index < this.numberOfWells; index++) {
             this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
           }
@@ -155,6 +192,94 @@ export default {
   },
 
   methods: {
+    validateHistoryForecast:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isHistoryForecastValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isHistoryForecastValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateOperationsData:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isOperationsDataValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isOperationsDataValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateGasFlowRates:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isGasFlowRatesValidate = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isGasFlowRatesValidate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    createGasFlowRateSheet: function (numberOfRates, gasFlowRates) {
+
+      let gasFlowRatesData = []
+      for (let index = 0; index < numberOfRates; index++) {
+        gasFlowRatesData.push([])
+      }
+
+      let min = numberOfRates
+
+      if (gasFlowRates != null) {
+        if (gasFlowRates.length < min) min = gasFlowRates.length
+        for (let i = 0; i < min; i++) {
+          gasFlowRatesData[i][0] = gasFlowRates[i]
+        }
+      }
+
+      document.getElementById('gasFlowRatesSheet').innerHTML = '';
+      this.gasFlowRatesSheet = jspreadsheet(document.getElementById('gasFlowRatesSheet'), {
+          data:gasFlowRatesData,
+          allowInsertRow:false,
+          allowManualInsertRow:false,
+          allowInsertColumn:false,
+          allowManualInsertColumn:false,
+          allowDeleteRow:false,
+          allowDeleteColumn:false,
+          columns: [
+              {
+                  type: 'numeric',
+                  title:'Gas Flow Rates (mmscf/day)',
+                  width: 350,
+                  decimal:','
+              },
+          ],
+          updateTable: this.validateGasFlowRates
+      });
+      this.gasFlowRatesSheet.hideIndex();
+    },
     onSavePage: async function(event) {
       console.log("WellHistory's onSavePage() is called ")
     
@@ -172,6 +297,9 @@ export default {
         operationsData: {
           SalesPressure:0, PressureLimit: 0, EconomicsRate: 0, QgtotInitial: 0, 
         },
+        matching: 0,
+        numberOfRates: 0,
+        gasFlowRates: [],
         numberOfWells: 0,
         wellsNetwork: [
 
@@ -187,6 +315,13 @@ export default {
       // this.myWellHistory.dualPorosity.hm = this.dualPorosityHSheet.getValue('B1')
       // this.myWellHistory.dualPorosity.ShapeFactorSigma = this.dualPorosityHSheet.getValue('C1')
       // this.myWellHistory.dualPorosity.MatrixGIIP = this.dualPorosityHSheet.getValue('D1')
+
+      this.myWellHistory.matching = this.matching.value
+      this.myWellHistory.numberOfRates = this.numberOfRates
+
+      for (let i = 0; i < this.numberOfRates; i++) {
+        this.myWellHistory.gasFlowRates[i] = this.gasFlowRatesSheet.getValue('A' + (i + 1));
+      }
 
       this.myWellHistory.historyForecastRun.FirstYearOfProduction = this.historyForecastSheet.getValue('A1')
       this.myWellHistory.historyForecastRun.LifeOfTheField = this.historyForecastSheet.getValue('B1')
@@ -596,6 +731,16 @@ export default {
     // });
     // this.dualPorosityHSheet.hideIndex();
 
+    // Gas Flow Rates
+    if (this.myWellHistory.matching != null && this.myWellHistory.matching == 1) {
+      this.matching = {name: 'Yes', value: 1}
+    }
+    else {
+      this.matching = {name: 'No', value: 0}
+    }
+    this.numberOfRates = this.myWellHistory.numberOfRates
+    this.createGasFlowRateSheet(this.myWellHistory.numberOfRates, this.myWellHistory.gasFlowRates);
+
     // History & Broadcast data
     // var historyForecastData = [
     //   [2020, 50]
@@ -628,7 +773,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateHistoryForecast
     });
     this.historyForecastSheet.hideIndex();
 
@@ -676,7 +821,7 @@ export default {
                 decimal:','
             },
         ],
-        updateTable: this.validationTable
+        updateTable: this.validateOperationsData
     });
     this.operationsDataSheet.hideIndex();
 
@@ -684,7 +829,6 @@ export default {
 
     // update wellNetwork in Watched function more....
     this.$nextTick(function () {
-      debugger
       for (let index = 0; index < this.numberOfWells; index++) {
         this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
       }
