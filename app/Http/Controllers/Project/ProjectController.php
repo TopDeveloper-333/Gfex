@@ -496,6 +496,16 @@ class ProjectController extends Controller
         //     $content = $content . $wellhistory['dualPorosity']['MatrixGIIP'] . PHP_EOL;    
         // }
 
+        // write matching data
+        $content = $content . $wellhistory['matching'] . PHP_EOL;
+        if (intval($wellhistory['matching']) == 1) {
+            $content = $content . $wellhistory['numberOfRates'] . PHP_EOL;
+            foreach ($wellhistory['gasFlowRates'] as $value) {
+                $content = $content . $value . PHP_EOL;
+            }    
+        }
+
+        // write wellsnetwork
         $content = $content . $wellhistory['numberOfWells'] . PHP_EOL;
         foreach ($wellhistory['wellsNetwork'] as $value) {
             $content = $content . $value['wellTestData'] . PHP_EOL;
@@ -625,6 +635,42 @@ class ProjectController extends Controller
         return $res;
     }
 
+    private function parasePressureMatching($filePath)
+    {
+        $res = array();
+        $content = fopen(storage_path($filePath),'r');
+        $i = 0;
+
+        while(!feof($content)){
+            try {
+                $line = fgets($content);
+                $i++;
+                if ($i < 3)
+                    continue;
+                
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+
+                if ($i == 4)
+                    error_log('Pressure_matching.out: ' . count($pieces));
+
+                if (count($pieces) == 4) {
+                    //if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
+                    {
+                        array_push($res, 
+                            array($pieces[1], $pieces[2])
+                        );
+                    }
+                }
+            } 
+            catch (Exception $e) {
+                continue;
+            }
+        }
+        fclose($content);
+        return $res;
+    }
+
     private function parseEconomics($filePath)
     {
         $res = array();
@@ -676,6 +722,7 @@ class ProjectController extends Controller
         Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
         Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
         Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
 
         //
         // Get content
@@ -891,6 +938,15 @@ class ProjectController extends Controller
             }    
         }
 
+        //
+        // Read output file : PRESSURE_MATCHING.OUT
+        //
+        if (Storage::disk('executables')->exists($workspace_dir . '/PRESSURE_MATCHING.OUT')) {
+            $pressure_content = Storage::disk('executables')->get($workspace_dir . '/PRESSURE_MATCHING.OUT');
+            $res['PRESSURE_MATCHING'] = htmlspecialchars($pressure_content);
+            $res['RES_PRESSURE_MATCHING'] = $this->parasePressureMatching($workspace_path.'/PRESSURE_MATCHING.OUT');
+        }
+
         return response()->json($res);
     }
 
@@ -904,6 +960,7 @@ class ProjectController extends Controller
         Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
         Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
         Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
 
         //
         // Get content

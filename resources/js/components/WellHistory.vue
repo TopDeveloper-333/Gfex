@@ -115,7 +115,9 @@ export default {
       ],
       isHistoryForecastValidate: true,
       isOperationsDataValidate: true,
-      isGasFlowRatesValidate: true
+      isGasFlowRatesValidate: true,
+      isWellsNetworkSheetValidate: [],
+      isWellsNetworkSheet1Validate: []
     }
   },
 
@@ -127,13 +129,30 @@ export default {
       if (this.isHidden == true)
         return true
 
-      return this.isHistoryForecastValidate & this.isOperationsDataValidate & this.isGasFlowRatesValidate
+      debugger
+      let c = true
+      let d = true
+      // for (let i = 0; i < this.isWellsNetworkSheetValidate.length; i++) {
+      //   c = c & this.isWellsNetworkSheetValidate[i]
+      //   d = d & this.isWellsNetworkSheet1Validate[i]
+      // }
+
+      return this.isHistoryForecastValidate & this.isOperationsDataValidate & this.isGasFlowRatesValidate &
+              c & d
     }
   },
 
   watch: {
     isDataValidate: function(val, oldVal) {
       this.$emit('changedValidate', val)
+    },
+    matching: function(val, oldVal) {
+      this.matching = val
+
+      if (this.matching.value == 1)
+        this.numberOfWells = 1
+      // else if (this.matching.value == 0 && this.numberOfWells < 4)
+      //   this.numberOfWells = 4
     },
     numberOfRates: function(val, oldVal) {
       if (val < 1)
@@ -150,48 +169,65 @@ export default {
       if (oldVal < 0)
         oldVal = 0;
 
+      if (this.matching.value == 1)
+        val = 1
+      // else if (this.matching.value == 0 && val < 4)
+      //   val = 4
+
       this.numberOfWells = val;
+      this.createWellsNetwork(this.numberOfWells, this.myWellHistory.wellsNetwork)
 
-      if (val > oldVal) {
-        // add new entry to wellsNetwork
-        for (let index = 0; index < (val - oldVal); index++) {          
-          let name = null
-          let option = null
+      // update wellNetwork in Watched function more....
+      this.$nextTick(function () {
+        let min = this.numberOfWells;
+        if (this.myWellHistory.wellsNetwork.length < min)
+          min = this.myWellHistory.wellsNetwork.length
 
-          if (this.myWellHistory!= null && this.myWellHistory.wellsNetwork[index+oldVal] != null) {
-            name = this.myWellHistory.wellsNetwork[index+oldVal].name
-            option =  this.testWellDataOptions[this.myWellHistory.wellsNetwork[index+oldVal].wellTestData - 1]
-          }
-
-          this.wellsNetwork.push(
-            {
-              id: this.wellsNetwork.length, 
-              name: name,
-              option:option, 
-              sheet: null,
-              sheet1: null
-            }
-          )
+        for (let index = 0; index < min; index++) {
+          this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
         }
+      })
 
-        // update wellNetwork in Watched function more....
-        this.$nextTick(function () {
-          for (let index = 0; index < this.numberOfWells; index++) {
-            this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
-          }
-        })
-
-      }
-      else if (val < oldVal) {
-        // remove entry from wellsNetwork
-        for (let index = 0; index < (oldVal - val); index++) {
-          this.wellsNetwork.pop()
-        }
-      }
     },
   },
 
   methods: {
+    validateWellsNetworkSheet:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+      var id = instance.id.replace('networkSheet-','');
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isWellsNetworkSheetValidate[id] = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isWellsNetworkSheetValidate[id] = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
+    validateWellsNetworkSheet1:function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+      var id = instance.id.replace('networkSheet1-','');
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isWellsNetworkSheet1Validate[id] = true
+      }
+      
+      if ((isNaN(value) == true) || (value < 0) ) 
+      {
+        this.markInvalidCell(cell)
+        this.isWellsNetworkSheet1Validate[id] = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+    },
     validateHistoryForecast:function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
 
@@ -242,6 +278,41 @@ export default {
       else {
         this.markNormalCell(cell)
       }
+    },
+    createWellsNetwork: function(numberOfWells, wellsNetwork) {
+
+      this.wellsNetwork = []
+      this.isWellsNetworkSheetValidate = []
+      this.isWellsNetworkSheet1Validate = []
+
+      debugger
+      for (let index = 0; index < numberOfWells; index++) {
+        this.wellsNetwork.push({
+          id: index, 
+          name: null,
+          option: null,
+          sheet: null,
+          sheet1: null
+        })
+        this.isWellsNetworkSheetValidate[index] = false
+        this.isWellsNetworkSheet1Validate[index] = false
+      }
+
+      let min = numberOfWells
+      if (wellsNetwork != null) {
+        if (wellsNetwork.length < min) min = wellsNetwork.length
+
+        for (let i =0; i < min; i++) {
+          this.wellsNetwork[i] = {
+            id: this.wellsNetwork[i].id,
+            name: wellsNetwork[i].name,
+            option: this.testWellDataOptions[wellsNetwork[i].wellTestData - 1],
+            sheet: null,
+            sheet1: null
+          }
+        }
+      }
+
     },
     createGasFlowRateSheet: function (numberOfRates, gasFlowRates) {
 
@@ -621,7 +692,7 @@ export default {
             allowDeleteRow:false,
             allowDeleteColumn:false,
             columns: columns,
-            updateTable: this.validationTable
+            updateTable: this.validateWellsNetworkSheet
         });
         this.wellsNetwork[index].sheet.hideIndex();
 
@@ -635,7 +706,7 @@ export default {
               allowDeleteRow:false,
               allowDeleteColumn:false,
               columns: columns1,
-              updateTable: this.validationTable
+              updateTable: this.validateWellsNetworkSheet1
           });
           this.wellsNetwork[index].sheet1.hideIndex();
         }
@@ -829,7 +900,11 @@ export default {
 
     // update wellNetwork in Watched function more....
     this.$nextTick(function () {
-      for (let index = 0; index < this.numberOfWells; index++) {
+      let min = this.numberOfWells;
+      if (this.myWellHistory.wellsNetwork.length < min)
+        min = this.myWellHistory.wellsNetwork.length
+
+      for (let index = 0; index < min; index++) {
         this.onUpdateWellNetwork(this.myWellHistory.wellsNetwork[index].wellTestData, index)
       }
     })

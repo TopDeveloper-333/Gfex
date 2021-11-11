@@ -145,25 +145,32 @@ export default {
   methods: {
     onChange: function(event) {
       if (this.outputFile != null) {
-        debugger
+        if (this.outputFile.name == 'PRESSURE_MATCHING') {
+          this.options = [
+            { name: "Qg (mmscf/day)", index: 0}, 
+            { name: "Pr (psia)", index: 1}, 
+          ]
+        }
+        else {
+          this.options = [
+            { name: "Time (Months)", index: 0}, 
+            { name: "Pr (psia)", index: 1}, 
+            { name: "PWF (psia)", index: 2}, 
+            { name: "PWH (psia)", index: 3}, 
+            { name: "PMAN (psia)", index: 4}, 
+            { name: "P_in (psia)", index: 5}, 
+            { name: "P_out (psia)", index: 6}, 
+            { name: "P_SALES (psia)", index: 7}, 
+            { name: "QG (mmscf/day)", index: 8}, 
+            { name: "CUM.GAS (This Well) (BCF)", index: 9}, 
+            { name: "QG (All Wells) (mmscf/day)", index: 10}, 
+            { name: "TOTAL CUM.GAS (All Wells) (BCF)", index: 11}, 
+            { name: "P/Z", index: 12}, 
+            { name: "MATRIX-FRACTURE TRANSFER (MSCF/D)", index: 13}, 
+            { name: "MATRIX CONTRIBUTION (BCF)", index: 14}, 
+          ]
+        }
         this.dataContent = this.resMonitoring[this.outputFile.name]
-        this.options = [
-          { name: "Time (Months)", index: 0}, 
-          { name: "Pr (psia)", index: 1}, 
-          { name: "PWF (psia)", index: 2}, 
-          { name: "PWH (psia)", index: 3}, 
-          { name: "PMAN (psia)", index: 4}, 
-          { name: "P_in (psia)", index: 5}, 
-          { name: "P_out (psia)", index: 6}, 
-          { name: "P_SALES (psia)", index: 7}, 
-          { name: "QG (mmscf/day)", index: 8}, 
-          { name: "CUM.GAS (This Well) (BCF)", index: 9}, 
-          { name: "QG (All Wells) (mmscf/day)", index: 10}, 
-          { name: "TOTAL CUM.GAS (All Wells) (BCF)", index: 11}, 
-          { name: "P/Z", index: 12}, 
-          { name: "MATRIX-FRACTURE TRANSFER (MSCF/D)", index: 13}, 
-          { name: "MATRIX CONTRIBUTION (BCF)", index: 14}, 
-        ]
         this.graphData = this.resMonitoring['RES_' + this.outputFile.name]
       }
       else {
@@ -227,6 +234,7 @@ export default {
       this.outputFileOptions.push({name: 'WELL' + (index + 1)})
     }
 
+    this.outputFileOptions.push({name: 'PRESSURE_MATCHING'})
     mountExitDialog();
   }
 
