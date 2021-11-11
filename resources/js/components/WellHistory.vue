@@ -652,7 +652,8 @@ export default {
 
       let data = []
       let data1 = []
-      if (optionValue == 1 && this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].cnModel != null) {
+      if (optionValue == 1 && this.myWellHistory.wellsNetwork!= null &&
+         this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].cnModel != null) {
         data.push(this.myWellHistory.wellsNetwork[index].cnModel)
         data1.push(this.myWellHistory.wellsNetwork[index].cnModel1)
       }
@@ -661,7 +662,8 @@ export default {
         data1.push([,])
       }
 
-      else if (optionValue == 2 && this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].verticalModel) {
+      else if (optionValue == 2 && this.myWellHistory.wellsNetwork!= null && 
+              this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].verticalModel) {
         data.push(this.myWellHistory.wellsNetwork[index].verticalModel)
         data1.push(this.myWellHistory.wellsNetwork[index].verticalModel1)
       }
@@ -670,7 +672,8 @@ export default {
         data1.push([,])
       }
 
-      else if (optionValue == 3 && this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].horizontalModel) {
+      else if (optionValue == 3 && this.myWellHistory.wellsNetwork!= null &&
+               this.myWellHistory.wellsNetwork[index] != null && this.myWellHistory.wellsNetwork[index].horizontalModel) {
         data.push(this.myWellHistory.wellsNetwork[index].horizontalModel)
         data1.push(this.myWellHistory.wellsNetwork[index].horizontalModel1)
       }
