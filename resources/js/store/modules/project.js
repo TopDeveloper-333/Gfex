@@ -23,7 +23,8 @@ export const state = {
   resKGKO: [],
   resOPT: [],
   resFastPlan: {},
-  resMonitoring: {}
+  resMonitoring: {},
+  resCvdOut: []
 }
 
 function getCookie(name, defaultValue) {
@@ -57,7 +58,8 @@ export const getters = {
   resKGKO: state => state.resKGKO,
   resOPT: state => state.resOPT,
   resFastPlan: state => state.resFastPlan,
-  resMonitoring: state => state.resMonitoring
+  resMonitoring: state => state.resMonitoring,
+  resCvdOut: state => state.resCvdOut
 }
 
 export const mutations = {
@@ -123,6 +125,9 @@ export const mutations = {
   },
   [types.SAVE_RES_KGKO] (state, resKGKO) {
     state.resKGKO = resKGKO
+  },
+  [types.SAVE_RES_CVDOUT] (state, resCvdOut) {
+    state.resCvdOut = resCvdOut
   },
   [types.SAVE_RES_OPTIMIZER] (state, resOPT) {
     state.resOPT = resOPT
@@ -226,6 +231,16 @@ export const actions = {
     }
     else {
       commit(types.SAVE_RES_KGKO, data)
+    }    
+  },
+  async fetchCvdOut({commit}, cvd) {
+    const { data } = await axios.post('/api/requestCvdOut', cvd)
+
+    if (typeof (data) == 'string') {
+      commit(types.SAVE_RES_CVDOUT, JSON.parse(data))      
+    }
+    else {
+      commit(types.SAVE_RES_CVDOUT, data)
     }    
   },
   async runDryGasProject({commit}, payload) {

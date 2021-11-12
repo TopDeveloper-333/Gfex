@@ -1078,5 +1078,111 @@ class ProjectController extends Controller
         return response()->json($res);
     }
 
+    public function requestCvdOut(Request $request)
+    {
+        // determine workspace dir
+        $workspace_dir = $request->user()->id;
+
+        error_log('requestCvdOut: Dir = ' . $workspace_dir);
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.NEW');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.DAT');
+
+        //
+        // Get content
+        //
+        $cvdData1 = $request->get('cvdData1');
+        $cvdData2 = $request->get('cvdData2');
+
+        //
+        // create workspace directory with user_id
+        //
+        $cmd_create_dir = 'mkdir ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_create_dir);
+
+        //
+        // copy BLACKOIL.exe into workspace directory
+        //
+        $cmd_copy_app = 'copy BLACKOIL.exe ' . $workspace_dir;
+        $output = Terminal::in(storage_path('executables'))->run($cmd_copy_app);
+        if ($output->successful() == false)  {
+            error_log('Error happened to copy BLACKOIL.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+
+        //
+        // create CVD.in file
+        //
+        $cmd_cvd_in_file = $workspace_dir . '/CVD.in';
+        $content = '';
+        $content = $content . $cvdData1['Psc'] . '  ';
+        $content = $content . $cvdData1['Tsc'] . '  ';
+        $content = $content . $cvdData1['T'] . '  ';
+        $content = $content . $cvdData1['Gi'] . '  ';
+        $content = $content . $cvdData1['Rvi'] . '  ';
+        $content = $content . $cvdData1['SpecificGravityOfOil'] . '  ';
+        $content = $content . $cvdData1['SpecificGravityOfGas'] . '  ';
+        $content = $content . $cvdData1['ZFactorOfGas'] . PHP_EOL ;
+
+        foreach ($cvdData2 as $value) {
+            $content = $content . $value[0] . '  ';
+            $content = $content . $value[1] . '  ';
+            $content = $content . $value[2] . '  ';
+            $content = $content . $value[3] . '  ';
+            $content = $content . $value[4] . '  ';
+            $content = $content . $value[5] . PHP_EOL;
+        }
+
+        Storage::disk('executables')->delete($cmd_cvd_in_file);
+        Storage::disk('executables')->put($cmd_cvd_in_file, $content);
+        
+        //
+        // launch BLACKOIL.exe
+        //
+        $workspace_path = 'executables/' . $workspace_dir;
+        $output = Terminal::in(storage_path($workspace_path))->run('BLACKOIL.exe');
+        if ($output->successful() == false)  {
+            error_log('Error happened to launch BLACKOIL.exe');
+            return response()->json([
+                []
+            ]);    
+        }
+        error_log('Finished to call CVD_FUNCTION');
+
+        //
+        // Get CVD.out file
+        //
+        $res = array();
+        $content = fopen(storage_path($workspace_path.'/CVD.OUT'),'r');
+        $i = 0;
+
+        while(!feof($content)){
+            try {
+                $line = fgets($content);
+                $i++;
+                if ($i < 2)
+                    continue;
+
+                $string = preg_replace('/\s+/', ',', $line);
+                $pieces = explode(',', $string);
+                if (count($pieces) == 10) {
+                    // if (is_numeric($pieces[1]) && is_numeric($pieces[2]) && is_numeric($pieces[3]) ) 
+                    {
+                        array_push($res, array($pieces[1], $pieces[2], $pieces[3],
+                                               $pieces[4], $pieces[5], $pieces[6], 
+                                               $pieces[7], $pieces[8]));
+                    }
+                }
+            } 
+            catch (Exception $e) {
+                continue;
+            }
+        }
+        fclose($content);
+
+        return response()->json($res);
+    }
 
 }

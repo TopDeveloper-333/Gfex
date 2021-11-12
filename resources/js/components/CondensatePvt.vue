@@ -4,8 +4,16 @@
              :is-full-page="fullPage"></loading>
     <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
 
+
+    <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
+      <div id="cvdData1Sheet"></div>
+      <div id="cvdData2Sheet"></div>
+    </div>
+
     <div>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onPlotPage">{{plotLabel}}</label>
+      <hr class="gf-line" v-show="bShowPlot == false">
+      <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlotPage">{{plotLabel}}</label>
+      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate</label>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
@@ -84,6 +92,8 @@ export default {
   
   data() {
     return {
+      cvdData1Sheet: null,
+      cvdData2Sheet: null,
       gasCondensate1Sheet: null,
       gasCondensate2Sheet: null,
       myGasCondensate : {},
@@ -103,6 +113,8 @@ export default {
       axisY2: null,
       plot: null,
       plotLabel: "Plot",
+      isCvd1Validate: true,
+      isCvd2Validate: true,
       isGasCondensate1Validate: true,
       isGasCondensate2Validate: true,
       axisColor: '#ffffff',
@@ -124,6 +136,7 @@ export default {
       gascondensate : state => state.project.gascondensate,
       isEconomics : state => state.project.isEconomics,
       isFDP: state => state.project.isFDP,
+      resCvdOut: state => state.project.resCvdOut
     }),
     isDataValidate: function() {
       if (this.isHidden == true)
@@ -138,6 +151,115 @@ export default {
         var modal = document.getElementById("plotModal");
         modal.style.display = "none";
     },
+    onCalculate: async function(event) {
+      this.isLoading = true
+      await this.onSavePage(null)
+
+      let cvd = {
+        cvdData1: {
+          Psc: 0, Tsc: 0, T: 0, Gi: 0, Rvi: 0, SpecificGravityOfOil:0, SpecificGravityOfGas:0, ZFactorOfGas:0,
+        },
+        cvdData2: [
+        ],
+      };
+
+      cvd.cvdData1.Psc = this.cvdData1Sheet.getValue('A1')
+      cvd.cvdData1.Tsc = this.cvdData1Sheet.getValue('B1')
+      cvd.cvdData1.T = this.cvdData1Sheet.getValue('C1')
+      cvd.cvdData1.Gi = this.cvdData1Sheet.getValue('D1')
+      cvd.cvdData1.Rvi = this.cvdData1Sheet.getValue('E1')
+      cvd.cvdData1.SpecificGravityOfOil = this.cvdData1Sheet.getValue('F1')
+      cvd.cvdData1.SpecificGravityOfGas = this.cvdData1Sheet.getValue('G1')
+      cvd.cvdData1.ZFactorOfGas = this.cvdData1Sheet.getValue('H1')
+
+      let numRowsOfCVD = this.cvdData2Sheet.options.data.length;
+      for (var i =0; i < numRowsOfCVD; i++) {
+        cvd.cvdData2[i] = [0, 0, 0, 0, 0, 0];
+        cvd.cvdData2[i][0] = this.cvdData2Sheet.getValue('A' + (i+1));
+        cvd.cvdData2[i][1] = this.cvdData2Sheet.getValue('B' + (i+1));
+        cvd.cvdData2[i][2] = this.cvdData2Sheet.getValue('C' + (i+1));
+        cvd.cvdData2[i][3] = this.cvdData2Sheet.getValue('D' + (i+1));
+        cvd.cvdData2[i][4] = this.cvdData2Sheet.getValue('E' + (i+1));
+        cvd.cvdData2[i][5] = this.cvdData2Sheet.getValue('F' + (i+1));
+      }
+      
+      await store.dispatch('project/fetchCvdOut', cvd)
+
+      let gasCondensate2Data = []
+      if (this.resCvdOut != null ) {
+        this.resCvdOut.forEach(element => {
+          gasCondensate2Data.push(element)      
+        });
+      }
+      else
+        gasCondensate2Data.push([],[],[])
+
+      document.getElementById('gasCondensate2Sheet').innerHTML = '';
+      this.gasCondensate2Sheet = jspreadsheet(document.getElementById('gasCondensate2Sheet'), {
+          allowInsertRow:true,
+          allowManualInsertRow:true,
+          allowInsertColumn:false,
+          allowManualInsertColumn:false,
+          allowDeleteRow:true,
+          allowDeleteColumn:false,
+          data:gasCondensate2Data,
+          columns: [
+              {
+                  type: 'numeric',
+                  title:'P (psia)',
+                  width: 140,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Bo (rb/stb)',
+                  width: 160,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Rs (scf/stb)',
+                  width: 180,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Bg (rb/mscf)',
+                  width: 200,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Rv (stb/mmscf)',
+                  width: 200,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Oil Viscosity (cp)',
+                  width: 240,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'Gas Viscosity (cp)',
+                  width: 240,
+                  decimal:','
+              },
+              {
+                  type: 'numeric',
+                  title:'PV Inj (%)',
+                  width: 150,
+                  decimal:','
+              },
+          ],
+          updateTable: this.validateGasCondensate2,
+      });
+      this.gasCondensate2Sheet.hideIndex();
+
+      this.isLoading = false
+
+    },
     onPlotPage: function(event) {
       if(this.bShowPlot == false) {
         this.bShowPlot = true
@@ -150,6 +272,12 @@ export default {
     },
     onSavePage: async function(event) {
       this.myGasCondensate = {
+        cvdData1: {
+          Psc: 0, Tsc: 0, T: 0, Gi: 0, Rvi: 0, SpecificGravityOfOil:0, SpecificGravityOfGas:0, ZFactorOfGas:0,
+        },
+        cvdData2: [
+
+        ],
         gasCondensate1 : {
           Psat: 0, Swi : 0
         },
@@ -157,6 +285,32 @@ export default {
         ]
       };
 
+      //
+      // CVD Data
+      //
+      this.myGasCondensate.cvdData1.Psc = this.cvdData1Sheet.getValue('A1')
+      this.myGasCondensate.cvdData1.Tsc = this.cvdData1Sheet.getValue('B1')
+      this.myGasCondensate.cvdData1.T = this.cvdData1Sheet.getValue('C1')
+      this.myGasCondensate.cvdData1.Gi = this.cvdData1Sheet.getValue('D1')
+      this.myGasCondensate.cvdData1.Rvi = this.cvdData1Sheet.getValue('E1')
+      this.myGasCondensate.cvdData1.SpecificGravityOfOil = this.cvdData1Sheet.getValue('F1')
+      this.myGasCondensate.cvdData1.SpecificGravityOfGas = this.cvdData1Sheet.getValue('G1')
+      this.myGasCondensate.cvdData1.ZFactorOfGas = this.cvdData1Sheet.getValue('H1')
+
+      let numRowsOfCVD = this.cvdData2Sheet.options.data.length;
+      for (var i =0; i < numRowsOfCVD; i++) {
+        this.myGasCondensate.cvdData2[i] = [0, 0, 0, 0, 0, 0];
+        this.myGasCondensate.cvdData2[i][0] = this.cvdData2Sheet.getValue('A' + (i+1));
+        this.myGasCondensate.cvdData2[i][1] = this.cvdData2Sheet.getValue('B' + (i+1));
+        this.myGasCondensate.cvdData2[i][2] = this.cvdData2Sheet.getValue('C' + (i+1));
+        this.myGasCondensate.cvdData2[i][3] = this.cvdData2Sheet.getValue('D' + (i+1));
+        this.myGasCondensate.cvdData2[i][4] = this.cvdData2Sheet.getValue('E' + (i+1));
+        this.myGasCondensate.cvdData2[i][5] = this.cvdData2Sheet.getValue('F' + (i+1));
+      }
+      
+      // 
+      // Pine Data
+      //
       this.myGasCondensate.gasCondensate1.Psat = this.gasCondensate1Sheet.getValue('A1');
       this.myGasCondensate.gasCondensate1.Swi = this.gasCondensate1Sheet.getValue('B1');
 
@@ -337,6 +491,42 @@ export default {
           }
       });
     },
+    validateCvd1: function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isCvd1Validate = true
+      }
+
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isCvd1Validate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+    },
+    validateCvd2: function(instance, cell, col, row, val, label, cellName) {
+      var value = parseFloat(val)
+
+      if (cellName == 'A1') {
+        // this means start to update table
+        this.isCvd2Validate = true
+      }
+
+      if ((isNaN(value) == true) || (value < 0)) 
+      {
+        this.markInvalidCell(cell)
+        this.isCvd2Validate = false
+      }
+      else {
+        this.markNormalCell(cell)
+      }
+
+    },
     validateGasCondensate1: function(instance, cell, col, row, val, label, cellName) {
       var value = parseFloat(val)
 
@@ -384,6 +574,137 @@ export default {
     this.myGasCondensate = this.gascondensate
     document.documentElement.style.setProperty('--axis-color', '#ffffff');
     document.documentElement.style.setProperty('--graph-color', '#ffbb78');
+
+    //
+    // CVD Data
+    //
+    let cvdSheetData1 = []
+    if (this.myGasCondensate != null && this.myGasCondensate.cvdData1 != null)
+      cvdSheetData1.push(this.myGasCondensate.cvdData1)
+    else
+      cvdSheetData1.push([,,,,,,,])
+
+    this.cvdData1Sheet = jspreadsheet(document.getElementById('cvdData1Sheet'), {
+        allowInsertRow:false,
+        allowManualInsertRow:false,
+        allowInsertColumn:false,
+        allowManualInsertColumn:false,
+        allowDeleteRow:false,
+        allowDeleteColumn:false,
+        data:cvdSheetData1,
+        columns: [
+            {
+                type: 'numeric',
+                title:'Psc (psia)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Tsc (F)',
+                width: 120,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'T (F)',
+                width: 100,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Gi (mscf)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Rvi (Stb/mmscf)',
+                width: 220,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Specific Gravity Of Oil',
+                width: 270,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Specific Gravity Of Gas',
+                width: 270,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Z-Factor Of Gas',
+                width: 200,
+                decimal:','
+            },
+        ],
+        updateTable: this.validateCvd1,
+    });
+    this.cvdData1Sheet.hideIndex();
+
+    let cvdSheetData2 = []
+    if (this.myGasCondensate != null && this.myGasCondensate.cvdData2 != null) {
+      this.myGasCondensate.cvdData2.forEach(element => {
+        cvdSheetData2.push(element)      
+      });
+    }
+    else
+      cvdSheetData2.push([])
+
+    this.cvdData2Sheet = jspreadsheet(document.getElementById('cvdData2Sheet'), {
+        allowInsertRow:true,
+        allowManualInsertRow:true,
+        allowInsertColumn:false,
+        allowManualInsertColumn:false,
+        allowDeleteRow:true,
+        allowDeleteColumn:false,
+        data:cvdSheetData2,
+        columns: [
+            {
+                type: 'numeric',
+                title:'P (psia)',
+                width: 140,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Gp (mscf)',
+                width: 160,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Np (stb)',
+                width: 160,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Z',
+                width: 100,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Z-2 phase',
+                width: 180,
+                decimal:','
+            },
+            {
+                type: 'numeric',
+                title:'Vo',
+                width: 120,
+                decimal:','
+            },
+        ],
+        updateTable: this.validateCvd2,
+    });
+    this.cvdData2Sheet.hideIndex();
+
 
     // var gasCondensate1Data = [
     //   // [,],
