@@ -13,7 +13,7 @@
     <div>
       <hr class="gf-line" v-show="bShowPlot == false">
       <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlotPage">{{plotLabel}}</label>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate via EOS</label>
+      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">CALCULATE</label>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
