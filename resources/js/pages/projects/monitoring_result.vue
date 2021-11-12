@@ -31,6 +31,7 @@
 
               <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == true">
                 <graph v-bind:options="options"
+                       v-bind:type="graphType"
                       v-bind:data="graphData"></graph>
               </div>
 
@@ -117,7 +118,8 @@ export default {
       dataContent: '',
       options: [],
       graphData: [],
-      previousPage: ''
+      previousPage: '',
+      graphType: null
     }
   },
 
@@ -150,6 +152,7 @@ export default {
             { name: "Qg (mmscf/day)", index: 0}, 
             { name: "Pr (psia)", index: 1}, 
           ]
+          this.graphType = 'bar'
         }
         else {
           this.options = [
@@ -169,6 +172,7 @@ export default {
             { name: "MATRIX-FRACTURE TRANSFER (MSCF/D)", index: 13}, 
             { name: "MATRIX CONTRIBUTION (BCF)", index: 14}, 
           ]
+          this.graphType = null
         }
         this.dataContent = this.resMonitoring[this.outputFile.name]
         this.graphData = this.resMonitoring['RES_' + this.outputFile.name]
@@ -177,6 +181,7 @@ export default {
         this.options = []
         this.graphData = []
         this.dataContent = ''
+        this.graphType = null
       }
     },
     onPlot: function(event) {

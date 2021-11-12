@@ -63,7 +63,7 @@ export default {
   name: 'Graph',
   middleware: 'auth',
 
-  props: ['options', 'data', 'labels'],
+  props: ['options', 'data', 'labels', 'type'],
   
   components: {
     Multiselect,
@@ -81,6 +81,7 @@ export default {
       graph1Color: '#b9ff78',
       isLoading: false,
       fullPage: true,
+      type: null,
     }
   },
 
@@ -179,6 +180,7 @@ export default {
             x: _axisX,
             columns: _columns,
             axes: _axes,
+            type: this.type
           },
           color: {
             pattern: [this.graphColor, this.graph1Color]

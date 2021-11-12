@@ -121,6 +121,7 @@ export const mutations = {
     state.relPerm = relPerm
   },
   [types.UPDATE_RES_KGKO] (state, resKGKO) {
+    debugger
     state.resKGKO = resKGKO
   },
   [types.SAVE_RES_KGKO] (state, resKGKO) {

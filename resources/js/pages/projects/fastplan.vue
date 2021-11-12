@@ -178,14 +178,14 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
-    onYes: function(event) {
+    onYes: async function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()
+      await this.onSavePage()
+      await this.onSaveProject()
       this.isLoading = false
 
       // go to home vue
@@ -215,7 +215,7 @@ export default {
       this.onExitPage();
     },
     onNextPage: async function(event) {
-      this.onSavePage()
+      await this.onSavePage()
 
       if (this.isSeparatorOptimizer == true) {
         this.$router.replace({ name: 'separator' })

@@ -442,14 +442,14 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
-    onYes: function(event) {
+    onYes: async function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()
+      await this.onSavePage()
+      await this.onSaveProject()
       this.isLoading = false
 
       // go to home vue
@@ -576,15 +576,15 @@ export default {
       await store.dispatch('project/saveSEP', this.mySEP)
 
     },
-    onPrevPage: function(event) {
-      this.onSavePage()
+    onPrevPage: async function(event) {
+      await this.onSavePage()
       this.$router.replace('fastplan')
     },
     onNextPage: async function(event) {
 
       this.isLoading = true;
-      this.onSavePage()
-      this.onSaveProject()
+      await this.onSavePage()
+      await this.onSaveProject()
 
       await store.dispatch('project/fetchSEP', this.mySEP)
 

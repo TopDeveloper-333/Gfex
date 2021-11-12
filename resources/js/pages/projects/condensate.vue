@@ -257,26 +257,26 @@ export default {
       this.isOperationValidate = operations
     },
     onSavePage: async function() {
-      this.$refs.condensateControl.onSavePage()
-      this.$refs.relPermControl.onSavePage()
-      this.$refs.surfaceControl.onSavePage()
-      this.$refs.reservoirControl.onSavePage()
-      this.$refs.wellHistoryControl.onSavePage()
-      this.$refs.economicsControl.onSavePage()
-      this.$refs.operationsControl.onSavePage()
+      await this.$refs.condensateControl.onSavePage()
+      await this.$refs.relPermControl.onSavePage()
+      await this.$refs.surfaceControl.onSavePage()
+      await this.$refs.reservoirControl.onSavePage()
+      await this.$refs.wellHistoryControl.onSavePage()
+      await this.$refs.economicsControl.onSavePage()
+      await this.$refs.operationsControl.onSavePage()
     },
     onSaveAs: function(event) {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
-    onYes: function(event) {
+    onYes: async function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()      
+      await this.onSavePage()
+      await this.onSaveProject()      
       this.isLoading = false
 
       // go to home vue
@@ -318,18 +318,18 @@ export default {
       var modal = document.getElementById("exitModal");
       modal.style.display = "block";
     },
-    onPrevPage: function(event) {
+    onPrevPage: async function(event) {
      
       this.isLoading = true
-      this.onSavePage()
+      await this.onSavePage()
       this.isLoading = false
 
       this.$router.replace('fastplan')
     },
     onNextPage: async function(event) {
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()
+      await this.onSavePage()
+      await this.onSaveProject()
       await this.runGasCondensateProject()
       this.isLoading = false
 

@@ -248,14 +248,14 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
-    onYes: function(event) {
+    onYes: async function(event) {
       // hide exit dialog
       var modal = document.getElementById("exitModal");
       modal.style.display = "none";
 
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()      
+      await this.onSavePage()
+      await this.onSaveProject()      
       this.isLoading = false
 
       // go to home vue
@@ -297,24 +297,24 @@ export default {
       modal.style.display = "block";
     },
     onSavePage: async function() {
-      this.$refs.drygasControl.onSavePage()
-      this.$refs.surfaceControl.onSavePage()
-      this.$refs.reservoirControl.onSavePage()
-      this.$refs.wellHistoryControl.onSavePage()
-      this.$refs.economicsControl.onSavePage()
-      this.$refs.operationsControl.onSavePage()
+      await this.$refs.drygasControl.onSavePage()
+      await this.$refs.surfaceControl.onSavePage()
+      await this.$refs.reservoirControl.onSavePage()
+      await this.$refs.wellHistoryControl.onSavePage()
+      await this.$refs.economicsControl.onSavePage()
+      await this.$refs.operationsControl.onSavePage()
     },
-    onPrevPage: function(event) {
+    onPrevPage: async function(event) {
       this.isLoading = true
-      this.onSavePage()
+      await this.onSavePage()
       this.isLoading = false
 
       this.$router.replace('fastplan')
     },
     onNextPage: async function(event) {
       this.isLoading = true
-      this.onSavePage()
-      this.onSaveProject()
+      await this.onSavePage()
+      await this.onSaveProject()
 
       if (this.isFDP == '1') {
         this.isLoading = false

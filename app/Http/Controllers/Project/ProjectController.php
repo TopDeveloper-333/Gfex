@@ -711,6 +711,53 @@ class ProjectController extends Controller
         return $res;
     }
 
+    private function removeOldFiles($workspace_dir)
+    {
+        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/FASTPLAN.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/GAS_PVT.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/KRSG.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/OPERATIONS.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PCGR.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PGOR.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PINE.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PKRG.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PKRO.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PMAT.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PZ.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/PZED.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/RESERVOIR.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/RESERVOIR_MON.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/SURFACE.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/WELL_HISTORY.BAK');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.DAT');
+        Storage::disk('executables')->delete($workspace_dir . '/COREY_DATA.in');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.in');
+        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.in');
+        Storage::disk('executables')->delete($workspace_dir . '/FASTPLAN.in');
+        Storage::disk('executables')->delete($workspace_dir . '/GAS_PVT.in');
+        Storage::disk('executables')->delete($workspace_dir . '/KRSG.in');
+        Storage::disk('executables')->delete($workspace_dir . '/OPERATIONS.in');
+        Storage::disk('executables')->delete($workspace_dir . '/PINE.in');
+        Storage::disk('executables')->delete($workspace_dir . '/PZED.in');
+        Storage::disk('executables')->delete($workspace_dir . '/RESERVOIR.in');
+        Storage::disk('executables')->delete($workspace_dir . '/RESERVOIR_MON.in');
+        Storage::disk('executables')->delete($workspace_dir . '/SURFACE.in');
+        Storage::disk('executables')->delete($workspace_dir . '/WELL_HISTORY.in');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.NEW');
+        Storage::disk('executables')->delete($workspace_dir . '/CVD.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/EARNING.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/KGKO_COREY.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/MATPLOT.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/PINE.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/PLOT_SI.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/PRESSURE_MATCHING.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
+        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_SI.OUT');
+    }
+
     public function runDryGas(Request $request)
     {
 
@@ -719,10 +766,7 @@ class ProjectController extends Controller
         $id = $request->get('projectId');
 
         error_log('runDryGas: id = '. $id. ' Dir = ' . $workspace_dir);
-        Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
+        $this->removeOldFiles($workspace_dir);
 
         //
         // Get content
@@ -837,7 +881,7 @@ class ProjectController extends Controller
         $id = $request->get('projectId');
 
         error_log('runDryGas: id = '. $id. ' Dir = ' . $workspace_dir);
-        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
+        $this->removeOldFiles($workspace_dir);
 
         //
         // Get content
@@ -957,10 +1001,7 @@ class ProjectController extends Controller
         $id = $request->get('projectId');
 
         error_log('runGasCondensate: id = '. $id. ' Dir = ' . $workspace_dir);
-        Storage::disk('executables')->delete($workspace_dir . '/PLOT_OF.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/ECONOMICS.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/RESULTS_OF.OUT');
-        Storage::disk('executables')->delete($workspace_dir . '/*.OUT');
+        $this->removeOldFiles($workspace_dir);
 
         //
         // Get content

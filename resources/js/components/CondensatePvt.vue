@@ -2,7 +2,7 @@
   <div>
     <loading :active.sync="isLoading" 
              :is-full-page="fullPage"></loading>
-    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Gas Condensate PVT Data</u></p>
+    <p class="card-text" style="font-size: 2.4rem !important;text-align: center !important;"><u>Constant Volume Depletion</u></p>
 
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
@@ -13,7 +13,7 @@
     <div>
       <hr class="gf-line" v-show="bShowPlot == false">
       <label class="btn btn-primary gf-button" style="float:right;margin-left:10px" v-on:click="onPlotPage">{{plotLabel}}</label>
-      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate</label>
+      <label class="btn btn-primary gf-button" style="float:right" v-on:click="onCalculate" v-show="bShowPlot == false">Calculate via EOS</label>
     </div>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
