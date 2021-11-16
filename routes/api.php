@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+    Route::post('getUsers', [ProfileController::class, 'getUsers']);
 
     Route::post('listProjects', [ProjectController::class, 'listProjects']);
     Route::post('createProject', [ProjectController::class, 'createProject']);

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Models;
+use App\Models\User;
+
 class ProfileController extends Controller
 {
     /**
@@ -12,6 +15,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
+        error_log('update() is called');
         $user = $request->user();
 
         $this->validate($request, [
@@ -23,4 +27,20 @@ class ProfileController extends Controller
 
         return response()->json($user);
     }
+
+
+    public function getUsers(Request $request)
+    {
+        $page = $request->get('page');
+        $current = $request->user();
+
+        if ($current->is_admin != '1') {
+            return response()->json([]);
+        }
+
+        $users = User::getAllUsers($page);
+        return response()->json($users);
+    }
+
+
 }

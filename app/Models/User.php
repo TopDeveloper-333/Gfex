@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use DB;
+
+
 class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
 {
     use Notifiable,
@@ -112,5 +115,15 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public static function getAllUsers($page)
+    {
+        return DB::table('users')
+                ->select('id', 'name', 'email', 'role', 'from', 'to')
+                ->where('is_admin', '!=', '1')
+                ->where('is_revoke', '==', '0')
+                ->orderBy('name', 'desc')
+                ->paginate(10, ['*'], 'page', $page);
     }
 }

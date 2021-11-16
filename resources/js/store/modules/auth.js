@@ -5,12 +5,14 @@ import * as types from '../mutation-types'
 // state
 export const state = {
   user: null,
+  users: {},
   token: Cookies.get('token')
 }
 
 // getters
 export const getters = {
   user: state => state.user,
+  users: state => state.users,
   token: state => state.token,
   check: state => state.user !== null
 }
@@ -40,6 +42,10 @@ export const mutations = {
 
   [types.UPDATE_USER] (state, { user }) {
     state.user = user
+  },
+
+  [types.FETCH_GETUSERS_SUCCESS] (state, users) {
+    state.users = users
   }
 }
 
@@ -56,6 +62,23 @@ export const actions = {
       commit(types.FETCH_USER_SUCCESS, { user: data })
     } catch (e) {
       commit(types.FETCH_USER_FAILURE)
+    }
+  },
+
+  async fetchUsers({ commit }, page) {
+    try {
+      const { data } = await axios.post('/api/getUsers', {'page' : page})      
+      if (typeof(data) == 'string') {
+        let payload = JSON.parse(data)
+        commit(types.FETCH_GETUSERS_SUCCESS, payload)
+      }
+      else {
+        let payload = data
+        commit(types.FETCH_GETUSERS_SUCCESS, payload)
+      }
+    } catch (e) {
+      console.log('parse isse')
+      commit(types.FETCH_GETUSERS_SUCCESS, [])
     }
   },
 

@@ -10,9 +10,9 @@
         <router-link :to="{ name: 'login' }">
           {{ $t('login') }}
         </router-link>
-        <router-link :to="{ name: 'register' }">
+        <!-- <router-link :to="{ name: 'register' }">
           {{ $t('register') }}
-        </router-link>
+        </router-link> -->
       </template>
     </div>
 
