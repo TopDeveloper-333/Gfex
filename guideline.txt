@@ -1,0 +1,9 @@
+- DB migration
+# php artisan migrate
+
+- Voyager install
+# composer require tcg/voyager
+# php artisan voyager:install
+
+- Assign admin privileges
+# php artisan voyager:admin fonzmg@gfex.com
