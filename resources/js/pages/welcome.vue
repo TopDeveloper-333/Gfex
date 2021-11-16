@@ -21,7 +21,7 @@
         <p style="font-size:7rem !important;font-weight:600;color:#4172c4">FastPlan*</p>
         <p style="font-size:3rem !important;font-weight:600;color:#4172c4">DEVELOPMENT SCREENING / PLANNING<br/>
         &<br/>
-        FIELD MONITORING / SURVEILLANCE<br/>
+        FIELD MONITORING / DRILLING / WORKOVER <br/>
         PLATFORM</p>
 
         <img class="titleImage" src="/assets/image/LOGO_GFEX.png" width="450" height="450">

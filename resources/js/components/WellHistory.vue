@@ -124,6 +124,7 @@ export default {
   computed: {
     ...mapState({
       wellhistory: state => state.project.wellhistory,
+      reservoir : state => state.project.reservoir,
     }),
     isDataValidate: function() {
       if (this.isHidden == true)
@@ -168,10 +169,8 @@ export default {
       if (oldVal < 0)
         oldVal = 0;
 
-      if (this.matching.value == 1)
+      if (this.matching.value == 1 && this.reservoir.hasDualPorosity == 0)
         val = 1
-      // else if (this.matching.value == 0 && val < 4)
-      //   val = 4
 
       this.numberOfWells = val;
       this.createWellsNetwork(this.numberOfWells, this.myWellHistory.wellsNetwork)

@@ -40,7 +40,7 @@
               </div>
 
               <div style="display:flex;align-items:center;margin-bottom:6px" v-show="bSeparatorOptimizer==false">
-                <label class="gf-item">FIELD MONITORING / SURVEILLANCE
+                <label class="gf-item">FIELD MONITORING / DRILLING / WORKOVER 
                 </label>
                 <label class="switch" style="margin: 0 0 auto auto">
                   <input type="checkbox" v-model="bFDP" false-value=1 true-value=0>
