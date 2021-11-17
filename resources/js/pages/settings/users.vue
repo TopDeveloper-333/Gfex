@@ -91,6 +91,17 @@
             <label class="btn btn-primary" v-on:click="onEditUser(props.row)">Edit</label>
             <label class="btn btn-danger" v-on:click="onDeleteUser(props.row)">Delete</label>
           </span>
+          <span v-if="props.column.field == 'role'">
+            <label v-show="`${props.row.role}` == 0">Permenant</label>
+            <label v-show="`${props.row.role}` == 1">Daily-based</label>
+          </span>
+          <span v-else-if="props.column.field == 'is_revoke'">
+            <label v-show="`${props.row.is_revoke}` == 0">Opened</label>
+            <label v-show="`${props.row.is_revoke}` == 1">Closed</label>
+          </span>
+          <span v-else>
+            {{props.formattedRow[props.column.field]}}
+          </span>
         </template>
       </vue-good-table>
     </div>
@@ -159,8 +170,8 @@ export default {
                 enabled: true,
                 placeholder: "Filter User's Role",
                 filterDropdownItems: [  
-                  { value: 0, text: 'Permenant (= 0)' },  
-                  { value: 1, text: 'Daily-based (= 1)' },  
+                  { value: 0, text: 'Permenant' },  
+                  { value: 1, text: 'Daily-based' },  
                 ],
                 trigger: 'enter', //only trigger on enter not on keyup 
               },
@@ -180,8 +191,8 @@ export default {
               filterOptions: {
                 enabled: true,
                 filterDropdownItems: [  
-                  { value: 0, text: 'Opened (= 0)' },  
-                  { value: 1, text: 'Closed (= 1)' },  
+                  { value: 0, text: 'Opened' },  
+                  { value: 1, text: 'Closed' },  
                 ],
                 trigger: 'enter', //only trigger on enter not on keyup 
               },
