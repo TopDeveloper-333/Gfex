@@ -111,7 +111,7 @@ export const actions = {
 
   async updateOtherUser({ commit }, updateUser) {
     try {
-      const { data } = await axios.post('/api/updateuser', {'updateuser' : updateUser})
+      const { data } = await axios.patch('/api/updateuser', updateUser)
       if (typeof(data) == 'string') {
         return JSON.parse(data)
       }

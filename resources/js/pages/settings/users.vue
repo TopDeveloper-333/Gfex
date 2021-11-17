@@ -43,7 +43,7 @@
         <div class="col-md-7">
           <select class="form-select" name="role" v-model="role">
             <option selected value="0">Permanent</option>
-            <option value="1">Weekly-based</option>
+            <option value="1">Daily-based</option>
           </select>
         </div>
       </div>
@@ -65,8 +65,8 @@
         <label class="col-md-3 col-form-label text-md-end">{{ $t('User status') }}</label>
         <div class="col-md-7">
           <select class="form-select" name="status" v-model="is_revoke">
-            <option selected value="0">Available</option>
-            <option value="1">Revoked</option>
+            <option selected value="0">Opened</option>
+            <option value="1">Closed</option>
           </select>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default {
                 placeholder: "Filter User's Role",
                 filterDropdownItems: [  
                   { value: 0, text: 'Permenant (= 0)' },  
-                  { value: 1, text: 'Timely-based (= 1)' },  
+                  { value: 1, text: 'Daily-based (= 1)' },  
                 ],
                 trigger: 'enter', //only trigger on enter not on keyup 
               },
@@ -180,8 +180,8 @@ export default {
               filterOptions: {
                 enabled: true,
                 filterDropdownItems: [  
-                  { value: 0, text: 'Available (= 0)' },  
-                  { value: 1, text: 'Revoked (= 1)' },  
+                  { value: 0, text: 'Opened (= 0)' },  
+                  { value: 1, text: 'Closed (= 1)' },  
                 ],
                 trigger: 'enter', //only trigger on enter not on keyup 
               },
@@ -232,20 +232,19 @@ export default {
       }        
     },
     async onDeleteUser(row) {
-      this.$confirm(
-        {
-          message: 'Are you sure to delete this user: "' + row.name + '"?',
-          button: {
-            no: 'No',
-            yes: 'Yes'
-          },
-          callback: async confirm => {
-            if (confirm) {
-              let result = await store.dispatch('auth/removeUser', row)
-              this.$router.go()
-            }
+      this.$confirm({
+        message: 'Are you sure to delete this user: "' + row.name + '"?',
+        button: {
+          no: 'No',
+          yes: 'Yes'
+        },
+        callback: async confirm => {
+          if (confirm) {
+            let result = await store.dispatch('auth/removeUser', row)
+            this.$router.go()
           }
-        })
+        }
+      })
     }
   }
 }

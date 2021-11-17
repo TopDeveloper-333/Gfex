@@ -1,7 +1,17 @@
 <template>
+  <div style="background-image: url(/assets/image/LOGIN_BACKGROUND.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    height: 100vh;">
+
   <div class="row">
     <div class="col-lg-7 m-auto">
-      <card :title="$t('verify_email')">
+      <div class="card" style="margin-top:20px">
+        <div class="card-header gf-header" style="background:yellow;color:rgb(13, 110, 253);font-size:3rem">
+           Resend verification
+        </div>
         <form @submit.prevent="send" @keydown="form.onKeydown($event)">
           <alert-success :form="form" :message="status" />
 
@@ -23,9 +33,11 @@
             </div>
           </div>
         </form>
-      </card>
+      </div>
     </div>
   </div>
+  </div>
+
 </template>
 
 <script>

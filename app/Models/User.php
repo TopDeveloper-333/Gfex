@@ -133,7 +133,6 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return DB::table('users')
                 ->select('id', 'name', 'email', 'role', 'from', 'to', 'is_revoke')
                 ->where('is_admin', '!=', '1')
-                ->where('is_revoke', '==', '0')
                 ->orderBy('name', 'desc')
                 ->get();
     }

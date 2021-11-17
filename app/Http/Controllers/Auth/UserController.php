@@ -22,7 +22,6 @@ class UserController extends Controller
     {
         // $page = $request->get('page');
         $current = $request->user();
-
         if ($current->is_admin != '1') {
             return response()->json([]);
         }
@@ -34,8 +33,7 @@ class UserController extends Controller
 
     public function addUser(Request $request)
     {
-        $currentUser = $request->user();
-        
+        $currentUser = $request->user();        
         if ($currentUser->is_admin != 1)
             return response()->json(['code' => -1, 'message' => 'The user has not administrator priviledge']);
 
@@ -72,10 +70,17 @@ class UserController extends Controller
 
     public function removeUser(Request $request)
     {
-        $currentUser = $request->user();
-        
+        $currentUser = $request->user();        
         if ($currentUser->is_admin != 1)
-            return response()->json(['code' => -1, 'message' => 'The user has not administrator priviledge']);
+            return response()->json(['message' => 'The user has not administrator priviledge']);
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => json_encode($validator->messages())]);
+        }
 
         $exitUser = User::find($request->get('id'));
         $exitUser->delete();
@@ -85,22 +90,33 @@ class UserController extends Controller
 
     public function updateUser(Request $request)
     {
-        $currentUser = $request->user();
-        
+        $currentUser = $request->user();        
         if ($currentUser->is_admin != 1)
             return response()->json(['code' => -1, 'message' => 'The user has not administrator priviledge']);
 
-        $updateUser = $request->get('updateuser');
-
-        $this->validate($updateUser, [
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$updateUser->id,
+            'email' => 'required|email',
             'role' => 'required',
             'is_revoke' => 'required'
         ]);
 
-        $updateUser->update($updateUser->only('name', 'email', 'role', 'from', 'to', 'is_rovoke'));
-        return response()->json($updateUser);
-            
+        if ($validator->fails()) {
+            return response()->json(['message' => json_encode($validator->messages())]);
+        }
+
+        $existUser = User::find($request->get('id'));
+        error_log(json_encode($existUser));
+
+        $existUser->name = $request->get('name');
+        $existUser->email = $request->get('email');
+        $existUser->role = $request->get('role');
+        $existUser->is_revoke = $request->get('is_revoke');
+        $existUser->from = $request->get('from');
+        $existUser->to = $request->get('to');
+        $existUser->save();
+        
+        return response()->json([]);
     }
 }

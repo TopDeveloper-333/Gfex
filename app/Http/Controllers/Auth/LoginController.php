@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -35,6 +36,21 @@ class LoginController extends Controller
         $user = $this->guard()->user();
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
             return false;
+        }
+
+        if ($user->is_revoke == 1)
+            return false;
+
+        if ($user->role == 1) {
+            $currentDay = Carbon::now();
+            $from = Carbon::createFromFormat('Y-m-d', $user->from);
+            $to = Carbon::createFromFormat('Y-m-d', $user->to);
+
+            if ($currentDay->lt($from))
+                return false;
+
+            if ($currentDay->gt($to))
+                return false;
         }
 
         $this->guard()->setToken($token);

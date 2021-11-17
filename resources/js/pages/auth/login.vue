@@ -1,5 +1,5 @@
 <template>
-  <div   style="background-image: url(/assets/image/LOGIN_BACKGROUND.png);
+  <div style="background-image: url(/assets/image/LOGIN_BACKGROUND.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -38,9 +38,9 @@
           <div class="mb-3 row">
             <div class="col-md-3" />
             <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
+              <!-- <checkbox v-model="remember" name="remember">
                 {{ $t('remember_me') }}
-              </checkbox>
+              </checkbox> -->
 
               <router-link :to="{ name: 'password.request' }" class="small ms-auto my-auto">
                 {{ $t('forgot_password') }}

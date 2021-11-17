@@ -1,5 +1,6 @@
 <template>
   <card :title="$t('User Management')">
+    <vue-confirm-dialog></vue-confirm-dialog>
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">    
       <p class="gf-item">Edit User</p>
       
@@ -7,7 +8,7 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('name') }}</label>
         <div class="col-md-7">
-          <input v-model="userInfo.name" class="form-control" type="text" name="name">
+          <input v-model="userInfo.name" class="form-control" type="text">
         </div>
       </div>
 
@@ -15,7 +16,7 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('email') }}</label>
         <div class="col-md-7">
-          <input v-model="userInfo.email" class="form-control" type="email" name="email">
+          <input v-model="userInfo.email" class="form-control" type="email">
         </div>
       </div>
 
@@ -23,25 +24,22 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('User Role') }}</label>
         <div class="col-md-7">
-          <select class="form-select" name="role" v-model="userInfo.role">
+          <select class="form-select" v-model="userInfo.role">
             <option selected value="0">Permanent</option>
-            <option value="1">Weekly-based</option>
+            <option value="1">Daily-based</option>
           </select>
-          <has-error :form="form" field="role" />
         </div>
       </div>
 
       <!-- From To -->
-      <div class="mb-3 row">
+      <div class="mb-3 row" v-show="userInfo.role != undefined && userInfo.role == 1">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('From') }}</label>
         <div class="col-md-3">
-          <input v-model="userInfo.from" class="form-control" type="date" name="from">
-          <has-error :form="form" field="from" />
+          <input v-model="userInfo.from" class="form-control" type="date">
         </div>
         <label class="col-md-1 col-form-label text-md-end">{{ $t('To') }}</label>
         <div class="col-md-3">
-          <input v-model="userInfo.to" class="form-control" type="date" name="to">
-          <has-error :form="form" field="from" />
+          <input v-model="userInfo.to" class="form-control" type="date">
         </div>
       </div>
 
@@ -49,11 +47,10 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('User status') }}</label>
         <div class="col-md-7">
-          <select class="form-select" name="status" v-model="userInfo.is_revoke">
-            <option selected value="0">Available</option>
-            <option value="1">Revoked</option>
+          <select class="form-select" v-model="userInfo.is_revoke">
+            <option selected value="0">Opened</option>
+            <option value="1">Closed</option>
           </select>
-          <has-error :form="form" field="status" />
         </div>
       </div>
 
@@ -96,18 +93,42 @@ export default {
     }
   },
   computed:{
-    ...mapState({
-      users : state => state.auth.users,
-    }),
   },
 
-  async mounted () {
+  created () {
     this.userInfo = this.$route.params
-    // alert(JSON.stringify(this.userInfo))
   },
 
   methods: {
-    onUpdate() {
+    async onUpdate() {
+
+      if (this.userInfo.role == 1) {
+        if (this.userInfo.from == undefined || this.userInfo.from == null){
+          this.$confirm({
+            message: 'Please choose <from> date field for the user',
+            button: {
+              yes: 'OK'
+            }
+          })
+          return;
+        }
+
+        if (this.userInfo.to == undefined || this.userInfo.to == null){
+          this.$confirm({
+            message: 'Please choose <to> date field for the user',
+            button: {
+              yes: 'OK'
+            }
+          })
+          return;
+        }
+      }
+      else {
+        this.userInfo.from = null
+        this.userInfo.to = null
+      }
+
+      await store.dispatch('auth/updateOtherUser', this.userInfo)
       this.$router.go(-1)
     },
     onBack() {
