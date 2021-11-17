@@ -27,7 +27,8 @@ export default [
       { path: '', redirect: { name: 'settings.profile' } },
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') },
-      { path: 'users', name: 'settings.users', component: page('settings/users.vue') }
+      { path: 'users', name: 'settings.users', component: page('settings/users.vue') },
+      { path: 'updateuser', name: 'settings.updateuser', component: page('settings/updateuser.vue') }
     ]
   },
 

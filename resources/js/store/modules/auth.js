@@ -82,6 +82,49 @@ export const actions = {
     }
   },
 
+  async addUser({ commit }, newUser) {
+    try {
+      const { data } = await axios.post('/api/adduser', newUser)
+      if (typeof(data) == 'string') {
+        return JSON.parse(data)
+      }
+      else {
+        return data
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+    return { 'message' : 'The unknown error happened'}
+  },
+
+  async removeUser({commit}, existUser) {
+    try {
+      const { data } = await axios.post('/api/removeuser', existUser)
+      return true
+    } catch (e) {
+      console.log(e)
+    }
+
+    return { 'message' : 'The unknown error happened'}
+  },
+
+  async updateOtherUser({ commit }, updateUser) {
+    try {
+      const { data } = await axios.post('/api/updateuser', {'updateuser' : updateUser})
+      if (typeof(data) == 'string') {
+        return JSON.parse(data)
+      }
+      else {
+        return data
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+    return { 'message' : 'The unknown error happened'}
+  },
+
   updateUser ({ commit }, payload) {
     commit(types.UPDATE_USER, payload)
   },

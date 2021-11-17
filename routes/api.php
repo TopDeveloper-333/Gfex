@@ -30,10 +30,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', [LoginController::class, 'logout']);
 
     Route::get('user', [UserController::class, 'current']);
+    Route::post('adduser', [UserController::class, 'addUser']);
+    Route::patch('updateuser', [UserController::class, 'updateUser']);
+    Route::post('removeuser', [UserController::class, 'removeUser']);
+    Route::post('getUsers', [UserController::class, 'getUsers']);
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
-    Route::post('getUsers', [ProfileController::class, 'getUsers']);
 
     Route::post('listProjects', [ProjectController::class, 'listProjects']);
     Route::post('createProject', [ProjectController::class, 'createProject']);

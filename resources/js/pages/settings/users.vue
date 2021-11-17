@@ -1,18 +1,15 @@
 <template>
   <card :title="$t('Users Management')">
+    <vue-confirm-dialog></vue-confirm-dialog>
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
-
-    <form @submit.prevent="addNewUser" @keydown="form.onKeydown($event)">
-      <alert-success :form="form" :message="$t('info_updated')" />
-
+    
       <p class="gf-item">Add new user</p>
       
       <!-- Name -->
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('name') }}</label>
         <div class="col-md-7">
-          <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" class="form-control" type="text" name="name">
-          <has-error :form="form" field="name" />
+          <input v-model="name" class="form-control" type="text" name="name">
         </div>
       </div>
 
@@ -20,8 +17,7 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('email') }}</label>
         <div class="col-md-7">
-          <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" type="email" name="email">
-          <has-error :form="form" field="email" />
+          <input v-model="email" class="form-control" type="email" name="email">
         </div>
       </div>
 
@@ -29,9 +25,7 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end ">{{ $t('password') }}</label>
         <div class="col-md-7">
-          <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" 
-            class="form-control" type="password" name="password">
-          <has-error :form="form" field="password" />
+          <input v-model="password" class="form-control" type="password" name="password">
         </div>
       </div>
 
@@ -39,36 +33,70 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label text-md-end">{{ $t('confirm_password') }}</label>
         <div class="col-md-7">
-          <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" 
-            class="form-control" type="password" name="password_confirmation">
-          <has-error :form="form" field="password_confirmation" />
+          <input v-model="password_confirmation" class="form-control" type="password" name="password_confirmation">
+        </div>
+      </div>
+
+      <!-- User Role -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label text-md-end">{{ $t('User Role') }}</label>
+        <div class="col-md-7">
+          <select class="form-select" name="role" v-model="role">
+            <option selected value="0">Permanent</option>
+            <option value="1">Weekly-based</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- From To -->
+      <div class="mb-3 row" v-show="role != undefined && role == 1">
+        <label class="col-md-3 col-form-label text-md-end">{{ $t('From') }}</label>
+        <div class="col-md-3">
+          <input v-model="from" class="form-control" type="date" name="from">
+        </div>
+        <label class="col-md-1 col-form-label text-md-end">{{ $t('To') }}</label>
+        <div class="col-md-3">
+          <input v-model="to" class="form-control" type="date" name="to">
+        </div>
+      </div>
+
+      <!-- Revoke -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label text-md-end">{{ $t('User status') }}</label>
+        <div class="col-md-7">
+          <select class="form-select" name="status" v-model="is_revoke">
+            <option selected value="0">Available</option>
+            <option value="1">Revoked</option>
+          </select>
         </div>
       </div>
 
       <!-- Submit Button -->
       <div class="mb-3 row">
         <div class="col-md-9 ms-md-auto">
-          <v-button :loading="form.busy" type="success">
-            {{ $t('Add new user') }}
-          </v-button>
+          <label class="btn btn-primary" v-on:click="addNewUser()">Add new user</label>
         </div>
       </div>
-    </form>
 
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
       <p class="gf-item">User List</p>
-      <div id="usersListSheet"></div>
+      <!-- <div id="usersListSheet"></div> -->
+      <vue-good-table :columns="columns" :rows="users" 
+                      max-height="300px"                      
+                      :search-options="{enabled: true}"
+                      :fixed-header="true"
+                      :pagination-options="{enabled: true,mode: 'pages'}">
+        <template slot="table-row" slot-scope="props">
+          <span v-if="props.column.field == 'action'">
+            <label class="btn btn-primary" v-on:click="onEditUser(props.row)">Edit</label>
+            <label class="btn btn-danger" v-on:click="onDeleteUser(props.row)">Delete</label>
+          </span>
+        </template>
+      </vue-good-table>
     </div>
 
-    <div class="mb-3 row">
-      <div class="col-md-12 ms-md-auto">
-        <v-button type="success">
-          {{ $t('Update users') }}
-        </v-button>
-      </div>
     </div>
 
-    </div>
   </card>
 </template>
 
@@ -79,6 +107,8 @@ import Form from 'vform'
 import store from '~/store'
 import { mapState } from 'vuex'
 import Multiselect from 'vue-multiselect'
+import 'vue-good-table/dist/vue-good-table.css'
+import Index from './index.vue'
 
 export default {
   scrollToTop: false,
@@ -86,7 +116,8 @@ export default {
   middleware: 'auth',
 
   components: {
-    Multiselect
+    Multiselect,
+    Index
   },
 
   metaInfo () {
@@ -95,13 +126,72 @@ export default {
 
   data() {
     return {
-      form: new Form({
-        name:'',
-        email: '',
-        password: '',
-        password_confirmation: ''
-      }),
-      usersListSheet: null
+      name:'',
+      email: '',
+      password: '',
+      password_confirmation: '',
+      role: null,
+      from: '',
+      to: '',
+      is_revoke: '',
+      roleOption: [
+        { name: 'Permanent', value: 0},
+        { name: 'Daily-based', value: 1},
+      ],
+      // usersListSheet: null,
+      columns: [
+          {
+              label:'Id',
+              field:'id',
+          },
+          {
+              label:'Name',
+              field:'name',
+          },
+          {
+              label:'Email',
+              field:'email',
+          },
+          {
+              label:'Role',
+              field:'role',
+              filterOptions: {
+                enabled: true,
+                placeholder: "Filter User's Role",
+                filterDropdownItems: [  
+                  { value: 0, text: 'Permenant (= 0)' },  
+                  { value: 1, text: 'Timely-based (= 1)' },  
+                ],
+                trigger: 'enter', //only trigger on enter not on keyup 
+              },
+          },
+          {
+              label:'From',
+              field:'from',
+          },
+          {
+              label:'To',
+              field:'to',
+          },
+          {
+              label:'Revoke',
+              field:'is_revoke',
+              placeholder: "Filter User's status",
+              filterOptions: {
+                enabled: true,
+                filterDropdownItems: [  
+                  { value: 0, text: 'Available (= 0)' },  
+                  { value: 1, text: 'Revoked (= 1)' },  
+                ],
+                trigger: 'enter', //only trigger on enter not on keyup 
+              },
+          },
+          {
+              label:'Action',
+              field:'action',
+          },
+      ],
+
     }
   },
   computed:{
@@ -112,91 +202,52 @@ export default {
 
   async mounted () {
     await store.dispatch('auth/fetchUsers', 0)
-
-    document.getElementById('usersListSheet').innerHTML = ''
-    this.usersListSheet = jspreadsheet(document.getElementById('usersListSheet'), {
-        data:this.users,
-        allowInsertRow:false,
-        allowManualInsertRow:false,
-        allowInsertColumn:false,
-        allowManualInsertColumn:false,
-        allowDeleteRow:false,
-        allowDeleteColumn:false,
-        search: true,
-        pagination: 10,
-        columns: [
-            {
-                type: 'text',
-                title:'Id',
-                width: 50,
-                decimal:','
-            },
-            {
-                type: 'text',
-                title:'Name',
-                width: 230,
-                decimal:','
-            },
-            {
-                type: 'text',
-                title:'Email',
-                width: 230,
-                decimal:','
-            },
-            {
-                type: 'dropdown',
-                title:'Role',
-                width: 180,
-                source: ['Permanent', 'Temporary']
-            },
-            {
-                type: 'calendar',
-                title:'From',
-                width: 160,
-                decimal:','
-            },
-            {
-                type: 'calendar',
-                title:'To',
-                width: 160,
-                decimal:','
-            },
-            {
-                type: 'dropdown',
-                title:'Revoke',
-                width: 130,
-                source: ['Yes', 'No']
-            },
-        ],
-    });
-    this.usersListSheet.hideIndex();
-
   },
 
   methods: {
+    onEditUser(row) {
+      this.$router.push({ name: 'settings.updateuser', params: row})
+    },
     async addNewUser () {
-      
+      if (this.role == 0) {
+        this.from = null;
+        this.to = null;
+      }
+
+      let result = await store.dispatch('auth/addUser', {
+        'name': this.name,
+        'email' : this.email,
+        'password' : this.password,
+        'password_confirmation' : this.password_confirmation,
+        'role' : this.role,
+        'from' : this.from,
+        'to' : this.to,
+        'is_revoke' : this.is_revoke
+      })
+
+      if (result.message != undefined) 
+        alert(result.message)
+      else {
+        this.$router.go()
+      }        
+    },
+    async onDeleteUser(row) {
+      this.$confirm(
+        {
+          message: 'Are you sure to delete this user: "' + row.name + '"?',
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+          callback: async confirm => {
+            if (confirm) {
+              let result = await store.dispatch('auth/removeUser', row)
+              this.$router.go()
+            }
+          }
+        })
     }
   }
 }
+
 </script>
-
-<style scoped>
-.jexcel > thead > tr > td {
-  font-size: 14px;
-  background-color: white !important;
-  border-top: 0px !important;
-  color: black;
-}
-
-.jexcel > tbody > tr > td {
-  font-size: 14px;
-  background-color: white;
-  border-top: 0px !important;
-  color: black;
-}
-.jexcel .highlight-selected {
-  background-color: white !important;
-  color: black !important;
-}
-</style>

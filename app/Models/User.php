@@ -27,6 +27,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'name',
         'email',
         'password',
+        'role',
+        'is_revoke',
+        'is_admin',
+        'from',
+        'to',
     ];
 
     /**

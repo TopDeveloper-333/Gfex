@@ -22,12 +22,18 @@
 </template>
 
 <script>
+import store from '~/store'
+import { mapState } from 'vuex'
+
 export default {
   middleware: 'auth',
 
   computed: {
+    ...mapState({
+      user : state => state.auth.user,
+    }),
     tabs () {
-      return [
+      let tt = [
         {
           icon: 'user',
           name: this.$t('profile'),
@@ -38,12 +44,17 @@ export default {
           name: this.$t('password'),
           route: 'settings.password'
         },
-        {
+      ]
+
+      if (this.user != undefined && this.user.is_admin == 1) {
+        tt.push({
           icon: 'users',
           name: this.$t('Users'),
           route: 'settings.users'
-        },
-      ]
+        })
+      }
+
+      return tt
     }
   }
 }
