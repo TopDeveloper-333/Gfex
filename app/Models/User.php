@@ -117,13 +117,19 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         return [];
     }
 
-    public static function getAllUsers($page)
+    public static function getAllUsers(/*$page*/)
     {
+        // return DB::table('users')
+        //         ->select('id', 'name', 'email', 'role', 'from', 'to')
+        //         ->where('is_admin', '!=', '1')
+        //         ->where('is_revoke', '==', '0')
+        //         ->orderBy('name', 'desc')
+        //         ->paginate(10, ['*'], 'page', $page);
         return DB::table('users')
-                ->select('id', 'name', 'email', 'role', 'from', 'to')
+                ->select('id', 'name', 'email', 'role', 'from', 'to', 'is_revoke')
                 ->where('is_admin', '!=', '1')
                 ->where('is_revoke', '==', '0')
                 ->orderBy('name', 'desc')
-                ->paginate(10, ['*'], 'page', $page);
+                ->get();
     }
 }

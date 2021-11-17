@@ -31,14 +31,15 @@ class ProfileController extends Controller
 
     public function getUsers(Request $request)
     {
-        $page = $request->get('page');
+        // $page = $request->get('page');
         $current = $request->user();
 
         if ($current->is_admin != '1') {
             return response()->json([]);
         }
 
-        $users = User::getAllUsers($page);
+        // $users = User::getAllUsers($page);
+        $users = User::getAllUsers();
         return response()->json($users);
     }
 
