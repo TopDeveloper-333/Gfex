@@ -31,6 +31,7 @@
                          @changedValidate="updateReservoirValidate($event)">
               </reservoir>
               <well-history v-show="screenType==='WELLHISTORY_SCREEN'" ref="wellHistoryControl" 
+                         v-bind:isHidden="!(isEconomics != true && isCondensate!='1' && isFDP =='0')"
                          @changedValidate="updateWellHistoryValidate($event)">
               </well-history>
               <economics v-show="screenType==='ECONOMICS_SCREEN'" ref="economicsControl" 
