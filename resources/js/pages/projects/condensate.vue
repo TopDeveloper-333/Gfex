@@ -14,7 +14,10 @@
           <div class="col-md-10 offset-md-1">
             <div class="card-body">
               <h3 class="card-title gf-title"><{{projectName}}> Field Project</h3>
-
+              <drygas-pvt v-show="screenType==='GASDATA_SCREEN'" ref="drygasControl" 
+                          v-bind:isHidden="false"
+                          @changedValidate="updateGasValidate($event)">
+              </drygas-pvt>
               <condensate-pvt v-show="screenType==='PVT_SCREEN'" ref="condensateControl"
                               v-bind:isHidden="false"
                               @changedValidate="updatePVTValidate($event)">
@@ -45,11 +48,14 @@
               </operations>
 
               <div class="d-flex justify-content-between" style="margin-top:20px">
-                <label class="btn btn-primary gf-button " v-on:click="onPrevPage">Previous</label>
+                <div style="text-align:center">
+                  <label class="btn btn-primary gf-button " v-on:click="onPrevPage">Previous</label>
+                </div>
 
                 <!-- <div style="text-align:center" class="btn-group" role="group"> -->
                 <div style="text-align:center">
-                  <label class="btn gf-button" v-on:click="onPVTPage" v-bind:class="pvtButtonClass">PVT</label>
+                  <label class="btn gf-button" v-on:click="onGasPage" v-bind:class="gasButtonClass">Gas Data</label>
+                  <label class="btn gf-button" v-on:click="onPVTPage" v-bind:class="pvtButtonClass">Condensate Data</label>
                   <label class="btn gf-button" v-on:click="onRelPermPage" v-bind:class="relPermButtonClass">Rel.Perm</label>
                   <label class="btn gf-button" v-on:click="onSurfacePage" v-bind:class="surfaceButtonClass">Surface</label>
                   <label class="btn gf-button" v-on:click="onReservoirPage" v-bind:class="reservoirButtonClass" v-show="isFDP=='1'">Reservoir</label>
@@ -58,9 +64,10 @@
                   <label class="btn gf-button" v-on:click="onOperationPage" v-bind:class="operationButtonClass" v-show="isFDP=='1'">Operations</label>
                 </div>
 
-                <div>
+                <div style="text-align:center">
                   <label class="btn btn-outline-primary gf-button" v-bind:class="executeButtonClass" v-on:click="onNextPage">Execute</label>
-                  <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
+                  <label class="btn btn-primary gf-button" v-on:click="onExitPage(false)">Save</label>
+                  <label class="btn btn-primary gf-button " v-on:click="onExitPage(true)">Exit</label>
                 </div>
 
               </div>
@@ -86,7 +93,7 @@
           <input style="font-size: 1.25rem" maxlength="20" v-model="newProjectName" placeholder="Please input new project name">
         </div>
         <div style="margin-bottom:16px;margin-top:16px">
-          <label class="btn btn-primary gf-button" v-on:click="onSaveAs" v-show="hideSaveAsButton==false">Save As</label>
+          <label class="btn btn-primary gf-button" v-on:click="onSaveAs" v-show="hideSaveAsButton==false && isLeavePage == true">Save As</label>
           <label class="btn btn-primary gf-button" v-on:click="onYes">Yes</label>
           <label class="btn btn-primary gf-button" v-on:click="onNo">No</label>
         </div>
@@ -99,6 +106,7 @@
 <script>
 import store from '~/store'
 import { mapState } from 'vuex'
+import DrygasPvt from '~/components/DrygasPvt.vue'
 import CondensatePvt from '~/components/CondensatePvt';
 import Surface from '~/components/Surface.vue';
 import Reservoir from '~/components/Reservoir.vue';
@@ -109,6 +117,7 @@ import RelativePermeability from '~/components/RelativePermeability.vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
+const GASDATA_SCREEN = "GASDATA_SCREEN"
 const PVT_SCREEN = "PVT_SCREEN"
 const RELPERM_SCREEN = "RELPERM_SCREEN"
 const SURFACE_SCREEN = "SURFACE_SCREEN"
@@ -134,6 +143,7 @@ export default {
   },
 
   components: {
+    DrygasPvt,
     CondensatePvt,
     Reservoir,
     WellHistory,
@@ -146,10 +156,11 @@ export default {
 
   data() {
     return {
-      screenType : PVT_SCREEN,
+      screenType : GASDATA_SCREEN,
       isSaveAs : false,
       hideSaveAsButton: false,
       newProjectName: "",
+      isGasValidate: true,
       isPVTValidate: true,
       isRelPermValidate: true,
       isSurfaceValidate: true,
@@ -159,6 +170,7 @@ export default {
       isOperationValidate: true,
       isLoading: false,
       fullPage: true,
+      isLeavePage: true
     }
   },
 
@@ -181,6 +193,13 @@ export default {
       gascondensate : state => state.project.gascondensate,
       resKGKO: state => state.project.resKGKO
     }),
+    gasButtonClass: function() {
+      if (this.isGasValidate == false) return {'btn-danger' : true}
+      // else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
+      else if (this.isDataValidate == false) return {'btn-outline-primary': true}
+      else if (this.screenType === GASDATA_SCREEN) return {'btn-primary': true}
+      else return {'btn-outline-primary': true}
+    },
     pvtButtonClass: function() {
       if (this.isPVTValidate == false) return {'btn-danger' : true}
       // else if (this.isDataValidate == false) return {'btn-outline-primary': true, 'disabled': true}
@@ -229,13 +248,15 @@ export default {
       else return {'btn-outline-primary': true, 'disabled': true}
     },
     isDataValidate: function() {
-      return this.isPVTValidate & this.isRelPermValidate & this.isSurfaceValidate & 
-          this.isReservoirValidate & this.isWellHistoryValidate & this.isEconomicsValidate &
-          this.isOperationValidate
+      return this.isGasValidate & this.isPVTValidate & this.isRelPermValidate & this.isSurfaceValidate & 
+          this.isReservoirValidate & this.isWellHistoryValidate & this.isEconomicsValidate & this.isOperationValidate
     }
   },
 
   methods: {
+    updateGasValidate (gas) {
+      this.isGasValidate = gas
+    },
     updatePVTValidate (pvt) {
       this.isPVTValidate = pvt
     },
@@ -258,6 +279,7 @@ export default {
       this.isOperationValidate = operations
     },
     onSavePage: async function() {
+      await this.$refs.drygasControl.onSavePage()
       await this.$refs.condensateControl.onSavePage()
       await this.$refs.relPermControl.onSavePage()
       await this.$refs.surfaceControl.onSavePage()
@@ -281,7 +303,8 @@ export default {
       this.isLoading = false
 
       // go to home vue
-      this.$router.replace('home')
+      if (this.isLeavePage == true)
+        this.$router.replace('home')
     },
     onNo: function(event) {
       // hide exit dialog
@@ -289,7 +312,11 @@ export default {
       modal.style.display = "none";
 
       // go to home vue
-      this.$router.replace('home')
+      if (this.isLeavePage == true)
+        this.$router.replace('home')
+    },
+    onGasPage: function(event) {
+      this.screenType = GASDATA_SCREEN
     },
     onPVTPage: function(event) {
       this.screenType = PVT_SCREEN
@@ -312,9 +339,10 @@ export default {
     onOperationPage: function(event) {
       this.screenType = OPERATIONS_SCREEN
     },
-    onExitPage: function(event) {
+    onExitPage: function(isLeave) {
       this.isSaveAs = false
       this.hideSaveAsButton = false
+      this.isLeavePage = isLeave
 
       var modal = document.getElementById("exitModal");
       modal.style.display = "block";
