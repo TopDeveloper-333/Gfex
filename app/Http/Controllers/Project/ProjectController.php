@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use TitasGailius\Terminal\Terminal;
 
 use App\Models\Project;
+use App\Models\License;
 
 
 class ProjectController extends Controller
@@ -1224,6 +1225,31 @@ class ProjectController extends Controller
         fclose($content);
 
         return response()->json($res);
+    }
+
+    public function generateLicense(Request $request)
+    {
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $role = $request->get('role');
+        $machineKey = $request->get('machineKey');
+
+        error_log($machineKey);
+        return response()->json([]);
+    }
+
+    public function fetchLicenses(Request $request)
+    {
+        // $page = $request->get('page');
+        $current = $request->user();
+        if ($current->is_admin != '1') {
+            return response()->json([]);
+        }
+
+        $licenses = License::getAllLicenses();
+        return response()->json($licenses);
     }
 
 }

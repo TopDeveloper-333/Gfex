@@ -77,7 +77,7 @@ export const actions = {
         commit(types.FETCH_GETUSERS_SUCCESS, payload)
       }
     } catch (e) {
-      console.log('parse isse')
+      console.log('FetchUsers parse issue')
       commit(types.FETCH_GETUSERS_SUCCESS, [])
     }
   },

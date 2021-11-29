@@ -28,7 +28,8 @@ export default [
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') },
       { path: 'users', name: 'settings.users', component: page('settings/users.vue') },
-      { path: 'updateuser', name: 'settings.updateuser', component: page('settings/updateuser.vue') }
+      { path: 'updateuser', name: 'settings.updateuser', component: page('settings/updateuser.vue') },
+      { path: 'license', name: 'settings.license', component: page('settings/license.vue') }
     ]
   },
 

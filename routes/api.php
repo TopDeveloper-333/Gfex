@@ -49,6 +49,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('requestKGKO', [CoreyController::class, 'requestKGKO']);
     Route::post('requestCvdOut', [ProjectController::class, 'requestCvdOut']);
     Route::post('requestOPT', [SepController::class, 'requestOPT']);
+
+    Route::post('generateLicense', [ProjectController::class, 'generateLicense']);
+    Route::post('fetchLicenses', [ProjectController::class, 'fetchLicenses']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

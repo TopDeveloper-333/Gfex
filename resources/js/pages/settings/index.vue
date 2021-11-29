@@ -52,6 +52,11 @@ export default {
           name: this.$t('Users'),
           route: 'settings.users'
         })
+        tt.push({
+          icon: 'money-check',
+          name: this.$t('License'),
+          route: 'settings.license'
+        })
       }
 
       return tt

@@ -24,7 +24,8 @@ export const state = {
   resOPT: [],
   resFastPlan: {},
   resMonitoring: {},
-  resCvdOut: []
+  resCvdOut: [],
+  licenses: []
 }
 
 function getCookie(name, defaultValue) {
@@ -59,7 +60,8 @@ export const getters = {
   resOPT: state => state.resOPT,
   resFastPlan: state => state.resFastPlan,
   resMonitoring: state => state.resMonitoring,
-  resCvdOut: state => state.resCvdOut
+  resCvdOut: state => state.resCvdOut,
+  licenses: state => state.licenses
 }
 
 export const mutations = {
@@ -139,6 +141,9 @@ export const mutations = {
   [types.SAVE_RES_MONITORING] (state, resMonitoring) {
     state.resMonitoring = resMonitoring
   },
+  [types.FETCH_LICENSES_SUCCESS](state, licenses) {
+    state.licenses = licenses
+  }
 }
 
 export const actions = {
@@ -269,6 +274,26 @@ export const actions = {
     }
     else {
       commit(types.SAVE_RES_FASTPLAN, data)
+    }
+  },
+  async generateLicense({commit}, payload) {
+    const { data } = await axios.post('/api/generateLicense', payload)
+    return data
+  },
+  async fetchLicenses({commit}, page) {
+    try {
+      const { data } = await axios.post('/api/fetchLicenses', {'page' : page})      
+      if (typeof(data) == 'string') {
+        let payload = JSON.parse(data)
+        commit(types.FETCH_LICENSES_SUCCESS, payload)
+      }
+      else {
+        let payload = data
+        commit(types.FETCH_LICENSES_SUCCESS, payload)
+      }
+    } catch (e) {
+      console.log('FetchLicenses parse issue')
+      commit(types.FETCH_LICENSES_SUCCESS, [])
     }
   }
 
