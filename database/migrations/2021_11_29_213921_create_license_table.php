@@ -21,7 +21,7 @@ class CreateLicenseTable extends Migration
             $table->date('to')->nullable()->default(null);
             $table->integer('role')->default(0);
             $table->string('machine_key')->default('');
-            $table->string('license_key')->default('');
+            $table->mediumText('license_key')->default('');
             $table->timestamps();
         });
     }

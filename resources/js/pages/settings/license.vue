@@ -69,6 +69,7 @@
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'action'">
             <label class="btn btn-primary" v-on:click="onDownloadLicense(props.row)">Download</label>
+            <label class="btn btn-danger" v-on:click="onDeleteLicense(props.row)">Delete</label>
           </span>
           <span v-if="props.column.field == 'role'">
             <label v-show="`${props.row.role}` == 0">Permenant</label>
@@ -118,18 +119,22 @@ export default {
           {
               label:'Id',
               field:'id',
+              width:'50px',
           },
           {
               label:'Name',
               field:'name',
+              width:'80px',
           },
           {
               label:'Email',
               field:'email',
+              width:'80px',
           },
           {
               label:'Role',
               field:'role',
+              width:'80px',
               filterOptions: {
                 enabled: true,
                 placeholder: "Filter User's Role",
@@ -143,22 +148,32 @@ export default {
           {
               label:'From',
               field:'from',
+              width:'90px',
           },
           {
               label:'To',
               field:'to',
+              width:'90px',
+          },
+          {
+              label:'OS',
+              field:'ostype',
+              width:'60px',
           },
           {
               label:'MachineKey',
-              field:'machineKey',
+              field:'machine_key',
+              width:'160px',
           },
           {
               label:'LicenseKey',
-              field:'licenseKey',
+              field:'license_key',
+              width:'320px',
           },
           {
               label:'Action',
               field:'action',
+              width:'80px',
           },
       ],
     }
@@ -215,6 +230,13 @@ export default {
         role: this.role,
         machineKey: this.machineKey
       })
+
+      if (result != undefined && result.license_key != undefined)
+      {
+
+        this.$router.go()
+      }
+
     }
   }
 }

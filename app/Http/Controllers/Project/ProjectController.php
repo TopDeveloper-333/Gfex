@@ -9,7 +9,10 @@ use TitasGailius\Terminal\Terminal;
 
 use App\Models\Project;
 use App\Models\License;
-
+use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Crypt\Common\PublicKey;
+use phpseclib3\Crypt\Common\PrivateKey;
+use phpseclib3\Exception\NoKeyLoadedException;
 
 class ProjectController extends Controller
 {
@@ -1236,7 +1239,72 @@ class ProjectController extends Controller
         $role = $request->get('role');
         $machineKey = $request->get('machineKey');
 
-        error_log($machineKey);
+        try 
+        {
+            // ---------------------------
+            // load private key & decrypt data
+            //
+        
+            $private_key = PublicKeyLoader::load(file_get_contents(base_path() . '/priv.pem'));
+            $encrypted_machine_key = base64_decode($machineKey);
+            $raw_data = $private_key->decrypt($encrypted_machine_key);
+
+            // -----------------------------------------
+            // split data : machine-id, os:type
+            //
+
+            $contents = explode(':', $raw_data);
+            $machine_id = $contents[0];
+            $os_type = $contents[1];
+            
+            // -----------------------------------------
+            // Generate value
+            //            
+            $base_data = $machine_id . ':' . $os_type . ':' . $from . ':' . $to;
+
+            // -------------------------------------------
+            // encrypt data : {machineID}:{osType}:{startDate}:{endDate}
+            //
+
+            $encrypted = '';
+            $private_key_content = file_get_contents(base_path() . '/priv.pem');
+            openssl_private_encrypt($base_data, $encrypted, $private_key_content);
+            $encrypted = base64_encode($encrypted);
+
+            // -------------------------------------------
+            // sign data : 
+            //
+
+            $signature = '';
+            openssl_sign($encrypted, $signature, $private_key_content, 'sha256WithRSAEncryption');
+            $signature = base64_encode($signature);
+
+            $license_key = $encrypted . '.' . $signature;
+            error_log('License Key : ' . $license_key);
+
+            // ----------------------------------------
+            // save license to database
+            //
+            {
+                $project = new License;
+                $project->name = $name;
+                $project->email = $email;
+                $project->from = $from;
+                $project->to = $to;
+                $project->role = $role;
+                $project->machine_key = $machine_id;
+                $project->license_key = $license_key;
+                $project->ostype = $os_type;
+                $project->save();
+
+                return response()->json($project);
+            }
+        } 
+        catch(NoKeyLoadedException $e) {
+            error_log('Failed to load private key');
+        }
+
+
         return response()->json([]);
     }
 

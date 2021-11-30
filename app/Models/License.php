@@ -19,7 +19,7 @@ class License extends Model
             //         ->orderBy('name', 'desc')
             //         ->paginate(10, ['*'], 'page', $page);
             return DB::table('licenses')
-                    ->select('id', 'name', 'email', 'role', 'from', 'to', 'machine_key','license_key')
+                    ->select('id', 'name', 'email', 'role', 'from', 'to', 'machine_key','license_key', 'ostype')
                     ->orderBy('name', 'desc')
                     ->get();
         }
