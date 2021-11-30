@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('generateLicense', [ProjectController::class, 'generateLicense']);
     Route::post('fetchLicenses', [ProjectController::class, 'fetchLicenses']);
+    Route::post('deleteLicense', [ProjectController::class, 'deleteLicense']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

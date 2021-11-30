@@ -295,6 +295,15 @@ export const actions = {
       console.log('FetchLicenses parse issue')
       commit(types.FETCH_LICENSES_SUCCESS, [])
     }
+  },
+  async deleteLicense({commit}, existLicense) {
+    try {
+      const { data } = await axios.post('/api/deleteLicense', existLicense)
+      return true
+    } catch (e) {
+      console.log(e)
+    }
+    return { 'message' : 'The unknown error happened'}
   }
 
 }

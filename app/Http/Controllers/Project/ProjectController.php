@@ -13,6 +13,7 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Crypt\Common\PublicKey;
 use phpseclib3\Crypt\Common\PrivateKey;
 use phpseclib3\Exception\NoKeyLoadedException;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -1320,4 +1321,24 @@ class ProjectController extends Controller
         return response()->json($licenses);
     }
 
+    public function deleteLicense(Request $request)
+    {
+        $currentUser = $request->user();        
+        if ($currentUser->is_admin != 1)
+            return response()->json(['message' => 'The user has not administrator priviledge']);
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => json_encode($validator->messages())]);
+        }
+
+        $existLicense = License::find($request->get('id'));
+        $existLicense->delete();
+
+        return response()->json([]);
+            
+    }
 }

@@ -75,10 +75,6 @@
             <label v-show="`${props.row.role}` == 0">Permenant</label>
             <label v-show="`${props.row.role}` == 1">Daily-based</label>
           </span>
-          <span v-else-if="props.column.field == 'is_revoke'">
-            <label v-show="`${props.row.is_revoke}` == 0">Opened</label>
-            <label v-show="`${props.row.is_revoke}` == 1">Closed</label>
-          </span>
           <span v-else>
             {{props.formattedRow[props.column.field]}}
           </span>
@@ -189,6 +185,36 @@ export default {
   },
 
   methods: {
+    generateLicenseKey(licenseKey) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(licenseKey));
+      element.setAttribute('download', "licenseKey.pem");
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    },
+    async onDownloadLicense(row) {
+      this.generateLicenseKey(row.license_key)
+    },
+    async onDeleteLicense(row) {
+      this.$confirm({
+        message: 'Are you sure to remove this license: "' + row.name + '"?',
+        button: {
+          no: 'No',
+          yes: 'Yes'
+        },
+        callback: async confirm => {
+          if (confirm) {
+            let result = await store.dispatch('project/deleteLicense', row)
+            this.$router.go()
+          }
+        }
+      })
+    },
     onFilePicked(event) {
       const file = event.target.files[0]
 
@@ -223,9 +249,9 @@ export default {
       }
 
       let result = await store.dispatch('project/generateLicense', {
-        name: this.name, 
-        email: this.email, 
-        from: this.from, 
+        name: this.name,
+        email: this.email,
+        from: this.from,
         to: this.to,
         role: this.role,
         machineKey: this.machineKey
@@ -233,7 +259,7 @@ export default {
 
       if (result != undefined && result.license_key != undefined)
       {
-
+        this.generateLicenseKey(result.license_key)
         this.$router.go()
       }
 
