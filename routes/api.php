@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Project\CoreyController;
 use App\Http\Controllers\Project\SepController;
+use App\Http\Controllers\Project\PlotController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('generateLicense', [ProjectController::class, 'generateLicense']);
     Route::post('fetchLicenses', [ProjectController::class, 'fetchLicenses']);
     Route::post('deleteLicense', [ProjectController::class, 'deleteLicense']);
+
+    Route::post('runSavePlot', [PlotController::class, 'runSavePlot']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

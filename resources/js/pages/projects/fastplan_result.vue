@@ -42,6 +42,7 @@
               <div class="d-flex justify-content-between">
                 <label class="btn btn-primary gf-button" v-on:click="onPrevPage">Previous</label>
                 <div>
+                  <label class="btn btn-primary gf-button " v-on:click="onSavePlot">Save Plot</label>
                   <label class="btn btn-primary gf-button " v-on:click="onExitPage">Exit</label>
                 </div>
               </div>
@@ -69,6 +70,41 @@
           <label class="btn btn-primary gf-button" v-on:click="onSaveAs" v-show="hideSaveAsButton==false">Save As</label>
           <label class="btn btn-primary gf-button" v-on:click="onYes">Yes</label>
           <label class="btn btn-primary gf-button" v-on:click="onNo">No</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="savePlotModal" class="gf-modal">
+      <div class="gf-modal-content">
+        <div class="gf-modal-header">
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-close" id="gf-exit-cancel-plot">&times;</span>
+        </div>
+        <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
+        <div>
+          <span style="font-size: 1.25rem">Plot Name: </span>
+          <input style="font-size: 1.25rem" maxlength="20" v-model="newPlotName" :placeholder="'like as : ' + projectName + '_' + previousPage">
+        </div>
+        <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onYesForPlot">Yes</label>
+          <label class="btn btn-primary gf-button" v-on:click="onNoForPlot">No</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="messageModal" class="gf-modal">
+      <div class="gf-modal-content">
+        <div class="gf-modal-header">
+          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-close" id="gf-exit-cancel-message">&times;</span>
+        </div>
+        <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
+        <div>
+          <span style="font-size: 1.25rem">{{messageName}} : </span>
+          <span style="font-size: 1.25rem">{{messageDescription}}</span>
+        </div>
+        <div style="margin-bottom:16px;margin-top:16px">
+          <label class="btn btn-primary gf-button" v-on:click="onYesForMessage">Ok</label>
         </div>
       </div>
     </div>
@@ -108,6 +144,7 @@ export default {
       isSaveAs : false,
       hideSaveAsButton: false,
       newProjectName: "",
+      newPlotName:"",
       plotLabel: "Data",
       bShowPlot : true,
       outputFile: null,
@@ -119,7 +156,9 @@ export default {
       dataContent: '',
       options: [],
       graphData: [],
-      previousPage: ''
+      previousPage: '',
+      messageName: '',
+      messageDescription: ''
     }
   },
 
@@ -225,10 +264,49 @@ export default {
       this.isSaveAs = true
       this.hideSaveAsButton = true
     },
+    showDialog(dialogId, isShow) {
+      var modal = document.getElementById(dialogId);
+      if (isShow == true)
+        modal.style.display = 'block';
+      else
+        modal.style.display = 'none';
+    },
+    onYesForMessage: function (event){
+      this.showDialog('messageModal', false);
+    },
+    onYesForPlot: async function(event) {
+
+      if (this.newPlotName == '') {
+        this.messageName = 'Warning'
+        this.messageDescription = 'Please input the plot name'
+        this.showDialog('messageModal', true);
+        return;
+      }
+
+      // hide save plot dialog
+      this.showDialog("savePlotModal", false)
+      
+      this.isLoading = true
+      const data = await this.runSavePlot()
+      this.isLoading = false
+
+      if (data == undefined || data.id == undefined ) {
+        this.messageName = 'Warning'
+        this.messageDescription = 'Failed to save the plot {' + this.newPlotName + '}'
+      }
+      else {
+        this.messageName = 'Success'
+        this.messageDescription = 'Saved the plot {' + this.newPlotName + '}'
+      }
+      this.showDialog('messageModal', true);
+    },
+    onNoForPlot: function(event) {
+      // hide save plot dialog
+      this.showDialog('savePlotModal', false);
+    },
     onYes: function(event) {
       // hide exit dialog
-      var modal = document.getElementById("exitModal");
-      modal.style.display = "none";
+      this.showDialog('exitModal', false);
 
       this.isLoading = true
       this.onSaveProject()      
@@ -239,8 +317,7 @@ export default {
     },
     onNo: function(event) {
       // hide exit dialog
-      var modal = document.getElementById("exitModal");
-      modal.style.display = "none";
+      this.showDialog('exitModal', false);
 
       // go to home vue
       this.$router.replace('home')
@@ -249,16 +326,20 @@ export default {
       this.isSaveAs = false
       this.hideSaveAsButton = false
 
-      var modal = document.getElementById("exitModal");
-      modal.style.display = "block";
+      this.showDialog('exitModal', true);
     },
     onPrevPage: function(event) {
       this.$router.replace(this.previousPage)
     },
+    onSavePlot: function(event) {
+      this.showDialog('savePlotModal', true);
+    }
   },
   mounted() {
     this.previousPage = this.$route.params.previous
     mountExitDialog();
+    mountSavePlotDialog();
+    mountMessageDialog();
   }
 
 }
@@ -270,6 +351,48 @@ function mountExitDialog() {
 
   // Get the <span> element that closes the modal
   var span = document.getElementById("gf-exit-cancel");
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }      
+}
+
+function mountSavePlotDialog() {
+
+  // Get the modal
+  var modal = document.getElementById("savePlotModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementById("gf-exit-cancel-plot");
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }      
+}
+
+function mountMessageDialog() {
+
+  // Get the modal
+  var modal = document.getElementById("messageModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementById("gf-exit-cancel-message");
 
   // When the user clicks on <span> (x), close the modal
   span.onclick = function() {

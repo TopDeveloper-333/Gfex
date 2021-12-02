@@ -276,6 +276,14 @@ export const actions = {
       commit(types.SAVE_RES_FASTPLAN, data)
     }
   },
+  async runSavePlot({commit}, payload) {
+    const { data } = await axios.post('/api/runSavePlot', payload)
+    if (typeof (data) == 'string') {
+      return JSON.parse(data)
+    }
+    else 
+      return data
+  },
   async generateLicense({commit}, payload) {
     const { data } = await axios.post('/api/generateLicense', payload)
     return data

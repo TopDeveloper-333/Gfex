@@ -100,5 +100,29 @@ Vue.mixin({
       payload.gascondensate = this.gascondensate
       await store.dispatch('project/runGasCondensateProject', payload)
     },
+    runSavePlot: async function() {
+      let payload = {}
+
+      payload.newPlotName = this.newPlotName
+
+      payload.projectId = this.projectId
+      payload.isFDP = this.isFDP
+      payload.isCondensate = this.isCondensate
+      payload.isEconomics = this.isEconomics
+      payload.isSeparatorOptimizer = this.isSeparatorOptimizer
+      payload.sep = this.sep
+      payload.drygas = this.drygas
+      payload.surface = this.surface
+      payload.reservoir = this.reservoir
+      payload.wellhistory = this.wellhistory
+      payload.economics = this.economics
+      payload.operations = this.operations
+      payload.relPerm = this.relPerm 
+      payload.resKGKO = this.resKGKO
+      payload.gascondensate = this.gascondensate
+      payload.plot = this.resFastPlan.RES_PLOT_OF
+      return await store.dispatch('project/runSavePlot', payload)
+    },
+
   }
 })

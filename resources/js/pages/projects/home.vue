@@ -33,10 +33,7 @@
                     <label class="btn btn-primary gf-button" v-on:click="onCreatePage">Create</label>
                   </div>
 
-                </div>
-                <div class="col-2"></div>
-                <div class="col-5">
-                  <label class="gf-item">Existing Projects
+                  <label class="gf-item" style="margin-top:30px">Existing Projects
                   </label>
 
                   <div style="display:flex;align-items:center;margin-bottom:16px;margin-top:16px">
@@ -45,6 +42,17 @@
 
                   <div>
                     <label class="btn btn-primary gf-button" v-on:click="onOpenPage">Open</label>
+                  </div>
+
+                </div>
+                <div class="col-2"></div>
+                <div class="col-5">
+
+                  <label class="gf-item">Plot for all projects
+                  </label>
+
+                  <div>
+                    <label class="btn btn-primary gf-button" v-on:click="onGoPlots">Go</label>
                   </div>
 
                 </div>
@@ -118,6 +126,9 @@ export default {
       var modal = document.getElementById("issueModal");
       modal.style.display = "none";
     },
+    onGoPlots: async function(event) {
+
+    },
     onCreatePage: async function(event) {
       if (this.myProjectName=="")
       {
@@ -134,7 +145,7 @@ export default {
       this.$router.replace({ name: 'fastplan' })
     },
     onOpenPage: async function(event) {
-      if (this.existProject==null)
+      if (this.existProject==null || this.existProject == '')
       {
         var modal = document.getElementById("issueModal");
         this.description = "Please choose existing project's name"

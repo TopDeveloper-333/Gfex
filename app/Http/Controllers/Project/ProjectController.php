@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
-    private function defaultProjectContent()
+    static public function defaultProjectContent()
     {
         return [
             'fastplan' => [
