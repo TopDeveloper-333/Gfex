@@ -39,10 +39,12 @@ class PlotController extends Controller
     $selected_plots = $request->get('selectedPlots');
     $axisX = $request->get('axisX');
     $axisY = $request->get('axisY');
+    $axisY2 = $request->get('axisY2');
 
     error_log($selected_plots[0][0]);
     error_log(json_encode($axisX));
     error_log(json_encode($axisY));
+    error_log(json_encode($axisY2));
 
     try {
 
@@ -61,18 +63,25 @@ class PlotController extends Controller
       }
 
       // get Axis Y with multiple cases
-      $resY = array();
       foreach ($selected_plots as $element) {
         $PLOT_DATA = Plot::find($element[0]);
         $plot = json_decode($PLOT_DATA->plot);
         
         $y = array();
-        $y[0] = $PLOT_DATA->plot_name;
+        $y[0] = $PLOT_DATA->plot_name . ':' . $axisY['name'];
         for ($i = 0; $i < count($plot); $i++) {
           $y[$i+1] = $plot[$i][$axisY['index']];
         }
 
         array_push($res, $y);
+
+        $y2 = array();
+        $y2[0] = $PLOT_DATA->plot_name . ':' . $axisY2['name'];
+        for ($i = 0; $i < count($plot); $i++) {
+          $y2[$i+1] = $plot[$i][$axisY2['index']];
+        }
+
+        array_push($res, $y2);
       }
 
       return response()->json($res);
