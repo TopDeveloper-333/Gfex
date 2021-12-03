@@ -276,8 +276,26 @@ export const actions = {
       commit(types.SAVE_RES_FASTPLAN, data)
     }
   },
+  async listPlots ({commit}) {
+    const { data } = await axios.post('/api/listPlots')
+
+    if (typeof(data) == 'string') {
+      return JSON.parse(data)
+    }
+    else {
+      return data
+    }
+  },
   async runSavePlot({commit}, payload) {
     const { data } = await axios.post('/api/runSavePlot', payload)
+    if (typeof (data) == 'string') {
+      return JSON.parse(data)
+    }
+    else 
+      return data
+  },
+  async runMultiPlot({commit}, payload) {
+    const { data } = await axios.post('/api/runMultiPlot', payload)
     if (typeof (data) == 'string') {
       return JSON.parse(data)
     }

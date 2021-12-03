@@ -20,6 +20,7 @@ export default [
   { path: '/monitoringresult', name: 'monitoringresult', component: page('projects/monitoring_result.vue') },
   { path: '/separator', name: 'separator', component: page('projects/separator.vue') },
   { path: '/separatorresult', name: 'separatorresult', component: page('projects/separator_result.vue') },
+  { path: '/multipleplots', name: 'multipleplots', component: page('projects/plots.vue') },
   {
     path: '/settings',
     component: page('settings/index.vue'),

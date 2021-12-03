@@ -55,7 +55,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('fetchLicenses', [ProjectController::class, 'fetchLicenses']);
     Route::post('deleteLicense', [ProjectController::class, 'deleteLicense']);
 
+    Route::post('listPlots', [PlotController::class, 'listPlots']);
     Route::post('runSavePlot', [PlotController::class, 'runSavePlot']);
+    Route::post('runMultiPlot', [PlotController::class, 'runMultiPlot']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {

@@ -13,8 +13,78 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Project\ProjectController;
 
+use DB;
+
 class PlotController extends Controller
 {
+
+  public function listPlots(Request $request)
+  {
+    $user_id = $request->user()->id;
+    $project_list = DB::table('plots')
+                    ->select('id','created as group', 'plot_name as name')
+                    ->where('user_id', '=', $user_id)
+                    ->get();
+
+    error_log('listPlots: user_id = '. $user_id);
+    error_log(json_encode($project_list));
+    return response()->json($project_list);
+
+  }
+
+  public function runMultiPlot(Request $request)
+  {
+    $user_id = $request->user()->id;
+
+    $selected_plots = $request->get('selectedPlots');
+    $axisX = $request->get('axisX');
+    $axisY = $request->get('axisY');
+
+    error_log($selected_plots[0][0]);
+    error_log(json_encode($axisX));
+    error_log(json_encode($axisY));
+
+    try {
+
+      // get Axis X
+      $res = array();
+      {
+        $plot = json_decode(Plot::find($selected_plots[0][0])->plot);
+
+        $x = array();
+        $x[0] = $axisX['name'];
+        for ($i = 0; $i < count($plot); $i++) {
+          $x[$i + 1] = $plot[$i][$axisX['index']];
+        }
+
+        array_push($res, $x);
+      }
+
+      // get Axis Y with multiple cases
+      $resY = array();
+      foreach ($selected_plots as $element) {
+        $PLOT_DATA = Plot::find($element[0]);
+        $plot = json_decode($PLOT_DATA->plot);
+        
+        $y = array();
+        $y[0] = $PLOT_DATA->plot_name;
+        for ($i = 0; $i < count($plot); $i++) {
+          $y[$i+1] = $plot[$i][$axisY['index']];
+        }
+
+        array_push($res, $y);
+      }
+
+      return response()->json($res);
+
+    }
+    catch (Exception $e) {
+      error_log('Error occurred on run Multiple plots');
+    }
+
+    return response()->json([]);
+  }
+
   public function runSavePlot(Request $request)
   {
     $user_id = $request->user()->id;

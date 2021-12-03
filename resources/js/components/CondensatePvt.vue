@@ -446,6 +446,7 @@ export default {
       this.updatePlot(axisX, columns, axes, ylabel, ylabel2);
     },
     updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
+      debugger
       this.plot = c3.generate({
           bindto: '#plot',
           size: {
