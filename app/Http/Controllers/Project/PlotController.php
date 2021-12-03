@@ -50,6 +50,7 @@ class PlotController extends Controller
 
       // get Axis X
       $res = array();
+      $maxLength = 0;
       {
         $plot = json_decode(Plot::find($selected_plots[0][0])->plot);
 
@@ -59,6 +60,7 @@ class PlotController extends Controller
           $x[$i + 1] = $plot[$i][$axisX['index']];
         }
 
+        $maxLength = count($plot);
         array_push($res, $x);
       }
 
@@ -66,6 +68,13 @@ class PlotController extends Controller
       foreach ($selected_plots as $element) {
         $PLOT_DATA = Plot::find($element[0]);
         $plot = json_decode($PLOT_DATA->plot);
+
+        // update x axis
+        if ($maxLength < count($plot)) {
+          for ($i = 0; $i < count($plot); $i++) {
+            $res[0][$i + 1] = $plot[$i][$axisX['index']];
+          }  
+        }
         
         $y = array();
         $y[0] = $PLOT_DATA->plot_name . ':' . $axisY['name'];
