@@ -1,5 +1,5 @@
 <template>
-  <card :title="$t('Users Management')">
+  <card :title="$t('License Management')">
     <vue-confirm-dialog></vue-confirm-dialog>
     <div style="display:flex;margin-bottom:6px;text-align:left" class="row">
     

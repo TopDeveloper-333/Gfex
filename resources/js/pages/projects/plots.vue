@@ -10,7 +10,7 @@
           FastPlan* Gas & Gas Condensate<br>
           <p style="font-size:3rem !important">Conventional and Shale Reservoirs</p>
         </div>
-        <div class="row g-0" style="background-color:#fdf500;">
+        <div class="row g-0" style="background-color:var(--background-color);">
           <div class="col-md-10 offset-md-1">
             <div class="card-body">
               <h3 class="card-title gf-title">Plots for Multiple Realisations
@@ -40,7 +40,7 @@
                 <div style="margin-top:32px;max-height:200px;overflow-y:scroll;overflow-x:hidden">
                     <div style="display:flex;text-align:left;margin-bottom:4px" v-for="entry in selectedPlots" :key='entry[0]'>
                       <input v-show="entry!=undefined && entry != ''" type="color" style="min-width:50px;height:50px;margin-right:20px;" :id="'graphColor' + entry" 
-                        :name="'graphColor' + entry" v-model="graphColor[entry]" @change="onApplyColor($event)">
+                        :name="'graphColor' + entry" v-model="graphColor[entry[0]]" @change="onApplyColor($event)">
                       <label v-show="entry!=undefined && entry != ''" :for="'graphColor' + entry" class="typo__label gf-item">{{graphColorNames["" + entry[0]]}}</label>
                     </div>
                 </div>
@@ -384,8 +384,13 @@ export default {
 
       this.selectedPlots = []
       this.plotSheet.options.data.forEach(element => {
-        if (element != '')
+        if (element != '') {
           this.selectedPlots.push(element)
+
+          debugger
+          let randomColor = Math.floor(Math.random()*16777215).toString(16);
+          this.graphColor[element[0]] = '#' + randomColor
+        }
       })
     }
   },
@@ -475,7 +480,7 @@ function mountMessageDialog() {
   font-size: 20px;
 }
 #plot4 {
-  background: green;
+  background: var(--secondary-color);
 }
 
 </style>

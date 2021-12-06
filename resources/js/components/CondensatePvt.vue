@@ -860,6 +860,6 @@ function mountPlotDialog() {
 <style scoped>
 
 #plot {
-  background: green;
+  background: var(--secondary-color);
 }
 </style>

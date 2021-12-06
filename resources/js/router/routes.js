@@ -26,6 +26,8 @@ export default [
     component: page('settings/index.vue'),
     children: [
       { path: '', redirect: { name: 'settings.profile' } },
+      { path: 'theme', name: 'settings.theme', component: page('settings/theme.vue') },
+      { path: 'removeproject', name: 'settings.removeproject', component: page('settings/removeproject.vue') },
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') },
       { path: 'users', name: 'settings.users', component: page('settings/users.vue') },

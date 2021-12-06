@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('createProject', [ProjectController::class, 'createProject']);
     Route::post('openProject', [ProjectController::class, 'openProject']);
     Route::post('saveProject', [ProjectController::class, 'saveProject']);
+    Route::post('deleteProject', [ProjectController::class, 'deleteProject']);
+
     Route::post('runDryGas', [ProjectController::class, 'runDryGas']);
     Route::post('runGasCondensate', [ProjectController::class, 'runGasCondensate']);
     Route::post('runMonitoring', [ProjectController::class, 'runMonitoring']);
@@ -56,6 +58,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('deleteLicense', [ProjectController::class, 'deleteLicense']);
 
     Route::post('listPlots', [PlotController::class, 'listPlots']);
+    Route::post('deletePlot', [PlotController::class, 'deletePlot']);    
     Route::post('runSavePlot', [PlotController::class, 'runSavePlot']);
     Route::post('runMultiPlot', [PlotController::class, 'runMultiPlot']);
 });

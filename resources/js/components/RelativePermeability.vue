@@ -496,7 +496,7 @@ function mountPlotDialog() {
   font-size: 20px;
 }
 #plot2 {
-  background: green;
+  background: var(--secondary-color);
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

@@ -32,6 +32,17 @@ class PlotController extends Controller
 
   }
 
+  public function deletePlot(Request $request)
+  {
+      $user_id = $request->user()->id;
+      $existProject = Plot::find($request->get('id'));
+      if ($existProject->user_id == $user_id) {
+          $existProject->delete();
+      }
+
+      return response()->json([]);
+  }
+
   public function runMultiPlot(Request $request)
   {
     $user_id = $request->user()->id;

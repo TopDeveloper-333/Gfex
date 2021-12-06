@@ -107,6 +107,7 @@ class ProjectController extends Controller
 
     public function openProject(Request $request)
     {
+        $user_id = $request->user()->id;
         $id = $request->get('id');
         $project_name = $request->get('project');
         error_log('openProject: id = '. $id . " name: ".$project_name);
@@ -156,6 +157,17 @@ class ProjectController extends Controller
         $project->save();
 
         // error_log(json_encode($content));
+
+        return response()->json([]);
+    }
+
+    public function deleteProject(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $existProject = Project::find($request->get('id'));
+        if ($existProject->user_id == $user_id) {
+            $existProject->delete();
+        }
 
         return response()->json([]);
     }

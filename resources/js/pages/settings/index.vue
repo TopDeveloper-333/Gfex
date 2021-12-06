@@ -44,6 +44,16 @@ export default {
           name: this.$t('password'),
           route: 'settings.password'
         },
+        {
+          icon: 'palette',
+          name: this.$t('Theme'),
+          route: 'settings.theme'
+        },
+        {
+          icon: 'book',
+          name: this.$t('Project'),
+          route: 'settings.removeproject'
+        },
       ]
 
       if (this.user != undefined && this.user.is_admin == 1) {

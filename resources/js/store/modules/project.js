@@ -25,7 +25,10 @@ export const state = {
   resFastPlan: {},
   resMonitoring: {},
   resCvdOut: [],
-  licenses: []
+  licenses: [],
+  backgroundColor: null,
+  primaryColor: null,
+  secondaryColor: null,
 }
 
 function getCookie(name, defaultValue) {
@@ -61,7 +64,10 @@ export const getters = {
   resFastPlan: state => state.resFastPlan,
   resMonitoring: state => state.resMonitoring,
   resCvdOut: state => state.resCvdOut,
-  licenses: state => state.licenses
+  licenses: state => state.licenses,
+  backgroundColor: state => state.backgroundColor,
+  primaryColor: state => state.primaryColor,
+  secondaryColor: state => state.secondaryColor
 }
 
 export const mutations = {
@@ -143,10 +149,18 @@ export const mutations = {
   },
   [types.FETCH_LICENSES_SUCCESS](state, licenses) {
     state.licenses = licenses
+  },
+  [types.SAVE_THEME_COLORS](state, colors) {
+    state.backgroundColor = colors.backgroundColor
+    state.primaryColor = colors.primaryColor
+    state.secondaryColor = colors.secondaryColor
   }
 }
 
 export const actions = {
+  async saveThemeColors({commit}, payload) {
+    commit(types.SAVE_THEME_COLORS, payload)
+  },
   async listProjects ({commit}) {
     const { data } = await axios.post('/api/listProjects')
 
@@ -180,6 +194,9 @@ export const actions = {
   },
   async saveProject({commit}, payload) {
     const { data } = await axios.post('api/saveProject', payload)    
+  },
+  async deleteProject({commit}, payload) {
+    const { data } = await axios.post('/api/deleteProject', payload)    
   },
   saveFastPlan ({commit}, payload) {
     const isFDP = payload.isFDP
@@ -285,6 +302,9 @@ export const actions = {
     else {
       return data
     }
+  },
+  async deletePlot({commit}, payload) {
+    const { data } = await axios.post('/api/deletePlot', payload)    
   },
   async runSavePlot({commit}, payload) {
     const { data } = await axios.post('/api/runSavePlot', payload)
