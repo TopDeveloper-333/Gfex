@@ -138,6 +138,8 @@ export default {
       var axes = {}
       var ylabel = null
       var ylabel2 = null
+      var y2Max = null
+      var y2Classes = {}
 
       // ----------------------------------------------------------
       // Start HERE
@@ -177,12 +179,19 @@ export default {
       if (this.axisY2 != null) {
         columns[this.axisY.length+1] = []
         columns[this.axisY.length+1][0] = this.axisY2.name
+
+        y2Max = 0
         for (let j = 1; j <= numRows; j++) {
           columns[this.axisY.length+1][j] = this.data[j-1][this.axisY2.index]
+          if (y2Max < this.data[j-1][this.axisY2.index])
+            y2Max = this.data[j-1][this.axisY2.index]
         }
 
         axes[this.axisY2.name] = 'y2'
         ylabel2 = this.axisY2.name
+        y2Classes[this.axisY2.name] = 'dotted'
+
+        y2Max = y2Max * 1.2
       }
 
       //
@@ -219,10 +228,10 @@ export default {
       }
       plotColor.push(this.graph1Color)
 
-      this.updatePlot(axisX, columns, axes, ylabel, ylabel2, plotColor);
+      this.updatePlot(axisX, columns, axes, ylabel, ylabel2, plotColor, y2Max, y2Classes);
 
     },
-    updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2, plotColor) {
+    updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2, plotColor, y2Max, y2Classes) {
       let plotOptions = {
           bindto: '#plot3',
           size: {
@@ -232,7 +241,8 @@ export default {
             x: _axisX,
             columns: _columns,
             axes: _axes,
-            type: this.type
+            type: this.type,
+            classes: y2Classes
           },
           color: {
             pattern: plotColor
@@ -260,6 +270,7 @@ export default {
               }
             },
             y2: {
+              max: y2Max,
               show: _ylabel2 != null, // ADD
               label: {
                 text: _ylabel2,

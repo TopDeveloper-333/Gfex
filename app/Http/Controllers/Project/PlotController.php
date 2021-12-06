@@ -48,51 +48,72 @@ class PlotController extends Controller
 
     try {
 
-      // get Axis X
       $res = array();
-      $maxLength = 0;
-      {
-        $plot = json_decode(Plot::find($selected_plots[0][0])->plot);
 
+      // get Axis X
+      {
         $x = array();
-        $x[0] = $axisX['name'];
-        for ($i = 0; $i < count($plot); $i++) {
-          $x[$i + 1] = $plot[$i][$axisX['index']];
+
+        foreach ($selected_plots as $element) {
+          $PLOT_DATA = Plot::find($element[0]);
+          $plot = json_decode($PLOT_DATA->plot);
+  
+          for ($i = 0; $i < count($plot); $i++) {
+            // $x[$i + 1] = $plot[$i][$axisX['index']];
+            $founded = false;
+            for ($j = 0; $j < count($x); $j++) {
+              if ($x[$j] == $plot[$i][$axisX['index']])
+                $founded = true;
+            }
+
+            if ($founded == false)
+              $x[count($x)] = $plot[$i][$axisX['index']];
+          }
         }
 
-        $maxLength = count($plot);
+        sort($x);
+        array_unshift($x, $axisX['name']);
         array_push($res, $x);
       }
 
       // get Axis Y with multiple cases
-      foreach ($selected_plots as $element) {
-        $PLOT_DATA = Plot::find($element[0]);
-        $plot = json_decode($PLOT_DATA->plot);
+      {       
+        foreach ($selected_plots as $element) {
+          $y = array();
+          $y2 = array();
 
-        // update x axis
-        if ($maxLength < count($plot)) {
+          $PLOT_DATA = Plot::find($element[0]);
+          $plot = json_decode($PLOT_DATA->plot);
+
+          // initialize y, y2 axis
+          for ($i = 0; $i < count($x); $i++) {
+            $y[$i] = null; $y2[$i] = null;
+          }
+
+          $y[0] = $PLOT_DATA->plot_name . ':' . $axisY['name'];
+          $y2[0] = $PLOT_DATA->plot_name . ':' . $axisY2['name'];
+
+          // update y, y2 axis
           for ($i = 0; $i < count($plot); $i++) {
-            $res[0][$i + 1] = $plot[$i][$axisX['index']];
-          }  
-        }
-        
-        $y = array();
-        $y[0] = $PLOT_DATA->plot_name . ':' . $axisY['name'];
-        for ($i = 0; $i < count($plot); $i++) {
-          $y[$i+1] = $plot[$i][$axisY['index']];
-        }
+            $index = -1;
 
-        array_push($res, $y);
+            $year = $plot[$i][$axisX['index']];
+            
+            for ($j = 0; $j < count($x); $j++) {
+              if ($x[$j] == $year)
+                $index = $j;
+            }
 
-        $y2 = array();
-        $y2[0] = $PLOT_DATA->plot_name . ':' . $axisY2['name'];
-        for ($i = 0; $i < count($plot); $i++) {
-          $y2[$i+1] = $plot[$i][$axisY2['index']];
+            $y[$index] = $plot[$i][$axisY['index']];
+            $y2[$index] = $plot[$i][$axisY2['index']];
+          }
+          
+          array_push($res, $y);
+          array_push($res, $y2);
         }
-
-        array_push($res, $y2);
       }
 
+      error_log('RES:' . json_encode($res));
       return response()->json($res);
 
     }
