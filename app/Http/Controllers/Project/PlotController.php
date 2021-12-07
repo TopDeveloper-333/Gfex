@@ -68,17 +68,18 @@ class PlotController extends Controller
         foreach ($selected_plots as $element) {
           $PLOT_DATA = Plot::find($element[0]);
           $plot = json_decode($PLOT_DATA->plot);
-  
+          
           for ($i = 0; $i < count($plot); $i++) {
-            // $x[$i + 1] = $plot[$i][$axisX['index']];
             $founded = false;
             for ($j = 0; $j < count($x); $j++) {
-              if ($x[$j] == $plot[$i][$axisX['index']])
+              if ($x[$j] == (int)$plot[$i][$axisX['index']]) {
                 $founded = true; break;
+              }
             }
 
-            if ($founded == false)
+            if ($founded == false) {
               $x[count($x)] = (int)$plot[$i][$axisX['index']];
+            }
           }
         }
 
@@ -108,7 +109,7 @@ class PlotController extends Controller
           for ($i = 0; $i < count($plot); $i++) {
             $index = -1;
 
-            $year = $plot[$i][$axisX['index']];
+            $year = (int)$plot[$i][$axisX['index']];
             
             for ($j = 0; $j < count($x); $j++) {
               if ($x[$j] == $year) {
@@ -125,7 +126,7 @@ class PlotController extends Controller
         }
       }
 
-      error_log('RES:' . json_encode($res));
+      // error_log('RES:' . json_encode($res));
       return response()->json($res);
 
     }
