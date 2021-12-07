@@ -55,7 +55,7 @@
     <div id="plotModal2" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-comment" style="margin-left:30px">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close" id="plot-gf-close2">&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
@@ -79,7 +79,7 @@ import html2canvas from 'html2canvas';
 
 export default {
   name: 'RelativePermeability',
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   props: ['isHidden'],
   
@@ -178,7 +178,7 @@ export default {
       // Initialize variables
       // ----------------------------------------------------------
       document.documentElement.style.setProperty('--axis-color', this.axisColor);
-      document.documentElement.style.setProperty('--secondary-color', this.graphColor);
+      // document.documentElement.style.setProperty('--secondary-color', this.graphColor);
 
       var axisX = this.axisX.name
       var columns = []
@@ -193,7 +193,6 @@ export default {
 
       // ----------------------------------------------------------------
       // add x data
-      debugger
       columns[0] = []
       columns[0][0] = this.axisX.name
       for (let index = 1; index <= numRows; index++) {
@@ -228,7 +227,6 @@ export default {
 
     },
     updatePlot: function(_axisX, _columns, _axes, _ylabel, _ylabel2) {
-      debugger
       let plotOptions = {
           bindto: '#plot2',
           size: {

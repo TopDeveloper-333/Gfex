@@ -18,6 +18,7 @@ export default [
   { path: '/drygas', name: 'drygas', component: page('projects/drygas.vue') },
   { path: '/fastplanresult', name: 'fastplanresult', component: page('projects/fastplan_result.vue') },
   { path: '/monitoringresult', name: 'monitoringresult', component: page('projects/monitoring_result.vue') },
+  { path: '/monitoringresult2', name: 'monitoringresult2', component: page('projects/monitoring_result2.vue') },
   { path: '/separator', name: 'separator', component: page('projects/separator.vue') },
   { path: '/separatorresult', name: 'separatorresult', component: page('projects/separator_result.vue') },
   { path: '/multipleplots', name: 'multipleplots', component: page('projects/plots.vue') },

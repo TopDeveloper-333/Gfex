@@ -23,12 +23,12 @@ export const state = {
   resKGKO: [],
   resOPT: [],
   resFastPlan: {},
-  resMonitoring: {},
   resCvdOut: [],
   licenses: [],
   backgroundColor: null,
   primaryColor: null,
   secondaryColor: null,
+  textColor: null
 }
 
 function getCookie(name, defaultValue) {
@@ -62,12 +62,12 @@ export const getters = {
   resKGKO: state => state.resKGKO,
   resOPT: state => state.resOPT,
   resFastPlan: state => state.resFastPlan,
-  resMonitoring: state => state.resMonitoring,
   resCvdOut: state => state.resCvdOut,
   licenses: state => state.licenses,
   backgroundColor: state => state.backgroundColor,
   primaryColor: state => state.primaryColor,
-  secondaryColor: state => state.secondaryColor
+  secondaryColor: state => state.secondaryColor,
+  textColor: state => state.textColor
 }
 
 export const mutations = {
@@ -75,7 +75,6 @@ export const mutations = {
     state.projectList = projectList
   },
   [types.LOAD_PROJECT] (state, {projectName, payload}) {
-    debugger
     console.log('LOAD_PROJECT')
     state.projectName = projectName
     state.projectId = payload.id
@@ -129,7 +128,6 @@ export const mutations = {
     state.relPerm = relPerm
   },
   [types.UPDATE_RES_KGKO] (state, resKGKO) {
-    debugger
     state.resKGKO = resKGKO
   },
   [types.SAVE_RES_KGKO] (state, resKGKO) {
@@ -144,9 +142,6 @@ export const mutations = {
   [types.SAVE_RES_FASTPLAN] (state, resFastPlan) {
     state.resFastPlan = resFastPlan
   },
-  [types.SAVE_RES_MONITORING] (state, resMonitoring) {
-    state.resMonitoring = resMonitoring
-  },
   [types.FETCH_LICENSES_SUCCESS](state, licenses) {
     state.licenses = licenses
   },
@@ -154,6 +149,7 @@ export const mutations = {
     state.backgroundColor = colors.backgroundColor
     state.primaryColor = colors.primaryColor
     state.secondaryColor = colors.secondaryColor
+    state.textColor = colors.textColor
   }
 }
 
@@ -275,13 +271,13 @@ export const actions = {
       commit(types.SAVE_RES_FASTPLAN, data)
     }
   },
-  async runMonitoringProject({commit}, payload) {
+  async runMonitoringProject({commit}, payload) {    
     const { data } = await axios.post('/api/runMonitoring', payload)
     if (typeof (data) == 'string') {
-      commit(types.SAVE_RES_MONITORING, JSON.parse(data))      
+      return JSON.parse(data)
     }
     else {
-      commit(types.SAVE_RES_MONITORING, data)
+      return data
     }
   },
   async runGasCondensateProject({commit}, payload) {

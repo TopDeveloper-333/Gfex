@@ -94,7 +94,7 @@ import store from '~/store'
 import { mapState } from 'vuex'
 
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   components: {
   },

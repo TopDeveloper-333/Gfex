@@ -22,8 +22,9 @@
                   <p class="gf-item">Output Files</p>
                   <multiselect v-model="outputFile" @input="onChange" :options="outputFileOptions" track-by="name" label="name" placeholder="Select OUTPUT files"></multiselect>
                 </div>
-                <div class="col-2" style="display:flex">
+                <div class="col-4" style="display:flex">
                   <label class="btn btn-primary gf-button" style="margin:auto auto 0 auto" v-on:click="onPlot">{{plotLabel}}</label>
+                  <label class="btn btn-primary gf-button" style="margin:auto auto 0 auto" v-on:click="onPlot2">WELL GRAPH</label>
                 </div>
               </div>
 
@@ -36,7 +37,7 @@
               </div>
 
               <div style="display:flex;margin-bottom:6px;text-align:left" class="row" v-show="bShowPlot == false">
-                <textarea v-model.lazy="dataContent" style="margin-left:10px;color:white;font-weight: 400;"></textarea>
+                <textarea v-model.lazy="dataContent" style="margin-left:10px;font-weight: 400;"></textarea>
               </div>
 
 
@@ -57,7 +58,7 @@
     <div id="exitModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-comment" style="margin-left:30px">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close" id="gf-exit-cancel">&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
@@ -90,7 +91,7 @@ import Graph from '~/components/Graph.vue';
 // import axios from 'axios'
 export default {
   name: 'FastplanResult',
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   metaInfo () {
     return { title: this.$t('Fastplan Result') }
@@ -119,7 +120,8 @@ export default {
       options: [],
       graphData: [],
       previousPage: '',
-      graphType: null
+      graphType: null,
+      resMonitoring: null
     }
   },
 
@@ -140,7 +142,6 @@ export default {
       operations: state => state.project.operations,
       relPerm: state => state.project.relPerm,
       gascondensate : state => state.project.gascondensate,
-      resMonitoring: state => state.project.resMonitoring      
     }),
   },
 
@@ -183,6 +184,10 @@ export default {
         this.dataContent = ''
         this.graphType = null
       }
+    },
+    onPlot2: function(event) {
+      debugger
+      this.$router.replace({ name: 'monitoringresult2', params: { resMonitoring: this.resMonitoring } })
     },
     onPlot: function(event) {
       if(this.bShowPlot == false) {
@@ -230,10 +235,10 @@ export default {
     },
   },
   mounted() {
-
+    debugger
+    this.resMonitoring = this.$route.params.resMonitoring
     this.outputFileOptions = []
 
-    debugger
     let wellCount = this.resMonitoring.NumberOfWells
     for (let index = 0; index < wellCount; index++) {
       this.outputFileOptions.push({name: 'WELL' + (index + 1)})
@@ -287,6 +292,7 @@ textarea{
     overflow-x: auto;
     resize: none;
     background-color: var(--secondary-color);
+    color: var(--text-color);
     font-family: monospace !important;
     font-size: 1.25rem !important;
 }

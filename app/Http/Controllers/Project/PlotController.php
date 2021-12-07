@@ -74,11 +74,11 @@ class PlotController extends Controller
             $founded = false;
             for ($j = 0; $j < count($x); $j++) {
               if ($x[$j] == $plot[$i][$axisX['index']])
-                $founded = true;
+                $founded = true; break;
             }
 
             if ($founded == false)
-              $x[count($x)] = $plot[$i][$axisX['index']];
+              $x[count($x)] = (int)$plot[$i][$axisX['index']];
           }
         }
 
@@ -111,8 +111,9 @@ class PlotController extends Controller
             $year = $plot[$i][$axisX['index']];
             
             for ($j = 0; $j < count($x); $j++) {
-              if ($x[$j] == $year)
-                $index = $j;
+              if ($x[$j] == $year) {
+                $index = $j; break;
+              }
             }
 
             $y[$index] = $plot[$i][$axisY['index']];

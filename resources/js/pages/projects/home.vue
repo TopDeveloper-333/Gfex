@@ -80,7 +80,7 @@
     <div id="issueModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-comment" style="margin-left:30px">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close">&times;</span>
         </div>
         <p style="font-size: 1.25rem;margin-top:20px">{{description}}</p>
@@ -102,7 +102,7 @@ import Loading from 'vue-loading-overlay';
 
 // import axios from 'axios'
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   components: {
     Multiselect,
@@ -184,10 +184,6 @@ export default {
     }
   },
   async mounted() {
-    document.documentElement.style.setProperty('--background-color', this.backgroundColor);
-    document.documentElement.style.setProperty('--primary-color', this.primaryColor);
-    document.documentElement.style.setProperty('--secondary-color', this.secondaryColor);
-
     this.isLoading = true
     await store.dispatch('project/listProjects')
     this.isLoading = false

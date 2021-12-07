@@ -93,7 +93,7 @@
     <div id="exitModal" class="gf-modal">
       <div class="gf-modal-content">
         <div class="gf-modal-header">
-          <span class="gf-comment" style="margin-left:30px;color:white">FastPlan* Gas & Gas Condensate</span>
+          <span class="gf-comment" style="margin-left:30px">FastPlan* Gas & Gas Condensate</span>
           <span class="gf-close">&times;</span>
         </div>
         <p class="gf-comment" style="margin-top:6px !important; margin-bottom:6px !important;"><{{projectName}}> Field Project</p>
@@ -122,7 +122,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 // import axios from 'axios'
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   // async asyncData () {
   //   const { data: projects } = await axios.get('/api/projects')
@@ -312,7 +312,6 @@ export default {
       let value = parseFloat(val)
 
       if (cellName == 'A1') {
-        debugger
         this.updateNumberValidate(instance, true)
       }
 
@@ -414,7 +413,6 @@ export default {
           // update other tables
           if (instance.id == 'setNumber1Sheet')
           {
-            debugger
             if (this.setNumber2Sheet != null)  // skip init
             {
               this.setNumber2Sheet.setValue('A1', this.setNumber2Sheet.getValue('A1'), true)
@@ -811,7 +809,6 @@ export default {
     //   // [,],
     //   // [,],
     // ];
-    debugger
     let setNumber1Data = []
     if (this.mySEP != null && this.mySEP.separatorConditions != null && this.mySEP.separatorConditions.setNumber1 != null) {
       this.mySEP.separatorConditions.setNumber1.forEach(element => {

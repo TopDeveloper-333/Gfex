@@ -57,7 +57,7 @@ import Multiselect from 'vue-multiselect'
 export default {
   name: 'Reservoir',
   
-  middleware: 'auth',
+  middleware: ['auth', 'theme'],
 
   components: {
     Multiselect
@@ -97,7 +97,6 @@ export default {
 
   watch: {
     dualPorosity: function(val, oldVal) {
-      debugger
       this.onSavePage(null)
     },
     isDataValidate: function(val, oldVal) {

@@ -4,7 +4,6 @@ import store from '~/store'
 Vue.mixin({
   methods: {
     onSaveProject: async function() {
-      debugger
       
       let payload = {}
 
@@ -76,7 +75,7 @@ Vue.mixin({
       // payload.relPerm = this.relPerm 
       // payload.resKGKO = this.resKGKO
       // payload.gascondensate = this.gascondensate
-      await store.dispatch('project/runMonitoringProject', payload)
+      return await store.dispatch('project/runMonitoringProject', payload)
     },
     runGasCondensateProject: async function() {
       let payload = {}
