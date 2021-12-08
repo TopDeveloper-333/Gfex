@@ -87,8 +87,10 @@ export default {
       isLoading: false,
       fullPage: true,
       maxItems : 200,
-      selectedStep: null,
-      steps: []
+      selectedStep: {name: 'Step: 1', value: 1},
+      steps: [
+        {name: 'Step: 1', value: 1}
+      ]
     }
   },
 
