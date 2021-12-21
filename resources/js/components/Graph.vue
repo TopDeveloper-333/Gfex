@@ -211,8 +211,8 @@ export default {
         y2Max = 0
         for (let j = 1; j <= Math.floor(numRows/steps); j++) {
           columns[this.axisY.length+1][j] = this.data[(j-1) * steps][this.axisY2.index]
-          if (y2Max < parseFloat(this.data[j-1][this.axisY2.index]))
-            y2Max = parseFloat(this.data[j-1][this.axisY2.index])
+          if (y2Max < parseFloat(this.data[(j-1) * steps][this.axisY2.index]))
+            y2Max = parseFloat(this.data[(j-1) * steps][this.axisY2.index])
         }
 
         axes[this.axisY2.name] = 'y2'
