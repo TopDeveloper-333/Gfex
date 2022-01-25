@@ -476,6 +476,8 @@ export default {
         return;
       }
 
+      this.wellsNetwork[index].option = selectedOption
+      this.wellsNetwork.push()
       this.onUpdateWellNetwork(selectedOption.value, index)
     },
     onUpdateWellNetwork: function (optionValue, index) {
